@@ -25,5 +25,5 @@ y bases de datos necesarias.
 ## 📂 Acceso al proyecto
 Puedes obtener este proyecto clonando el siguiente repositorio
 ```
-https://github.com/wizardcode-bot/Secret-number-Game.git
+https://github.com/wizardcode-bot/Spare-Parts-Sales-System.git
 ```
