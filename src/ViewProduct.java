@@ -61,7 +61,7 @@ public class ViewProduct extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "ID del Producto", "Nombre", "Marca", "Cantidad", "Precio"
+                "ID", "ID del Producto", "Nombre", "Marca", "Cantidad", "Precio por Unidad"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {

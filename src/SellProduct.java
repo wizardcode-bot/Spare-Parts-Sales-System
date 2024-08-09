@@ -429,7 +429,7 @@ public class SellProduct extends javax.swing.JFrame {
                 SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into bill(billId, billDate, totalPaid, generatedBy) values(?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into bills(billId, billDate, totalPaid, generatedBy) values(?,?,?,?)");
                 ps.setString(1, billId);
                 ps.setString(2, myFormat.format(cal.getTime()));
                 ps.setInt(3, finalTotalPrice);
