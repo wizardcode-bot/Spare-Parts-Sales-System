@@ -90,7 +90,7 @@ public class ViewBill extends javax.swing.JFrame {
         try{
             Connection con = ConnectionProvider.getCon();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from bill");
+            ResultSet rs = st.executeQuery("select * from bills");
             while(rs.next()){
                 model.addRow(new Object[]{rs.getString("billId"), rs.getString("billDate"), rs.getString("totalPaid"), rs.getString("generatedBy")});
             }
