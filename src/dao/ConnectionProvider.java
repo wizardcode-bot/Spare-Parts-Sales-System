@@ -7,7 +7,6 @@ public class ConnectionProvider {
     public static Connection getCon(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            //Connection con  = DriverManager.getConnection("jdbc:mysql://localhost:3306/pharmacy?useSSL=false","root","");
             Connection con  = DriverManager.getConnection("jdbc:mysql://localhost:3306/spare_parts?useSSL=false","root","");
             return con;
         }

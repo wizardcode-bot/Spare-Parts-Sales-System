@@ -1,11 +1,11 @@
 
-package pharmacy.management.system;
+package inventory.management.system;
 
 /**
  *
  * @author HOME
  */
-public class PharmacyManagementSystem {
+public class InventoryManagementSystem {
 
     /**
      * @param args the command line arguments
