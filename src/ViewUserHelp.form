@@ -20,7 +20,6 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-12,0,0,3,82"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
@@ -47,34 +46,6 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel6">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="18" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="A&#xf1;adir Usuarios"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="44" y="98" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel5">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="16" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;A&#xf1;adir Usuarios&apos; puedes registrar a nuevos usuarios del sistema, estos tendr&#xe1;n su propia cuenta, por lo cual deber&#xe1;s ingresar algunos de sus datos personales.&quot;&#xa;    + &quot;&lt;br&gt;Primero asigna un rol al nuevo usuario del sistema, ten en cuenta las funciones a las que tiene acceso cada rol:&quot;&#xa;    + &quot;&lt;br&gt;Administrador: A&#xf1;adir, Ver, Actualizar y Eliminar usuarios, Gestionar clientes, Ver y Actualizar su propia cuenta.&quot;&#xa;    + &quot;&lt;br&gt;Vendedor: A&#xf1;adir, Consultar, Actualizar, Eliminar y Vender productos, Ver facturas, Ver y Actualizar su propia cuenta.&quot;&#xa;    + &quot;&lt;br&gt;Luego de haber asignado un rol al usuario, ahora debes de ingresar los datos que se solicitan en el formulario de registro y dar click en &apos;Guardar&apos;&quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Guardar&apos; el nuevo usuario quedar&#xe1; registrado en la base de datos de usuarios del sistema y podr&#xe1; iniciar sesi&#xf3;n con sus credenciales.&quot;&#xa;    + &quot;&lt;br&gt;Recuerda que el nombre de usuario y la contrase&#xf1;a asignados son las credenciales que usar&#xe1; el usuario para ingresar al sistema.&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
-        </Property>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="40" y="130" width="750" height="300"/>
-        </Constraint>
-      </Constraints>
-    </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -87,6 +58,34 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="804" y="6" width="40" height="40"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="16" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n &apos;Ver usuarios&apos; podr&#xe1;s ver una tabla con los datos de todos los usuarios registrados que tienen acceso al sistema.&quot;&#xa;    + &quot;&lt;br&gt;En este mismo m&#xf3;dulo podr&#xe1;s eliminar cualquier cuenta, menos la tuya.&quot;&#xa;    + &quot;&lt;br&gt;Para eliminar una cuenta debes hacer click sobre la fila a eliminar y confirmar el proceso.&quot;&#xa;    + &quot;&lt;br&gt;Al eliminar una cuenta, todos los datos del usuario ser&#xe1;n completamente borrados de la base de datos y este ya no tendr&#xe1; acceso al sistema.&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
+        </Property>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="50" y="130" width="750" height="190"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel3">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Ver Usuarios"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="50" y="100" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

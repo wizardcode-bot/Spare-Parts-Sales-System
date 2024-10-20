@@ -1,17 +1,12 @@
 
-
-/**
- *
- * @author HOME
- */
-public class AddUserHelp extends javax.swing.JFrame {
+public class ViewUserHelp extends javax.swing.JFrame {
 
     /**
-     * Creates new form AddUserHelp
+     * Creates new form ViewUserHelp
      */
-    public AddUserHelp() {
+    public ViewUserHelp() {
         initComponents();
-        setSize(850, 500);
+        setSize(850,500);
         setLocationRelativeTo(null);
     }
 
@@ -26,9 +21,9 @@ public class AddUserHelp extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -40,20 +35,6 @@ public class AddUserHelp extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 58, 850, 10));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel6.setText("Añadir Usuarios");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 98, -1, -1));
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel5.setText("<html><p>En la función de 'Añadir Usuarios' puedes registrar a nuevos usuarios del sistema, estos tendrán su propia cuenta, por lo cual deberás ingresar algunos de sus datos personales."
-            + "<br>Primero asigna un rol al nuevo usuario del sistema, ten en cuenta las funciones a las que tiene acceso cada rol:"
-            + "<br>Administrador: Añadir, Ver, Actualizar y Eliminar usuarios, Gestionar clientes, Ver y Actualizar su propia cuenta."
-            + "<br>Vendedor: Añadir, Consultar, Actualizar, Eliminar y Vender productos, Ver facturas, Ver y Actualizar su propia cuenta."
-            + "<br>Luego de haber asignado un rol al usuario, ahora debes de ingresar los datos que se solicitan en el formulario de registro y dar click en 'Guardar'"
-            + "<br>Al dar click en 'Guardar' el nuevo usuario quedará registrado en la base de datos de usuarios del sistema y podrá iniciar sesión con sus credenciales."
-            + "<br>Recuerda que el nombre de usuario y la contraseña asignados son las credenciales que usará el usuario para ingresar al sistema.</p></html>");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 750, 300));
-
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -61,6 +42,17 @@ public class AddUserHelp extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel2.setText("<html><p>En la función 'Ver usuarios' podrás ver una tabla con los datos de todos los usuarios registrados que tienen acceso al sistema."
+            + "<br>En este mismo módulo podrás eliminar cualquier cuenta, menos la tuya."
+            + "<br>Para eliminar una cuenta debes hacer click sobre la fila a eliminar y confirmar el proceso."
+            + "<br>Al eliminar una cuenta, todos los datos del usuario serán completamente borrados de la base de datos y este ya no tendrá acceso al sistema.</p></html>");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, 750, 190));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setText("Ver Usuarios");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -87,20 +79,20 @@ public class AddUserHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddUserHelp().setVisible(true);
+                new ViewUserHelp().setVisible(true);
             }
         });
     }
@@ -108,8 +100,8 @@ public class AddUserHelp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

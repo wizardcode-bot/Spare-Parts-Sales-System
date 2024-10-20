@@ -39,9 +39,11 @@ public class AddClient extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtVehicleInfo = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtVehicleInfo = new javax.swing.JTextArea();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -102,10 +104,6 @@ public class AddClient extends javax.swing.JFrame {
         jLabel6.setText("Información del vehículo *");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 250, -1, -1));
 
-        txtVehicleInfo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtVehicleInfo.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtVehicleInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 270, 300, -1));
-
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
@@ -115,10 +113,21 @@ public class AddClient extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 310, 101, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 380, 101, -1));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("* Indica campo obligatorio");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 460, -1, -1));
+
+        txtVehicleInfo.setColumns(20);
+        txtVehicleInfo.setRows(5);
+        jScrollPane1.setViewportView(txtVehicleInfo);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 275, 300, 95));
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -201,18 +210,20 @@ public class AddClient extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMobileNumber;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtVehicleInfo;
+    private javax.swing.JTextArea txtVehicleInfo;
     // End of variables declaration//GEN-END:variables
 }
