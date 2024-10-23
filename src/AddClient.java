@@ -15,6 +15,7 @@ public class AddClient extends javax.swing.JFrame {
      */
     public AddClient() {
         initComponents();
+        setSize(850,500);
         setLocationRelativeTo(null);
     }
 
@@ -47,6 +48,7 @@ public class AddClient extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
@@ -66,43 +68,43 @@ public class AddClient extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nombre *");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtName.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 300, -1));
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Número de teléfono *");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMobileNumber.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 300, -1));
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Dirección *");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtAddress.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 300, -1));
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Correo electrónico");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, -1, -1));
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 300, -1));
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 150, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Información del vehículo *");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 250, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 210, -1, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -113,18 +115,18 @@ public class AddClient extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 380, 101, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 300, 101, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("* Indica campo obligatorio");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 460, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 420, -1, -1));
 
         txtVehicleInfo.setColumns(20);
         txtVehicleInfo.setRows(5);
         jScrollPane1.setViewportView(txtVehicleInfo);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 275, 300, 95));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 300, 60));
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 500));
@@ -153,14 +155,16 @@ public class AddClient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
         } else if (address.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
+        } else if (vehicleInfo.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la información del vehículo!"); 
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into clients (name, mobileNumber, address, email, vehicleInfo) values (?,?,?,?,?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into clients (name, mobileNumber, address, email, vehicleInfo) values (?,?,?,?,?)");
                 ps.setString(1, name);
                 ps.setString(2, mobileNumber);
-                ps.setString(3, email);
-                ps.setString(4, address);
+                ps.setString(3, address);
+                ps.setString(4, email);
                 ps.setString(5, vehicleInfo);
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Cliente agregado exitosamente!");
