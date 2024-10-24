@@ -123,6 +123,7 @@ public class AddClient extends javax.swing.JFrame {
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 420, -1, -1));
 
         txtVehicleInfo.setColumns(20);
+        txtVehicleInfo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtVehicleInfo.setRows(5);
         jScrollPane1.setViewportView(txtVehicleInfo);
 
