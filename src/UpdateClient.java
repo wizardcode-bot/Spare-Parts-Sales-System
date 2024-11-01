@@ -30,7 +30,7 @@ public class UpdateClient extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        txtClientName = new javax.swing.JTextField();
+        txtNickName = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -66,11 +66,11 @@ public class UpdateClient extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Nombre del cliente");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 91, -1, -1));
+        jLabel2.setText("Nombre clave del cliente");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
 
-        txtClientName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtClientName, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 87, 320, -1));
+        txtNickName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtNickName, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 87, 320, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -136,6 +136,11 @@ public class UpdateClient extends javax.swing.JFrame {
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
         jButton3.setText("Actualizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 360, 120, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
@@ -151,16 +156,17 @@ public class UpdateClient extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int checkClientExist = 0;
-        String clientName = txtClientName.getText();
-        if (clientName.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
+        String nickName = txtNickName.getText();
+        if (nickName.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre clave del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
         } else {
 
             try {
                 Connection con = ConnectionProvider.getCon();
                 Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from clients where name = '" + clientName + "'");
+                ResultSet rs = st.executeQuery("select * from clients where nickname = '" + nickName + "'");
                 while (rs.next()) {
+                    txtNickName.setEditable(false);
                     checkClientExist = 1;
                     txtName.setText(rs.getString("name"));
                     txtMobileNumber.setText(rs.getString("mobileNumber"));
@@ -181,6 +187,48 @@ public class UpdateClient extends javax.swing.JFrame {
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String name = txtName.getText();
+        String mobileNumber = txtMobileNumber.getText();
+        String address = txtAddress.getText();
+        String email = txtEmail.getText();
+        String vehicleInfo = txtVehicleInfo.getText();
+        String nickname = txtNickName.getText();
+        
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
+        } else if (mobileNumber.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
+        } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
+            JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
+        } else if (address.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
+        } else if (!email.matches(emailPattern)){
+            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
+        } else if (vehicleInfo.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la información del vehículo!"); 
+        } else {
+            try{
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("update clients set name=?, mobileNumber=?, address=?, email=?, vehicleInfo=? where nickname=?");
+                ps.setString(1, name);
+                ps.setString(2, mobileNumber);
+                ps.setString(3, address);
+                ps.setString(4, email);
+                ps.setString(5, vehicleInfo);
+                ps.setString(6, nickname);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "¡Cliente actualizado exitosamente!");
+                setVisible(false);
+                new UpdateClient().setVisible(true);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -232,10 +280,10 @@ public class UpdateClient extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtClientName;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMobileNumber;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtNickName;
     private javax.swing.JTextArea txtVehicleInfo;
     // End of variables declaration//GEN-END:variables
 }

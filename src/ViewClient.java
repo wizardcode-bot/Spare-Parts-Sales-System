@@ -63,7 +63,7 @@ public class ViewClient extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Teléfono", "Dirección", "Correo", "Info. del Vehículo"
+                "ID", "Nombre", "Teléfono", "Dirección", "Correo", "Nombre clave", "Info. del vehículo"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -103,7 +103,7 @@ public class ViewClient extends javax.swing.JFrame {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from clients");
             while(rs.next()){
-                model.addRow(new Object[]{rs.getString("client_pk"),rs.getString("name"),rs.getString("mobileNumber"),rs.getString("address"),rs.getString("email"),rs.getString("vehicleInfo")});
+                model.addRow(new Object[]{rs.getString("client_pk"),rs.getString("name"),rs.getString("mobileNumber"),rs.getString("address"),rs.getString("email"), rs.getString("nickname"), rs.getString("vehicleInfo")});
             }
         }
         catch(Exception e){

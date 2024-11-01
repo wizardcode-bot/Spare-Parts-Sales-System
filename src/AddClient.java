@@ -4,18 +4,21 @@ import dao.ConnectionProvider;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.*;
+import javax.swing.ImageIcon;
 
 public class AddClient extends javax.swing.JFrame {
 
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
+    public int checkNickname = 0;
 
     /**
      * Creates new form AddClient
      */
     public AddClient() {
         initComponents();
-        setSize(850,500);
+        iconLabel.setVisible(false);
+        setSize(850, 500);
         setLocationRelativeTo(null);
     }
 
@@ -44,7 +47,10 @@ public class AddClient extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtVehicleInfo = new javax.swing.JTextArea();
-        jButton3 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtNickName = new javax.swing.JTextField();
+        iconLabel = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -104,7 +110,7 @@ public class AddClient extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Información del vehículo *");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 210, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 280, -1, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -115,7 +121,7 @@ public class AddClient extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 300, 101, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 370, 101, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
@@ -127,10 +133,27 @@ public class AddClient extends javax.swing.JFrame {
         txtVehicleInfo.setRows(5);
         jScrollPane1.setViewportView(txtVehicleInfo);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 300, 60));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 300, 300, 60));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 500));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Nombre Clave *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 209, -1, -1));
+
+        txtNickName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtNickName.setForeground(new java.awt.Color(0, 0, 0));
+        txtNickName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNickNameKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtNickName, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 228, 300, -1));
+
+        iconLabel.setText("jLabel9");
+        getContentPane().add(iconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(772, 231, -1, -1));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -146,6 +169,7 @@ public class AddClient extends javax.swing.JFrame {
         String mobileNumber = txtMobileNumber.getText();
         String address = txtAddress.getText();
         String email = txtEmail.getText();
+        String nickname = txtNickName.getText();
         String vehicleInfo = txtVehicleInfo.getText();
 
         if (name.equals("")) {
@@ -156,17 +180,25 @@ public class AddClient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
         } else if (address.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        } else if (vehicleInfo.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la información del vehículo!"); 
+        } else if (!email.matches(emailPattern)) {
+            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
+        } else if (nickname.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre clave!");
+        } else if (checkNickname == 1){
+            JOptionPane.showMessageDialog(null, "¡El nombre clave ya existe!");
+        }
+        else if (vehicleInfo.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la información del vehículo!");
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into clients (name, mobileNumber, address, email, vehicleInfo) values (?,?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into clients (name, mobileNumber, address, email, nickname, vehicleInfo) values (?,?,?,?,?,?)");
                 ps.setString(1, name);
                 ps.setString(2, mobileNumber);
                 ps.setString(3, address);
                 ps.setString(4, email);
-                ps.setString(5, vehicleInfo);
+                ps.setString(5, nickname);
+                ps.setString(6, vehicleInfo);
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Cliente agregado exitosamente!");
                 setVisible(false);
@@ -176,6 +208,32 @@ public class AddClient extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtNickNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNickNameKeyReleased
+        // TODO add your handling code here:
+        String nickname = txtNickName.getText();
+        if (!nickname.equals("")) {
+            iconLabel.setVisible(true);
+            iconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+            iconLabel.setText("");
+            checkNickname = 0;
+
+            try {
+                Connection con = ConnectionProvider.getCon();
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("select * from clients where nickname='" + nickname + "'");
+                while (rs.next()) {
+                    checkNickname = 1;
+                    iconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                    iconLabel.setText("");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        } else {
+            iconLabel.setVisible(false);
+        }
+    }//GEN-LAST:event_txtNickNameKeyReleased
 
     /**
      * @param args the command line arguments
@@ -213,22 +271,25 @@ public class AddClient extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel iconLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMobileNumber;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtNickName;
     private javax.swing.JTextArea txtVehicleInfo;
     // End of variables declaration//GEN-END:variables
 }
