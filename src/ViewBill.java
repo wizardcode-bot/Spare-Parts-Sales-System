@@ -61,7 +61,7 @@ public class ViewBill extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Factura de ID", "Fecha", "Total Pagado", "Generado por"
+                "Factura de ID", "Fecha", "Total Pagado", "Generado por", "Cliente"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -92,7 +92,7 @@ public class ViewBill extends javax.swing.JFrame {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from bills");
             while(rs.next()){
-                model.addRow(new Object[]{rs.getString("billId"), rs.getString("billDate"), rs.getString("totalPaid"), rs.getString("generatedBy")});
+                model.addRow(new Object[]{rs.getString("billId"), rs.getString("billDate"), rs.getString("totalPaid"), rs.getString("generatedBy"), rs.getString("relatedClient")});
             }
         }
         catch(Exception e){

@@ -20,6 +20,7 @@ public class SellProduct extends javax.swing.JFrame {
     private int finalTotalPrice = 0;
     private String billId = "";
     private String username = "";
+    private String selectedClient = "";
 
     /**
      * Creates new form SellProduct
@@ -32,6 +33,7 @@ public class SellProduct extends javax.swing.JFrame {
         initComponents();
         username = tempUsername;
         setLocationRelativeTo(null);
+        setSize(1366, 778);
     }
 
     private void productName(String nameOrUniqueId) {
@@ -97,7 +99,13 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         lblFinalTotalPrice = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        comboRelateClient = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
+        txtFilterClient = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -148,15 +156,26 @@ public class SellProduct extends javax.swing.JFrame {
             new String [] {
                 "Productos Registrados"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         productsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productsTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(productsTable);
+        if (productsTable.getColumnModel().getColumnCount() > 0) {
+            productsTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 200, 370, 477));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 200, 370, 390));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -220,7 +239,7 @@ public class SellProduct extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 350, -1, -1));
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 340, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -238,17 +257,17 @@ public class SellProduct extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 401, 684, 220));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 470, 684, 220));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio total:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(773, 643, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 610, -1, -1));
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblFinalTotalPrice.setText("---");
-        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(939, 643, -1, -1));
+        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 610, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -259,10 +278,42 @@ public class SellProduct extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 650, -1, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 660, -1, -1));
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        comboRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        comboRelateClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un cliente", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(comboRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 366, 300, -1));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Filtrar por nombre clave");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 403, -1, -1));
+
+        txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 427, 200, -1));
+
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
+        jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(793, 424, 100, -1));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Relacionar Cliente");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 345, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Seleccione en la tabla el producto que a eliminar ");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 700, -1, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -12, -1, 790));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -275,6 +326,7 @@ public class SellProduct extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         productName("");
+        cargarClientes();
         txtUniqueId.setEditable(false);
         txtName.setEditable(false);
         txtCompanyName.setEditable(false);
@@ -406,6 +458,11 @@ public class SellProduct extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        selectedClient = comboRelateClient.getSelectedItem().toString();
+        if (selectedClient.equals("Seleccione un cliente")){
+            selectedClient = "No registrado";
+        }
+            
         if (finalTotalPrice != 0) {
             billId = getUniqueId("Factura -");
 
@@ -429,11 +486,12 @@ public class SellProduct extends javax.swing.JFrame {
                 SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into bills(billId, billDate, totalPaid, generatedBy) values(?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into bills(billId, billDate, totalPaid, generatedBy, relatedClient) values(?,?,?,?,?)");
                 ps.setString(1, billId);
                 ps.setString(2, myFormat.format(cal.getTime()));
                 ps.setInt(3, finalTotalPrice);
                 ps.setString(4, username);
+                ps.setString(5, selectedClient);
                 ps.executeUpdate();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
@@ -449,7 +507,7 @@ public class SellProduct extends javax.swing.JFrame {
                 doc.add(CompanyName);
                 Paragraph starLine = new Paragraph("\n************************************************************************************************************\n");
                 doc.add(starLine);
-                Paragraph details = new Paragraph("\tID de factura: " + billId + "\nFecha: " + new Date() + "\nPrecio Total Pagado: " + finalTotalPrice);
+                Paragraph details = new Paragraph("\tID de factura: " + billId + "\nFecha: " + new Date() + "\nPrecio Total Pagado: " + finalTotalPrice + "\nVendedor: " + username + "\nCliente: " + selectedClient);
                 doc.add(details);
                 doc.add(starLine);
                 PdfPTable tbl = new PdfPTable(6);
@@ -491,6 +549,50 @@ public class SellProduct extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // filtrar clientes por nombre clave
+        int checkClientExist = 0;
+        String filterClient = txtFilterClient.getText();
+        if (filterClient.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre clave del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+
+            try {
+                Connection con = ConnectionProvider.getCon();
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("select name from clients where nickname = '" + filterClient + "'");
+                if (rs.next()) {
+                    checkClientExist = 1;
+                    comboRelateClient.setSelectedItem(rs.getString("name"));
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            if (checkClientExist == 0) {
+                JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
+                comboRelateClient.setSelectedItem("Seleccione un cliente");
+            }
+        }
+        txtFilterClient.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /* Método para cargar los clientes en el jComboBox */
+    private void cargarClientes() {
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from clients");
+            comboRelateClient.removeAllItems();
+            comboRelateClient.addItem("Seleccione un cliente");
+
+            while (rs.next()) {
+                comboRelateClient.addItem(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -529,10 +631,15 @@ public class SellProduct extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddToCart;
     private javax.swing.JTable cartTable;
+    private javax.swing.JComboBox<String> comboRelateClient;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -547,6 +654,7 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JLabel lblFinalTotalPrice;
     private javax.swing.JTable productsTable;
     private javax.swing.JTextField txtCompanyName;
+    private javax.swing.JTextField txtFilterClient;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNoOfUnits;
     private javax.swing.JTextField txtPricePerUnit;

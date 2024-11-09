@@ -5,12 +5,11 @@
         <group>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/UpdateClient.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/Login.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ManageClients.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/SellerDashboard.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/dao/Tables.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/AddClient.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ViewClient.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/AddUser.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/UpdateUser.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/SellProduct.java</file>
         </group>
     </open-files>
 </project-private>
