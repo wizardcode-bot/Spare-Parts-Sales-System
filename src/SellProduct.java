@@ -232,14 +232,14 @@ public class SellProduct extends javax.swing.JFrame {
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
-        btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add to cart.png"))); // NOI18N
+        btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
         btnAddToCart.setText("Añadir al carrito");
         btnAddToCart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 340, -1, -1));
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 340, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -271,7 +271,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/generate bill & print.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
         jButton3.setText("Generar venta e Imprimir");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
