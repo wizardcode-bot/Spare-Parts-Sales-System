@@ -1,12 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 
-/**
- *
- * @author HOME
- */
 public class ManageServices extends javax.swing.JFrame {
 
     /**
@@ -56,17 +48,23 @@ public class ManageServices extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/newService.png"))); // NOI18N
         jButton2.setText("Nuevo servicio");
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.setIconTextGap(20);
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(101, 146, 300, 108));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/viewService.png"))); // NOI18N
         jButton3.setText("Consultar servicios");
+        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(458, 146, 300, 108));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/updateService.png"))); // NOI18N
         jButton4.setText("Actualizar estado");
+        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton4.setIconTextGap(10);
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(101, 285, 300, 108));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N

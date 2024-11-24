@@ -121,7 +121,7 @@ public class SellerDashboard extends javax.swing.JFrame {
 
         jButton8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(0, 0, 0));
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/salida.png"))); // NOI18N
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/exit.png"))); // NOI18N
         jButton8.setText("              Salir");
         jButton8.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
         jButton8.setMargin(new java.awt.Insets(2, 20, 2, 14));
