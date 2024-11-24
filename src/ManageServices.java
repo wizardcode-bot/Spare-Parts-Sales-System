@@ -54,6 +54,7 @@ public class ManageServices extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/newService.png"))); // NOI18N
         jButton2.setText("Nuevo servicio");
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(101, 146, 300, 108));
 
@@ -64,6 +65,7 @@ public class ManageServices extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/updateService.png"))); // NOI18N
         jButton4.setText("Actualizar estado");
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(101, 285, 300, 108));
 
