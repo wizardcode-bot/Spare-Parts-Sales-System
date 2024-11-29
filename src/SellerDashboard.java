@@ -149,7 +149,7 @@ public class SellerDashboard extends javax.swing.JFrame {
         jButton9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton9.setForeground(new java.awt.Color(0, 0, 0));
         jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addClients.png"))); // NOI18N
-        jButton9.setText(" Añadir Cliente");
+        jButton9.setText(" Registrar Cliente");
         jButton9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton9.setIconTextGap(20);

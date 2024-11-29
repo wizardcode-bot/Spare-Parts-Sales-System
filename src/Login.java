@@ -94,8 +94,8 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la aplicación?","Selecciona una opción",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí","No"},"Sí");
-        if (a==0){
+        int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la aplicación?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+        if (a == 0) {
             System.exit(0);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -104,30 +104,30 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         String username = txtUsername.getText();
         String password = txtPassword.getText();
-        
+
         int temp = 0;
-        
-        try{
+
+        try {
             Connection con = ConnectionProvider.getCon();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from appuser where username='"+username+"' and password='"+password+"'");
-            while(rs.next()){
+            ResultSet rs = st.executeQuery("select * from appuser where username='" + username + "' and password='" + password + "'");
+            while (rs.next()) {
+                String userRole = rs.getString("userRole");
+                System.out.println(userRole);
                 temp = 1;
-                if(rs.getString("userRole").equals("Administrador")){
+                if (rs.getString("userRole").equals("Administrador")) {
                     setVisible(false);
                     new AdminDashboard(username).setVisible(true);
-                }
-                else{
+                } else {
                     setVisible(false);
                     new SellerDashboard(username).setVisible(true);
                 }
             }
-            
-            if(temp == 0){
-                JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto","Error", JOptionPane.ERROR_MESSAGE);
+
+            if (temp == 0) {
+                JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -8,12 +8,14 @@ import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import java.util.Date;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class AddUser extends javax.swing.JFrame {
 
-    public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
+    //public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
     public int checkUsername = 0;
+    public String hashedPassword  = "";
 
     /**
      * Creates new form AddUser
@@ -44,7 +46,7 @@ public class AddUser extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtMobileNumber = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtEmail = new javax.swing.JTextField();
+        txtIDcard = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         iconLabel = new javax.swing.JLabel();
@@ -104,11 +106,11 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Correo electrónico");
+        jLabel6.setText("Número de cédula (sin puntos ni espacios)");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 120, -1, -1));
 
-        txtEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 143, 300, -1));
+        txtIDcard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtIDcard, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 143, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
@@ -229,9 +231,10 @@ public class AddUser extends javax.swing.JFrame {
             dob = dFormat.format(dateDOB.getDate());
         }
         String mobileNumber = txtMobileNumber.getText();
-        String email = txtEmail.getText();
+        String IDcard = txtIDcard.getText();
         String username = txtUsername.getText();
         String password = txtPassword.getText();
+        hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         String address = txtAddress.getText();
 
         if (name.equals("")) {
@@ -241,11 +244,11 @@ public class AddUser extends javax.swing.JFrame {
         } else if (mobileNumber.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
         } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
-            JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
-        } else if (email.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el correo electrónico!");
-        } else if (!email.matches(emailPattern)) {
-            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
+            JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido!");
+        } else if (IDcard.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
+        } else if (!IDcard.matches(mobileNumberPattern) || IDcard.length() > 10 || IDcard.length() < 6) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido!");
         } else if (username.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!");
         } else if (checkUsername == 1) {
@@ -257,14 +260,14 @@ public class AddUser extends javax.swing.JFrame {
         }else{
             try{
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into appuser (userRole, name, dob, mobileNumber, email, username, password, address) values (?,?,?,?,?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) values (?,?,?,?,?,?,?,?)");
                 ps.setString(1, userRole);
                 ps.setString(2, name);
                 ps.setString(3, dob);
                 ps.setString(4, mobileNumber);
-                ps.setString(5, email);
+                ps.setString(5, IDcard);
                 ps.setString(6, username);
-                ps.setString(7, password);
+                ps.setString(7, hashedPassword);
                 ps.setString(8, address);
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Usuario agregado exitosamente!");
@@ -346,7 +349,7 @@ public class AddUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIDcard;
     private javax.swing.JTextField txtMobileNumber;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPassword;
