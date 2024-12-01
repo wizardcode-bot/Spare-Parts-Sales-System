@@ -2,8 +2,9 @@
 import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class Login extends javax.swing.JFrame {
 
@@ -93,7 +94,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        
         int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la aplicación?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
         if (a == 0) {
             System.exit(0);
@@ -101,34 +102,50 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        
         String username = txtUsername.getText();
         String password = txtPassword.getText();
 
-        int temp = 0;
+        //verificar si el usuario existe
+        boolean userFound = false;
+        
+        String query = "SELECT password, userRole FROM appuser WHERE username = ?";
 
-        try {
-            Connection con = ConnectionProvider.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from appuser where username='" + username + "' and password='" + password + "'");
-            while (rs.next()) {
-                String userRole = rs.getString("userRole");
-                System.out.println(userRole);
-                temp = 1;
-                if (rs.getString("userRole").equals("Administrador")) {
-                    setVisible(false);
-                    new AdminDashboard(username).setVisible(true);
-                } else {
-                    setVisible(false);
-                    new SellerDashboard(username).setVisible(true);
+        try (
+            Connection con = ConnectionProvider.getCon(); 
+            PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setString(1, username);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    userFound = true;
+
+                    String hashedPassword = rs.getString("password");
+
+                    // Verificar la contraseña ingresada
+                    if (BCrypt.checkpw(password, hashedPassword)) {
+                        // Determinar el rol del usuario
+                        String userRole = rs.getString("userRole");
+                        setVisible(false);
+                        if ("Administrador".equals(userRole)) {
+                            new AdminDashboard(username).setVisible(true);
+                        } else {
+                            new SellerDashboard(username).setVisible(true);
+                        }
+                    } else {
+                        // Contraseña incorrecta
+                        JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
 
-            if (temp == 0) {
+            // Si no se encontró al usuario
+            if (!userFound) {
                 JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error al iniciar sesión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -69,7 +69,7 @@ public class ViewUser extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Rol", "Fecha de Nacimiento", "Teléfono", "Cédula", "Usuario", "Contraseña", "Dirección"
+                "ID", "Nombre", "Rol", "Fecha de Nacimiento", "Teléfono", "Cédula", "Usuario", "Dirección"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -111,7 +111,7 @@ public class ViewUser extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery("select * from appuser ");
             
             while(rs.next()){
-                model.addRow(new Object[]{rs.getString("appuser_pk"), rs.getString("name"), rs.getString("userRole") , rs.getString("dob"), rs.getString("mobileNumber"), rs.getString("IDcard"), rs.getString("username"), rs.getString("password"), rs.getString("address")});
+                model.addRow(new Object[]{rs.getString("appuser_pk"), rs.getString("name"), rs.getString("userRole") , rs.getString("dob"), rs.getString("mobileNumber"), rs.getString("IDcard"), rs.getString("username"), rs.getString("address")});
             }
         }
         catch(Exception e){

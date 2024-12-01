@@ -15,7 +15,7 @@ public class AddUser extends javax.swing.JFrame {
     //public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
     public int checkUsername = 0;
-    public String hashedPassword  = "";
+    public String hashedPassword = "";
 
     /**
      * Creates new form AddUser
@@ -194,7 +194,7 @@ public class AddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void txtUsernameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyReleased
-        // TODO add your handling code here:
+
         String username = txtUsername.getText();
         if (!username.equals("")) {
             iconLabel.setVisible(true);
@@ -202,25 +202,30 @@ public class AddUser extends javax.swing.JFrame {
             iconLabel.setText("");
             checkUsername = 0;
 
-            try {
-                Connection con = ConnectionProvider.getCon();
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from appuser where username = '" + username + "'");
-                while (rs.next()) {
-                    checkUsername = 1;
-                    iconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
-                    iconLabel.setText("");
+            String query = "SELECT * FROM appuser WHERE username = ?";
+            try (
+                    Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+                pst.setString(1, username);
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        checkUsername = 1;
+                        iconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                        iconLabel.setText("");
+                    }
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         } else {
             iconLabel.setVisible(false);
         }
+
     }//GEN-LAST:event_txtUsernameKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+
         String userRole = (String) comboUserRole.getSelectedItem();
         String name = txtName.getText();
         SimpleDateFormat dFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -257,10 +262,10 @@ public class AddUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la contraseña!");
         } else if (address.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        }else{
-            try{
-                Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) values (?,?,?,?,?,?,?,?)");
+        } else {
+            String query = "INSERT INTO appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
                 ps.setString(1, userRole);
                 ps.setString(2, name);
                 ps.setString(3, dob);
@@ -269,13 +274,13 @@ public class AddUser extends javax.swing.JFrame {
                 ps.setString(6, username);
                 ps.setString(7, hashedPassword);
                 ps.setString(8, address);
+
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Usuario agregado exitosamente!");
                 setVisible(false);
                 new AddUser().setVisible(true);
-            }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
