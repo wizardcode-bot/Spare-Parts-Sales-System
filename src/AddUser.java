@@ -3,7 +3,6 @@ import dao.ConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.*;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -15,6 +14,7 @@ public class AddUser extends javax.swing.JFrame {
     //public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
     public int checkUsername = 0;
+    public int checkID = 0;
     public String hashedPassword = "";
 
     /**
@@ -22,7 +22,8 @@ public class AddUser extends javax.swing.JFrame {
      */
     public AddUser() {
         initComponents();
-        iconLabel.setVisible(false);
+        userIconLabel.setVisible(false);
+        IDiconLabel.setVisible(false);
         setLocationRelativeTo(null);
     }
 
@@ -49,7 +50,7 @@ public class AddUser extends javax.swing.JFrame {
         txtIDcard = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        iconLabel = new javax.swing.JLabel();
+        userIconLabel = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -57,7 +58,9 @@ public class AddUser extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        IDiconLabel = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -110,6 +113,11 @@ public class AddUser extends javax.swing.JFrame {
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 120, -1, -1));
 
         txtIDcard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtIDcard.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIDcardKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtIDcard, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 143, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -125,10 +133,10 @@ public class AddUser extends javax.swing.JFrame {
         });
         getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 214, 300, -1));
 
-        iconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        iconLabel.setForeground(new java.awt.Color(0, 0, 0));
-        iconLabel.setText("---");
-        getContentPane().add(iconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(778, 218, -1, -1));
+        userIconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        userIconLabel.setForeground(new java.awt.Color(0, 0, 0));
+        userIconLabel.setText("---");
+        getContentPane().add(userIconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(778, 218, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
@@ -177,14 +185,15 @@ public class AddUser extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(802, 6, 40, 40));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(799, 150, -1, -1));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 500));
+        IDiconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        IDiconLabel.setForeground(new java.awt.Color(0, 0, 0));
+        IDiconLabel.setText("---");
+        getContentPane().add(IDiconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(778, 147, -1, -1));
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -197,12 +206,12 @@ public class AddUser extends javax.swing.JFrame {
 
         String username = txtUsername.getText();
         if (!username.equals("")) {
-            iconLabel.setVisible(true);
-            iconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
-            iconLabel.setText("");
+            userIconLabel.setVisible(true);
+            userIconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+            userIconLabel.setText("");
             checkUsername = 0;
 
-            String query = "SELECT * FROM appuser WHERE username = ?";
+            String query = "SELECT username FROM appuser WHERE username = ?";
             try (
                     Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -211,15 +220,15 @@ public class AddUser extends javax.swing.JFrame {
                 try (ResultSet rs = pst.executeQuery()) {
                     while (rs.next()) {
                         checkUsername = 1;
-                        iconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
-                        iconLabel.setText("");
+                        userIconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                        userIconLabel.setText("");
                     }
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
         } else {
-            iconLabel.setVisible(false);
+            userIconLabel.setVisible(false);
         }
 
     }//GEN-LAST:event_txtUsernameKeyReleased
@@ -254,7 +263,9 @@ public class AddUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
         } else if (!IDcard.matches(mobileNumberPattern) || IDcard.length() > 10 || IDcard.length() < 6) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido!");
-        } else if (username.equals("")) {
+        }  else if (checkID == 1) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula ya existe!");
+        }  else if (username.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!");
         } else if (checkUsername == 1) {
             JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya existe!");
@@ -264,7 +275,8 @@ public class AddUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
         } else {
             String query = "INSERT INTO appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+            try (Connection con = ConnectionProvider.getCon(); 
+                 PreparedStatement ps = con.prepareStatement(query)) {
 
                 ps.setString(1, userRole);
                 ps.setString(2, name);
@@ -296,9 +308,35 @@ public class AddUser extends javax.swing.JFrame {
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void txtIDcardKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDcardKeyReleased
+        String idCard = txtIDcard.getText();
+
+        if (!idCard.equals("")) {
+            IDiconLabel.setVisible(true);
+            IDiconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+            IDiconLabel.setText("");
+            checkID = 0;
+
+            String query = "SELECT IDcard FROM appuser WHERE IDcard = ?";
+            try (Connection con = ConnectionProvider.getCon();
+                PreparedStatement pst = con.prepareStatement(query)) {
+
+                pst.setString(1, idCard);
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        checkID = 1;
+                        IDiconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                        IDiconLabel.setText("");
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        } else {
+            userIconLabel.setVisible(false);
+        }
+    }//GEN-LAST:event_txtIDcardKeyReleased
 
     /**
      * @param args the command line arguments
@@ -336,21 +374,22 @@ public class AddUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel IDiconLabel;
     private javax.swing.JComboBox<String> comboUserRole;
     private com.toedter.calendar.JDateChooser dateDOB;
-    private javax.swing.JLabel iconLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
@@ -359,5 +398,6 @@ public class AddUser extends javax.swing.JFrame {
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtUsername;
+    private javax.swing.JLabel userIconLabel;
     // End of variables declaration//GEN-END:variables
 }

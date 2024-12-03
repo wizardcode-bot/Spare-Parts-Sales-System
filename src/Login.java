@@ -104,7 +104,8 @@ public class Login extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         String username = txtUsername.getText();
-        String password = txtPassword.getText();
+        char[] passwordChars = txtPassword.getPassword();
+        String password = new String(passwordChars);
 
         //verificar si el usuario existe
         boolean userFound = false;
@@ -147,6 +148,9 @@ public class Login extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al iniciar sesión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        java.util.Arrays.fill(passwordChars, '\0'); //limpiar el arreglo del campo de contraseña
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
