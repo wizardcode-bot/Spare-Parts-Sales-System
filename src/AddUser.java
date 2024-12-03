@@ -60,6 +60,7 @@ public class AddUser extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         IDiconLabel = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -74,7 +75,7 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Rol de usuario");
+        jLabel2.setText("Rol de usuario *");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 120, -1, -1));
 
         comboUserRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -84,7 +85,7 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Nombre");
+        jLabel3.setText("Nombre *");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 186, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -101,7 +102,7 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Número de teléfono");
+        jLabel5.setText("Número de teléfono *");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 326, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -109,7 +110,7 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Número de cédula (sin puntos ni espacios)");
+        jLabel6.setText("Número de cédula (sin puntos ni espacios) *");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 120, -1, -1));
 
         txtIDcard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -122,7 +123,7 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Nombre de usuario");
+        jLabel7.setText("Nombre de usuario *");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 186, -1, -1));
 
         txtUsername.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -140,7 +141,7 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Contraseña");
+        jLabel9.setText("Contraseña *");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 256, -1, -1));
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -191,6 +192,11 @@ public class AddUser extends javax.swing.JFrame {
         IDiconLabel.setForeground(new java.awt.Color(0, 0, 0));
         IDiconLabel.setText("---");
         getContentPane().add(IDiconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(778, 147, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("(*) Indica campo obligatorio");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 450, -1, -1));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -382,6 +388,7 @@ public class AddUser extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

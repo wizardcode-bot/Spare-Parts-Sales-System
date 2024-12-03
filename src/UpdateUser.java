@@ -1,13 +1,11 @@
 
 import dao.ConnectionProvider;
-import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import java.sql.*;
-import java.util.Date;
 
 public class UpdateUser extends javax.swing.JFrame {
 
-    private String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
+    //private String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     private String mobileNumberPattern = "^[0-9]*$";
 
     /**
@@ -31,32 +29,27 @@ public class UpdateUser extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
+        txtIDcard = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         comboUserRole = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        dateDOB = new com.toedter.calendar.JDateChooser();
-        jLabel6 = new javax.swing.JLabel();
-        txtEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtMobileNumber = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtUsername = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Actualizar Usuario");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -64,16 +57,12 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Nombre de Usuario");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 93, -1, -1));
+        jLabel2.setText("Número de cédula");
 
-        txtUsername.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(261, 89, 300, -1));
+        txtIDcard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -84,12 +73,10 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 87, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Rol del Usuario");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 171, -1, -1));
 
         comboUserRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboUserRole.setForeground(new java.awt.Color(255, 255, 255));
@@ -99,47 +86,28 @@ public class UpdateUser extends javax.swing.JFrame {
                 comboUserRoleActionPerformed(evt);
             }
         });
-        getContentPane().add(comboUserRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 193, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Nombre");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 245, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 273, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Fecha de Nacimiento");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 329, -1, -1));
-
-        dateDOB.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        getContentPane().add(dateDOB, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 351, 300, -1));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Correo Electrónico");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 171, -1, -1));
-
-        txtEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 194, 300, -1));
+        jLabel5.setText("Nombre de usuario");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Número de teléfono");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 245, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 273, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Dirección");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 329, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 351, 300, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -150,7 +118,6 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 393, 120, -1));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -159,15 +126,106 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, 40, 30));
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 500));
+        txtUsername.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtUsername.setForeground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(260, 260, 260)
+                        .addComponent(jLabel1)
+                        .addGap(156, 156, 156)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboUserRole, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7)
+                            .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(436, 436, 436)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(83, 83, 83))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(133, 133, 133)
+                .addComponent(jLabel2)
+                .addGap(12, 12, 12)
+                .addComponent(txtIDcard, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(5, 5, 5)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel2))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addComponent(txtIDcard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jButton2))
+                                .addGap(62, 62, 62)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel7))
+                                .addGap(7, 7, 7)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(comboUserRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel5))
+                    .addComponent(jButton3))
+                .addGap(12, 12, 12)
+                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(114, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -178,35 +236,27 @@ public class UpdateUser extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        
         int checkUserExist = 0;
-        String username = txtUsername.getText();
+        String IDcard = txtIDcard.getText();
 
-        if (username.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!","No hay usuarios seleccionados",JOptionPane.INFORMATION_MESSAGE);
+        if (IDcard.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!","No hay usuarios seleccionados",JOptionPane.INFORMATION_MESSAGE);
         } else {
-            SimpleDateFormat dFormat = new SimpleDateFormat("dd-MM-yyyy");
-
+            
             try {
                 Connection con = ConnectionProvider.getCon();
                 Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from appuser where username = '" + username + "'");
+                ResultSet rs = st.executeQuery("select * from appuser where IDcard = '" + IDcard + "'");
 
                 while (rs.next()) {
-                    txtUsername.setEditable(false);
+                    txtIDcard.setEditable(false);
                     checkUserExist = 1;
                     txtName.setText(rs.getString("name"));
+                    txtUsername.setText(rs.getString("username"));
                     txtMobileNumber.setText(rs.getString("mobileNumber"));
-                    txtEmail.setText(rs.getString("email"));
                     txtAddress.setText(rs.getString("address"));
-                    String dob = rs.getString("dob");
-
-                    if (dob != "") {
-                        try {
-                            dateDOB.setDate(dFormat.parse(dob));
-                        } catch (Exception e) {
-                        }
-                    }
+                    
                     if (rs.getString("userRole").equals("Administrador")) {
                         comboUserRole.removeAllItems();
                         comboUserRole.addItem("Administrador");
@@ -221,54 +271,44 @@ public class UpdateUser extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
             if (checkUserExist == 0) {
-                JOptionPane.showMessageDialog(null, "¡El nombre de usuario no existe!","Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡El usuario no existe!","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        
         String userRole = (String) comboUserRole.getSelectedItem();
         String name = txtName.getText();
-        SimpleDateFormat dFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = dateDOB.getDate();
-        String dob = "";
-
-        if (date != null) {
-            dob = dFormat.format(dateDOB.getDate());
-        }
-        String mobileNumber = txtMobileNumber.getText();
-        String email = txtEmail.getText();
         String username = txtUsername.getText();
+        String mobileNumber = txtMobileNumber.getText();
+        String IDcard = txtIDcard.getText();
         String address = txtAddress.getText();
 
-        if (name.equals("")) {
+        if (IDcard.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
+        } else if (name.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
-        } else if (dob.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la fecha de nacimiento!");
+        } else if (name.matches(mobileNumberPattern)){
+            JOptionPane.showMessageDialog(null, "¡No puedes ingresar números en el nombre!");
+        }else if (username.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!");
         } else if (mobileNumber.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
         } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
-        } else if (email.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el correo electrónico!");
-        } else if (!email.matches(emailPattern)) {
-            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
-        } else if (username.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!");
         } else if (address.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("update appuser set userRole=?, name=?, dob=?, mobileNumber=?, email=?, address=? where username=?");
+                PreparedStatement ps = con.prepareStatement("update appuser set userRole=?, name=?, username=?, mobileNumber=?,  address=? where IDcard=?");
                 ps.setString(1, userRole);
                 ps.setString(2, name);
-                ps.setString(3, dob);
+                ps.setString(3, username);
                 ps.setString(4, mobileNumber);
-                ps.setString(5, email);
-                ps.setString(6, address);
-                ps.setString(7, username);
+                ps.setString(5, address);
+                ps.setString(6, IDcard);
                 ps.executeUpdate();
                 
                 JOptionPane.showMessageDialog(null, "¡Usuario actualizado exitosamente!");
@@ -289,10 +329,6 @@ public class UpdateUser extends javax.swing.JFrame {
         
         new UpdateUserHelp().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -331,23 +367,20 @@ public class UpdateUser extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboUserRole;
-    private com.toedter.calendar.JDateChooser dateDOB;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIDcard;
     private javax.swing.JTextField txtMobileNumber;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtUsername;
