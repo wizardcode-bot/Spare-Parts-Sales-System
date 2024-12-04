@@ -5,9 +5,8 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import javax.swing.table.TableModel;
 
-
 public class ViewUser extends javax.swing.JFrame {
-    
+
     private String username = "";
 
     /**
@@ -16,7 +15,7 @@ public class ViewUser extends javax.swing.JFrame {
     public ViewUser() {
         initComponents();
     }
-     
+
     public ViewUser(String tempUsername) {
         initComponents();
         username = tempUsername;
@@ -39,7 +38,11 @@ public class ViewUser extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtFilterID = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -79,12 +82,12 @@ public class ViewUser extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 81, 838, 340));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 115, 838, 333));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Selecciona la fila de el usuario a eliminar");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 440, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 466, -1, -1));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -95,28 +98,73 @@ public class ViewUser extends javax.swing.JFrame {
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, 40, 30));
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 500));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Filtrar por número de cédula");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 82, -1, -1));
+
+        txtFilterID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtFilterID.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtFilterID, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 78, 300, -1));
+
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 0, 0));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/filter.png"))); // NOI18N
+        jButton2.setText("Filtrar");
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(581, 75, 90, -1));
+
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 0, 0));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/reset.png"))); // NOI18N
+        jButton3.setText("Reiniciar");
+        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(677, 75, 110, -1));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadAllData() {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // Limpia la tabla antes de cargar los datos
+    String query = "SELECT * FROM appuser";
+
+    try (Connection con = ConnectionProvider.getCon();
+         PreparedStatement ps = con.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getString("appuser_pk"),
+                rs.getString("name"),
+                rs.getString("userRole"),
+                rs.getString("dob"),
+                rs.getString("mobileNumber"),
+                rs.getString("IDcard"),
+                rs.getString("username"),
+                rs.getString("address")
+            });
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        
-        try{
-            Connection con = ConnectionProvider.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from appuser ");
-            
-            while(rs.next()){
-                model.addRow(new Object[]{rs.getString("appuser_pk"), rs.getString("name"), rs.getString("userRole") , rs.getString("dob"), rs.getString("mobileNumber"), rs.getString("IDcard"), rs.getString("username"), rs.getString("address")});
-            }
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
+       loadAllData(); 
     }//GEN-LAST:event_formComponentShown
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -130,33 +178,68 @@ public class ViewUser extends javax.swing.JFrame {
         TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
         String usernameTable = model.getValueAt(index, 6).toString();
-        
-        if(username.equals(usernameTable)){
-            JOptionPane.showMessageDialog(null, "¡No puedes eliminar tu propia cuenta!","Error",JOptionPane.ERROR_MESSAGE);
-        }else {
-            int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar a este usuario?","Selecciona una opción",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí","No"},"Sí");
-            
-            if(a==0){
-                try{
-                    Connection con = ConnectionProvider.getCon();
-                    PreparedStatement ps = con.prepareStatement("delete from appuser where appuser_pk=?");
-                    ps.setString(1,id);
-                    ps.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "¡Usuario eliminado exitosamente!");
+
+        if (username.equals(usernameTable)) {
+            JOptionPane.showMessageDialog(null, "¡No puedes eliminar tu propia cuenta!", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar a este usuario?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+
+            if (a == 0) {
+                String query = "DELETE FROM appuser WHERE appuser_pk = ?";
+                try (
+                        Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+                    ps.setString(1, id);
+                    int rowsAffected = ps.executeUpdate();
+                    if (rowsAffected > 0) {
+                        JOptionPane.showMessageDialog(null, "¡Usuario eliminado exitosamente!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encontró al usuario con el ID proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                     setVisible(false);
                     new ViewUser(username).setVisible(true);
-                }
-                catch(Exception e){
-                    JOptionPane.showMessageDialog(null, e);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
         new ViewUserHelp().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        String idCard = txtFilterID.getText();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Limpia la tabla antes de cargar los datos filtrados
+        String query = "SELECT * FROM appuser WHERE IDcard = ?";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, idCard);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getString("appuser_pk"),
+                        rs.getString("name"),
+                        rs.getString("userRole"),
+                        rs.getString("dob"),
+                        rs.getString("mobileNumber"),
+                        rs.getString("IDcard"),
+                        rs.getString("username"),
+                        rs.getString("address")
+                    });
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        loadAllData();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,11 +279,15 @@ public class ViewUser extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtFilterID;
     // End of variables declaration//GEN-END:variables
 }
