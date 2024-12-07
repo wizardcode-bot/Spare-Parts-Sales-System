@@ -44,6 +44,7 @@ public class UpdateUser extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         txtUsername = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -150,6 +151,9 @@ public class UpdateUser extends javax.swing.JFrame {
         txtUsername.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 363, 300, -1));
 
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -225,27 +229,47 @@ public class UpdateUser extends javax.swing.JFrame {
         } else if (address.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
         } else {
-            String query = "UPDATE appuser SET userRole=?, name=?, username=?, mobileNumber=?, address=? WHERE IDcard=?";
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+            // Verificar si el nombre de usuario ya existe
+            String checkUsernameQuery = "SELECT COUNT(*) FROM appuser WHERE username = ? AND IDcard != ?";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement psCheck = con.prepareStatement(checkUsernameQuery)) {
 
-                ps.setString(1, userRole);
-                ps.setString(2, name);
-                ps.setString(3, username);
-                ps.setString(4, mobileNumber);
-                ps.setString(5, address);
-                ps.setString(6, IDcard);
+                psCheck.setString(1, username);  // Verificar el nombre de usuario ingresado
+                psCheck.setString(2, IDcard);    // Excluir el usuario actual (con IDcard específico)
 
-                int rowsUpdated = ps.executeUpdate();
+                ResultSet rsCheck = psCheck.executeQuery();
+                rsCheck.next();
+                int usernameCount = rsCheck.getInt(1);
 
-                if (rowsUpdated > 0) {
-                    JOptionPane.showMessageDialog(null, "¡Usuario actualizado exitosamente!");
-                    setVisible(false);
-                    new UpdateUser().setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "¡No se encontró ningún usuario con la cédula especificada!");
+                if (usernameCount > 0) {
+                    JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya está en uso!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;  // Salir si el nombre de usuario ya existe
                 }
+
+                // Si el nombre de usuario es único, proceder con la actualización
+                String query = "UPDATE appuser SET userRole=?, name=?, username=?, mobileNumber=?, address=? WHERE IDcard=?";
+                try (PreparedStatement psUpdate = con.prepareStatement(query)) {
+                    psUpdate.setString(1, userRole);
+                    psUpdate.setString(2, name);
+                    psUpdate.setString(3, username);
+                    psUpdate.setString(4, mobileNumber);
+                    psUpdate.setString(5, address);
+                    psUpdate.setString(6, IDcard);
+
+                    int rowsUpdated = psUpdate.executeUpdate();
+
+                    if (rowsUpdated > 0) {
+                        JOptionPane.showMessageDialog(null, "¡Usuario actualizado exitosamente!");
+                        setVisible(false);
+                        new UpdateUser().setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "¡No se encontró ningún usuario con la cédula especificada!");
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
+                }
+
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al verificar el nombre de usuario: " + e.getMessage());
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -306,6 +330,7 @@ public class UpdateUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;

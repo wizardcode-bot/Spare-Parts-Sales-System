@@ -15,13 +15,13 @@ public class updatePassword extends javax.swing.JFrame {
      */
     public updatePassword() {
         initComponents();
-        setSize(425, 300);
-        setLocationRelativeTo(null);
     }
 
     public updatePassword(String tempUsername) {
         initComponents();
         username = tempUsername;
+        setSize(425, 300);
+        setLocationRelativeTo(null);
     }
 
     public static void updatePassword(String username, String currentPassword, String newPassword) {
@@ -31,7 +31,6 @@ public class updatePassword extends javax.swing.JFrame {
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement verifyStmt = con.prepareStatement(verifyQuery); PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
 
-            
             verifyStmt.setString(1, username);
             try (ResultSet rs = verifyStmt.executeQuery()) {
                 if (rs.next()) {
@@ -46,6 +45,7 @@ public class updatePassword extends javax.swing.JFrame {
                         int rowsUpdated = updateStmt.executeUpdate();
                         if (rowsUpdated > 0) {
                             JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!");
+                            new updatePassword().setVisible(false);
                         } else {
                             JOptionPane.showMessageDialog(null, "Error al actualizar la contraseña. Inténtalo nuevamente.");
                         }
