@@ -14,7 +14,7 @@ public class Tables {
             //st.executeUpdate("insert into appuser(userRole, name, dob, mobileNumber, IDcard, username, password, address) values('Admin','Admin','16-12-1992','0000111122','1006465848','admin','admin','Colombia')"); 
             //st.executeUpdate("create table products(product_pk int AUTO_INCREMENT primary key, uniqueId varchar(200), name varchar(200), companyName varchar(200), quantity bigint, price bigint)");
             //st.executeUpdate("create table bills(bill_pk int AUTO_INCREMENT primary key, billId varchar(200), billDate varchar(50), totalPaid bigint, generatedBy varchar(50), relatedClient varchar(200))");
-            //st.executeUpdate("create table clients(client_pk int AUTO_INCREMENT primary key, name varchar(200), mobileNumber varchar(200), address varchar(200), email varchar(200), nickname varchar(200), vehicleInfo varchar(200))");
+            //st.executeUpdate("create table clients(client_pk bigint AUTO_INCREMENT primary key, name varchar(200), mobileNumber varchar(100), address varchar(200), email varchar(200), idCard varchar(50))");
             JOptionPane.showMessageDialog(null, "Table created succesfully");        
         }
         catch(Exception e){

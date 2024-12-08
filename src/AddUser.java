@@ -340,7 +340,7 @@ public class AddUser extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
         } else {
-            userIconLabel.setVisible(false);
+            IDiconLabel.setVisible(false);
         }
     }//GEN-LAST:event_txtIDcardKeyReleased
 

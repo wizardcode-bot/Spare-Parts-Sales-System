@@ -11,13 +11,14 @@ public class AddClient extends javax.swing.JFrame {
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
     public int checkNickname = 0;
+    public int checkID = 0;
 
     /**
      * Creates new form AddClient
      */
     public AddClient() {
         initComponents();
-        iconLabel.setVisible(false);
+        IDiconLabel.setVisible(false);
         setSize(850, 500);
         setLocationRelativeTo(null);
     }
@@ -42,22 +43,23 @@ public class AddClient extends javax.swing.JFrame {
         txtAddress = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtVehicleInfo = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
-        txtNickName = new javax.swing.JTextField();
-        iconLabel = new javax.swing.JLabel();
+        txtIDCard = new javax.swing.JTextField();
+        IDiconLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Añadir Cliente");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(274, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -65,38 +67,43 @@ public class AddClient extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nombre *");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 159, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtName.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 179, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Número de teléfono *");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 239, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMobileNumber.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 259, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Dirección *");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 311, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtAddress.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 331, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Correo electrónico");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 159, -1, -1));
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Información del vehículo *");
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 179, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -107,126 +114,34 @@ public class AddClient extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 288, 101, -1));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("* Indica campo obligatorio");
-
-        txtVehicleInfo.setColumns(20);
-        txtVehicleInfo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtVehicleInfo.setRows(5);
-        jScrollPane1.setViewportView(txtVehicleInfo);
+        jLabel8.setText("(*) Indica campo obligatorio");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 422, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Nombre Clave *");
+        jLabel7.setText("Número de cédula *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 238, -1, -1));
 
-        txtNickName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtNickName.setForeground(new java.awt.Color(0, 0, 0));
-        txtNickName.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtIDCard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtIDCard.setForeground(new java.awt.Color(0, 0, 0));
+        txtIDCard.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNickNameKeyReleased(evt);
+                txtIDCardKeyReleased(evt);
             }
         });
+        getContentPane().add(txtIDCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 259, 300, -1));
 
-        iconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        iconLabel.setForeground(new java.awt.Color(0, 0, 0));
-        iconLabel.setText("---");
+        IDiconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        IDiconLabel.setForeground(new java.awt.Color(0, 0, 0));
+        IDiconLabel.setText("---");
+        getContentPane().add(IDiconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(772, 263, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(274, 274, 274)
-                .addComponent(jLabel1)
-                .addGap(273, 273, 273)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(jLabel2)
-                .addGap(311, 311, 311)
-                .addComponent(jLabel5))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(jLabel3)
-                .addGap(236, 236, 236)
-                .addComponent(jLabel7))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(txtNickName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(iconLabel))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(jLabel4)
-                .addGap(303, 303, 303)
-                .addComponent(jLabel6))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(460, 460, 460)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(jLabel8))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5))
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel3))
-                    .addComponent(jLabel7))
-                .addGap(3, 3, 3)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtNickName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(iconLabel)))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6))
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addComponent(jButton2)
-                .addGap(22, 22, 22)
-                .addComponent(jLabel8))
-        );
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -237,13 +152,12 @@ public class AddClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+
         String name = txtName.getText();
         String mobileNumber = txtMobileNumber.getText();
         String address = txtAddress.getText();
         String email = txtEmail.getText();
-        String nickname = txtNickName.getText();
-        String vehicleInfo = txtVehicleInfo.getText();
+        String idCard = txtIDCard.getText();
 
         if (name.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
@@ -253,60 +167,68 @@ public class AddClient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
         } else if (address.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        } else if (!email.matches(emailPattern)) {
+        } else if (!email.equals("") && !email.matches(emailPattern)) {
             JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
-        } else if (nickname.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre clave!");
-        } else if (checkNickname == 1){
-            JOptionPane.showMessageDialog(null, "¡El nombre clave ya existe!");
-        }
-        else if (vehicleInfo.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la información del vehículo!");
+        } else if (idCard.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
+        } else if (!idCard.matches(mobileNumberPattern) || idCard.length() > 10 || idCard.length() < 6) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido!");
+        } else if (checkID == 1) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula ya existe!");
         } else {
-            try {
-                Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into clients (name, mobileNumber, address, email, nickname, vehicleInfo) values (?,?,?,?,?,?)");
+
+            String query = "INSERT INTO clients (name, mobileNumber, address, email, idCard) VALUES (?,?,?,?,?)";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+                if (email.equals("")) {
+                    email = "N/A";
+                }
+
                 ps.setString(1, name);
                 ps.setString(2, mobileNumber);
                 ps.setString(3, address);
                 ps.setString(4, email);
-                ps.setString(5, nickname);
-                ps.setString(6, vehicleInfo);
+                ps.setString(5, idCard);
+
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Cliente agregado exitosamente!");
                 setVisible(false);
                 new AddClient().setVisible(true);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void txtNickNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNickNameKeyReleased
-        // TODO add your handling code here:
-        String nickname = txtNickName.getText();
-        if (!nickname.equals("")) {
-            iconLabel.setVisible(true);
-            iconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
-            iconLabel.setText("");
-            checkNickname = 0;
+    private void txtIDCardKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDCardKeyReleased
 
-            try {
-                Connection con = ConnectionProvider.getCon();
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from clients where nickname='" + nickname + "'");
-                while (rs.next()) {
-                    checkNickname = 1;
-                    iconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
-                    iconLabel.setText("");
+        String idCard = txtIDCard.getText();
+
+        if (!idCard.equals("")) {
+            IDiconLabel.setVisible(true);
+            IDiconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+            IDiconLabel.setText("");
+            checkID = 0;
+
+            String query = "SELECT idCard FROM clients WHERE idCard = ?";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+                pst.setString(1, idCard);
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        checkID = 1;
+                        IDiconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                        IDiconLabel.setText("");
+                    }
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         } else {
-            iconLabel.setVisible(false);
+            IDiconLabel.setVisible(false);
         }
-    }//GEN-LAST:event_txtNickNameKeyReleased
+    }//GEN-LAST:event_txtIDCardKeyReleased
 
     /**
      * @param args the command line arguments
@@ -344,7 +266,7 @@ public class AddClient extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel iconLabel;
+    private javax.swing.JLabel IDiconLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -355,13 +277,11 @@ public class AddClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIDCard;
     private javax.swing.JTextField txtMobileNumber;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtNickName;
-    private javax.swing.JTextArea txtVehicleInfo;
     // End of variables declaration//GEN-END:variables
 }
