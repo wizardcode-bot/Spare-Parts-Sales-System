@@ -1,36 +1,39 @@
 
 import dao.ConnectionProvider;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
 import javax.swing.table.TableModel;
 
-public class ViewClient extends javax.swing.JFrame {
+public class ViewVehicle extends javax.swing.JFrame {
 
     /**
-     * Creates new form ViewClient
+     * Creates new form ViewVehicle
      */
-    public ViewClient() {
+    public ViewVehicle() {
         initComponents();
-        setSize(850, 500);
         setLocationRelativeTo(null);
     }
 
     private void loadAllData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Limpia la tabla antes de cargar los datos
-        String query = "SELECT * FROM clients";
+        String query = "SELECT m.plate, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS clientName "
+                + "FROM motorbikes m "
+                + "JOIN clients c ON m.client_pk = c.client_pk";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rs.getString("client_pk"),
-                    rs.getString("name"),
-                    rs.getString("mobileNumber"),
-                    rs.getString("address"),
-                    rs.getString("email"),
-                    rs.getString("idCard")
+                    rs.getString("plate"),
+                    rs.getString("brandName"),
+                    rs.getString("model"),
+                    rs.getString("cylinderCapacity"),
+                    rs.getString("color"),
+                    rs.getString("clientName") // Obtén el nombre del cliente
                 });
             }
         } catch (Exception e) {
@@ -48,13 +51,13 @@ public class ViewClient extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtFilterID = new javax.swing.JTextField();
+        txtFilterPlate = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,8 +72,9 @@ public class ViewClient extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Clientes registrados");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, -1, -1));
+        jLabel1.setText("Vehículos registrados");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -79,16 +83,23 @@ public class ViewClient extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Nombre", "Teléfono", "Dirección", "Correo", "Número de cédula"
+                "Placa", "Marca", "Modelo", "Cilindraje", "Color", "Propietario"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -96,31 +107,26 @@ public class ViewClient extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 122, 818, 324));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 112, 822, 336));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Selecciona la fila del cliente a eliminar");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(309, 458, -1, -1));
+        jLabel2.setText("Seleccione la fila del vehículo a eliminar");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(297, 460, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Filtrar por nombre o número de cédula");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 82, -1, -1));
+        jLabel3.setText("Filtrar por número de placa");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 79, -1, -1));
 
-        txtFilterID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtFilterID.setForeground(new java.awt.Color(0, 0, 0));
-        txtFilterID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFilterIDActionPerformed(evt);
-            }
-        });
-        txtFilterID.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtFilterPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtFilterPlate.setForeground(new java.awt.Color(0, 0, 0));
+        txtFilterPlate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFilterIDKeyReleased(evt);
+                txtFilterPlateKeyReleased(evt);
             }
         });
-        getContentPane().add(txtFilterID, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 78, 300, -1));
+        getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(197, 75, 300, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -128,74 +134,73 @@ public class ViewClient extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        loadAllData();
-    }//GEN-LAST:event_formComponentShown
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        loadAllData();
+    }//GEN-LAST:event_formComponentShown
+
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
-        String id = model.getValueAt(index, 0).toString();
+        String plate = model.getValueAt(index, 0).toString();
 
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar a este cliente?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este vehículo?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
         if (a == 0) {
-            try {
-                Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("delete from clients where client_pk=?");
-                ps.setString(1, id);
+            String query = "DELETE FROM motorbikes WHERE plate=?";
+
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+                ps.setString(1, plate);
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "¡Cliente eliminado exitosamente!");
+
+                JOptionPane.showMessageDialog(null, "¡Vehículo eliminado exitosamente!");
                 setVisible(false);
-                new ViewClient().setVisible(true);
+                new ViewVehicle().setVisible(true);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void txtFilterIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterIDKeyReleased
-
-        String filterText = txtFilterID.getText().trim();
+    private void txtFilterPlateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterPlateKeyReleased
+        String filterText = txtFilterPlate.getText().trim();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Limpia la tabla antes de cargar los datos filtrados
+        model.setRowCount(0);
 
         String query;
         if (!filterText.isEmpty()) {
-            query = "SELECT * FROM clients WHERE idCard LIKE ? OR name LIKE ?";
+            query = "SELECT m.plate, m.brandName, m.model, "
+                    + "m.cylinderCapacity, m.color, c.name AS clientName "
+                    + "FROM motorbikes m "
+                    + "INNER JOIN clients c ON m.client_pk = c.client_pk "
+                    + "WHERE m.plate LIKE ?";
         } else {
-            loadAllData(); // Si el campo está vacío, carga todos los datos
+            loadAllData();
             return;
         }
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, "%" + filterText + "%");
-            ps.setString(2, "%" + filterText + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     model.addRow(new Object[]{
-                        rs.getString("client_pk"),
-                        rs.getString("name"),
-                        rs.getString("mobileNumber"),
-                        rs.getString("address"),
-                        rs.getString("email"),
-                        rs.getString("idCard")
+                        rs.getString("plate"),
+                        rs.getString("brandName"),
+                        rs.getString("model"),
+                        rs.getString("cylinderCapacity"),
+                        rs.getString("color"),
+                        rs.getString("clientName") // Aquí obtenemos el nombre del propietario
                     });
                 }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_txtFilterIDKeyReleased
-
-    private void txtFilterIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFilterIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFilterIDActionPerformed
+    }//GEN-LAST:event_txtFilterPlateKeyReleased
 
     /**
      * @param args the command line arguments
@@ -214,20 +219,20 @@ public class ViewClient extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewClient().setVisible(true);
+                new ViewVehicle().setVisible(true);
             }
         });
     }
@@ -241,6 +246,6 @@ public class ViewClient extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtFilterID;
+    private javax.swing.JTextField txtFilterPlate;
     // End of variables declaration//GEN-END:variables
 }

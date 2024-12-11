@@ -1,11 +1,15 @@
 
 import dao.ConnectionProvider;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class AddVehicle extends javax.swing.JFrame {
+
+    public boolean checkPlateExists = false;
 
     /**
      * Creates new form AddVehicle
@@ -13,22 +17,6 @@ public class AddVehicle extends javax.swing.JFrame {
     public AddVehicle() {
         initComponents();
         setLocationRelativeTo(null);
-    }
-
-    private void cargarClientes() {
-        try {
-            Connection con = ConnectionProvider.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from clients");
-            comboRelateClient.removeAllItems();
-            comboRelateClient.addItem("Seleccione un cliente");
-
-            while (rs.next()) {
-                comboRelateClient.addItem(rs.getString("name") + "   -   " + rs.getString("idCard"));
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
     }
 
     /**
@@ -54,73 +42,101 @@ public class AddVehicle extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtColor = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        comboRelateClient = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         txtFilterClient = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        plateIcon = new javax.swing.JLabel();
+        txtRelateClient = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Registrar vehículo");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(237, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de placa *");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 134, -1, -1));
 
         txtPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPlate.setForeground(new java.awt.Color(0, 0, 0));
+        txtPlate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPlateKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 155, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Marca *");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 208, -1, -1));
 
         txtBrandName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtBrandName.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtBrandName, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 229, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Modelo");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 283, -1, -1));
 
         txtModel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtModel.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 303, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cilindraje");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 134, -1, -1));
 
         txtCylinder.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCylinder.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtCylinder, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 153, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Color");
+        jLabel6.setText("Color *");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 214, -1, -1));
 
         txtColor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtColor.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 229, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Relacionar propietario");
-
-        comboRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        comboRelateClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un cliente", "Item 2", "Item 3", "Item 4" }));
+        jLabel7.setText("Relacionar propietario *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 283, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Filtrar por número de cédula");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 344, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFilterClient.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 365, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -131,6 +147,7 @@ public class AddVehicle extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 396, 100, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -141,102 +158,26 @@ public class AddVehicle extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(672, 362, 94, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(237, 237, 237)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(txtPlate)
-                    .addComponent(txtBrandName)
-                    .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel8)
-                        .addComponent(jLabel5)
-                        .addComponent(txtCylinder)
-                        .addComponent(jLabel6)
-                        .addComponent(txtColor)
-                        .addComponent(jLabel7)
-                        .addComponent(comboRelateClient, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(txtFilterClient, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(101, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPlate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCylinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboRelateClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtFilterClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addContainerGap(78, Short.MAX_VALUE))
-        );
+        plateIcon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        plateIcon.setForeground(new java.awt.Color(0, 0, 0));
+        plateIcon.setText("---");
+        getContentPane().add(plateIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(381, 159, -1, -1));
+
+        txtRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtRelateClient.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 303, 300, -1));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // filtrar clientes por nombre clave
-        int checkClientExist = 0;
+        boolean checkClientExist = false;
         String filterClient = txtFilterClient.getText();
         if (filterClient.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
@@ -247,22 +188,21 @@ public class AddVehicle extends javax.swing.JFrame {
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select name from clients where idCard = '" + filterClient + "'");
                 if (rs.next()) {
-                    checkClientExist = 1;
-                    comboRelateClient.setSelectedItem(rs.getString("name"));
+                    checkClientExist = true;
+                    txtRelateClient.setText(rs.getString("name"));
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
-            if (checkClientExist == 0) {
+            if (!checkClientExist) {
                 JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
-                comboRelateClient.setSelectedItem("Seleccione un cliente");
+                //txtRelateClient.setText("");
             }
         }
-        txtFilterClient.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        cargarClientes();
+        txtRelateClient.setEditable(false);
     }//GEN-LAST:event_formComponentShown
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -272,14 +212,98 @@ public class AddVehicle extends javax.swing.JFrame {
         String model = txtModel.getText();
         String cylinder = txtCylinder.getText();
         String color = txtColor.getText();
-        String selectedClient = comboRelateClient.getSelectedItem().toString();
+        String selectedClient = txtRelateClient.getText();
+        String idCard = txtFilterClient.getText();
         
-        if (plate.equals("")){
+        if (plate.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de placa!");
-        } else if (brandName.equals("")){
+        } else if (brandName.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la marca del vehículo!");
+        } else if (color.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el color del vehículo!");
+        } else if (selectedClient.equals("Seleccione un cliente")) {
+            JOptionPane.showMessageDialog(null, "¡Debes relacionar el propietario del vehículo!");
+        } else if(checkPlateExists) {
+            JOptionPane.showMessageDialog(null, "¡El número de placa ya está registrado!");
+        } else {
+            String queryGetClientPk = "SELECT client_pk FROM clients WHERE name = ? and idCard=?";
+            String queryInsertMotorbike = "INSERT INTO motorbikes (plate, brandName, model, cylinderCapacity, color, client_pk) VALUES (?,?,?,?,?,?)";
+
+            try (Connection con = ConnectionProvider.getCon(); 
+                PreparedStatement psGetClientPk = con.prepareStatement(queryGetClientPk); 
+                PreparedStatement psInsertMotorbike = con.prepareStatement(queryInsertMotorbike)) {
+
+                // Buscar client_pk del cliente seleccionado
+                psGetClientPk.setString(1, selectedClient);
+                psGetClientPk.setString(2, idCard);
+                ResultSet rs = psGetClientPk.executeQuery();
+
+                if (rs.next()) {
+                    int clientPk = rs.getInt("client_pk");
+
+                    // Reemplazar valores por defecto si están vacíos
+                    if (model.equals("")) {
+                        model = "No registrado";
+                    }
+
+                    if (cylinder.equals("")) {
+                        cylinder = "No registrado";
+                    }
+
+                    // Preparar el INSERT en motorbikes
+                    psInsertMotorbike.setString(1, plate);
+                    psInsertMotorbike.setString(2, brandName);
+                    psInsertMotorbike.setString(3, model);
+                    psInsertMotorbike.setString(4, cylinder);
+                    psInsertMotorbike.setString(5, color);
+                    psInsertMotorbike.setInt(6, clientPk);
+
+                    psInsertMotorbike.executeUpdate();
+
+                    JOptionPane.showMessageDialog(null, "¡Vehículo agregado exitosamente!");
+                    setVisible(false);
+                    new AddVehicle().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Cliente no encontrado en la base de datos!");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtPlateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlateKeyReleased
+        String plate = txtPlate.getText();
+
+        if (!plate.equals("")) {
+            plateIcon.setVisible(true);
+            plateIcon.setIcon(new ImageIcon("src\\images\\yes.png"));
+            plateIcon.setText("");
+            checkPlateExists = false;
+
+            String query = "SELECT plate FROM motorbikes WHERE plate = ?";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+                pst.setString(1, plate);
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        checkPlateExists = true;
+                        plateIcon.setIcon(new ImageIcon("src\\images\\no.png"));
+                        plateIcon.setText("");
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        } else {
+            plateIcon.setVisible(false);
+        }
+    }//GEN-LAST:event_txtPlateKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,16 +319,24 @@ public class AddVehicle extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddVehicle.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddVehicle.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddVehicle.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddVehicle.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -317,7 +349,6 @@ public class AddVehicle extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> comboRelateClient;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -329,12 +360,15 @@ public class AddVehicle extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel plateIcon;
     private javax.swing.JTextField txtBrandName;
     private javax.swing.JTextField txtColor;
     private javax.swing.JTextField txtCylinder;
     private javax.swing.JTextField txtFilterClient;
     private javax.swing.JTextField txtModel;
     private javax.swing.JTextField txtPlate;
+    private javax.swing.JTextField txtRelateClient;
     // End of variables declaration//GEN-END:variables
 }
