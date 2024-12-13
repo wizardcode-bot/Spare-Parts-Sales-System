@@ -176,7 +176,7 @@ public class AddVehicle extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // filtrar clientes por nombre clave
+        // filtrar clientes por número de cédula
         boolean checkClientExist = false;
         String filterClient = txtFilterClient.getText();
         if (filterClient.equals("")) {

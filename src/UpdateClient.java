@@ -139,28 +139,31 @@ public class UpdateClient extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMobileNumberActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        
         int checkClientExist = 0;
         String idCard = txtIDCard.getText();
         if (idCard.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la cédula del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
         } else {
 
-            try {
-                Connection con = ConnectionProvider.getCon();
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from clients where idCard = '" + idCard + "'");
-                while (rs.next()) {
-                    txtIDCard.setEditable(false);
-                    checkClientExist = 1;
-                    txtName.setText(rs.getString("name"));
-                    txtMobileNumber.setText(rs.getString("mobileNumber"));
-                    txtAddress.setText(rs.getString("address"));
-                    txtEmail.setText(rs.getString("email"));
+            String query = "SELECT * FROM clients WHERE idCard = ?";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+                ps.setString(1, idCard);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        txtIDCard.setEditable(false);
+                        checkClientExist = 1;
+                        txtName.setText(rs.getString("name"));
+                        txtMobileNumber.setText(rs.getString("mobileNumber"));
+                        txtAddress.setText(rs.getString("address"));
+                        txtEmail.setText(rs.getString("email"));
+                    }
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+
             if (checkClientExist == 0) {
                 JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -168,12 +171,12 @@ public class UpdateClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        
         String name = txtName.getText();
         String mobileNumber = txtMobileNumber.getText();
         String address = txtAddress.getText();
@@ -191,10 +194,11 @@ public class UpdateClient extends javax.swing.JFrame {
         } else if (!email.matches(emailPattern) && !email.equals("N/A")) {
             JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
         } else {
-            try {
+            
+            String query = "update clients set name=?, mobileNumber=?, address=?, email=? where idCard=?";
+            try (Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement(query);){
 
-                Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("update clients set name=?, mobileNumber=?, address=?, email=? where idCard=?");
                 ps.setString(1, name);
                 ps.setString(2, mobileNumber);
                 ps.setString(3, address);
@@ -205,7 +209,7 @@ public class UpdateClient extends javax.swing.JFrame {
                 setVisible(false);
                 new UpdateClient().setVisible(true);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

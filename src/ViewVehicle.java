@@ -14,6 +14,7 @@ public class ViewVehicle extends javax.swing.JFrame {
      */
     public ViewVehicle() {
         initComponents();
+        setSize(850,500);
         setLocationRelativeTo(null);
     }
 
