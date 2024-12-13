@@ -24,12 +24,15 @@ public class Tables {
                     + "VALUES ('Admin', 'Admin', '16-12-1992', '0000111122', '1006465848', 'admin', 'admin', 'Colombia')";
 
             String createProductsTable = "CREATE TABLE IF NOT EXISTS products ("
-                    + "product_pk INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "uniqueId VARCHAR(200), "
+                    + "product_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
+                    + "uniqueId VARCHAR(255), "
+                    + "category_pk INT, "
                     + "name VARCHAR(200), "
-                    + "companyName VARCHAR(200), "
+                    + "productBrand VARCHAR(200), "
                     + "quantity BIGINT, "
-                    + "price BIGINT)";
+                    + "acquiredPrice BIGINT, "
+                    + "sellingPrice BIGINT, "
+                    + "FOREIGN KEY (category_pk) REFERENCES productCategories(category_pk))";
 
             String createBillsTable = "CREATE TABLE IF NOT EXISTS bills ("
                     + "bill_pk INT AUTO_INCREMENT PRIMARY KEY, "
@@ -47,27 +50,30 @@ public class Tables {
                     + "email VARCHAR(200), "
                     + "idCard VARCHAR(50))";
 
-             String createMotorbikesTable = "CREATE TABLE IF NOT EXISTS motorbikes ("
-            + "motorbike_pk INT AUTO_INCREMENT PRIMARY KEY, "
-            + "plate VARCHAR(50) NOT NULL, "
-            + "brandName VARCHAR(100) NOT NULL, "
-            + "model VARCHAR(100), "
-            + "cylinderCapacity VARCHAR(100), "
-            + "color VARCHAR(50) NOT NULL, "
-            + "client_pk BIGINT, "
-            + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk) "
-            + "ON DELETE SET NULL ON UPDATE RESTRICT)";
-             
-             
+            String createMotorbikesTable = "CREATE TABLE IF NOT EXISTS motorbikes ("
+                    + "motorbike_pk INT AUTO_INCREMENT PRIMARY KEY, " //convertir en bigint
+                    + "plate VARCHAR(50) NOT NULL, "
+                    + "brandName VARCHAR(100) NOT NULL, "
+                    + "model VARCHAR(100), "
+                    + "cylinderCapacity VARCHAR(100), "
+                    + "color VARCHAR(50) NOT NULL, "
+                    + "client_pk BIGINT, "
+                    + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk) "
+                    + "ON DELETE SET NULL ON UPDATE RESTRICT)";
+
+            String createCategories = "CREATE TABLE IF NOT EXISTS productCategories("
+                    + "category_pk INT AUTO_INCREMENT PRIMARY KEY,"
+                    + "categoryName VARCHAR(100) NOT NULL)";
+
             // Ejecutar las consultas
             //st.executeUpdate(createAppUserTable);
             //st.executeUpdate(insertAdmin);
             //st.executeUpdate(createProductsTable);
             //st.executeUpdate(createBillsTable);
             //st.executeUpdate(createClientsTable);
-            st.executeUpdate(createMotorbikesTable);
-
-            JOptionPane.showMessageDialog(null, "Tables created successfully!");
+            //st.executeUpdate(createMotorbikesTable);
+            //st.executeUpdate(createCategories);
+            JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
