@@ -5,7 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import javax.swing.table.TableModel;
 
-
 public class ViewProduct extends javax.swing.JFrame {
 
     /**
@@ -14,6 +13,61 @@ public class ViewProduct extends javax.swing.JFrame {
     public ViewProduct() {
         initComponents();
         setLocationRelativeTo(null);
+    }
+
+    // Método para cargar las categorías en el JComboBox
+    private void loadCategories() {
+        comboFilterCategory.removeAllItems(); // Limpia las categorías existentes
+        comboFilterCategory.addItem("Todas"); // Agrega la opción "Todas"
+
+        String query = "SELECT categoryName FROM productCategories";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                comboFilterCategory.addItem(rs.getString("categoryName"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Método para cargar los productos con o sin filtro de categoría
+    private void loadAllData(String categoryFilter) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Limpia la tabla antes de cargar los datos
+
+        String query = "SELECT p.uniqueId, c.categoryName, p.name, p.productBrand, p.quantity, p.acquiredPrice, p.sellingPrice "
+                + "FROM products p "
+                + "JOIN productCategories c ON p.category_pk = c.category_pk";
+
+        // Agregar filtro de categoría si no se seleccionó "Todas"
+        if (!"Todas".equals(categoryFilter)) {
+            query += " WHERE c.categoryName = ?";
+        }
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+            if (!"Todas".equals(categoryFilter)) {
+                ps.setString(1, categoryFilter);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getString("uniqueId"),
+                        rs.getString("categoryName"),
+                        rs.getString("name"),
+                        rs.getString("productBrand"),
+                        rs.getString("quantity"),
+                        rs.getString("acquiredPrice"),
+                        rs.getString("sellingPrice")
+                    });
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -32,6 +86,7 @@ public class ViewProduct extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        comboFilterCategory = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -40,12 +95,10 @@ public class ViewProduct extends javax.swing.JFrame {
                 formComponentShown(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Ver Productos");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(295, 6, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -53,17 +106,23 @@ public class ViewProduct extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 850, 10));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "ID del Producto", "Nombre", "Marca", "Cantidad", "Precio por Unidad"
+                "ID del Producto", "Categoría", "Nombre", "Marca", "Cantidad", "Precio adquirido", "Precio de venta"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -71,15 +130,70 @@ public class ViewProduct extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 75, 838, 361));
-
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Selecciona la fila del producto a eliminar");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 454, -1, -1));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Filtrar por categoría");
+
+        comboFilterCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        comboFilterCategory.setForeground(new java.awt.Color(0, 0, 0));
+        comboFilterCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todas", "Item 2", "Item 3", "Item 4" }));
+        comboFilterCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFilterCategoryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 340, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(264, 264, 264)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(312, 312, 312))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboFilterCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(comboFilterCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(24, 24, 24))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -90,29 +204,18 @@ public class ViewProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        try{
-            Connection con = ConnectionProvider.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from products");
-            while(rs.next()){
-                model.addRow(new Object[]{rs.getString("product_pk"), rs.getString("uniqueId"), rs.getString("name"), rs.getString("companyName"), rs.getString("quantity"), rs.getString("price")});
-            }
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
+        loadCategories(); // Carga las categorías en el JComboBox
+        loadAllData("Todas"); // Carga todos los productos por defecto
     }//GEN-LAST:event_formComponentShown
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int index = jTable1.getSelectedRow();
-        TableModel  model = jTable1.getModel();
+        TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
         int a = JOptionPane.showConfirmDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción", JOptionPane.YES_NO_OPTION);
-        if(a==0){
-            try{
+        if (a == 0) {
+            try {
                 Connection con = ConnectionProvider.getCon();
                 PreparedStatement ps = con.prepareStatement("delete from products where product_pk=?");
                 ps.setString(1, id);
@@ -120,12 +223,16 @@ public class ViewProduct extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "¡Producto eliminado exitosamente!");
                 setVisible(false);
                 new ViewProduct().setVisible(true);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void comboFilterCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFilterCategoryActionPerformed
+        String selectedCategory = (String) comboFilterCategory.getSelectedItem();
+        loadAllData(selectedCategory); // Carga los productos según la categoría seleccionada
+    }//GEN-LAST:event_comboFilterCategoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -164,6 +271,7 @@ public class ViewProduct extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboFilterCategory;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

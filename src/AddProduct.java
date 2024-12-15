@@ -2,10 +2,12 @@
 import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import java.sql.*;
+import javax.swing.ImageIcon;
 
 public class AddProduct extends javax.swing.JFrame {
 
     public String numberPattern = "^[0-9]*$";
+    public Boolean checkProductID = false;
 
     /**
      * Creates new form AddMedicine
@@ -64,6 +66,7 @@ public class AddProduct extends javax.swing.JFrame {
         txtLocation = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        iconLabel = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,6 +93,11 @@ public class AddProduct extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 115, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtUniqueId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtUniqueIdKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 135, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -188,6 +196,11 @@ public class AddProduct extends javax.swing.JFrame {
         jLabel7.setText("(*) Indica campo obligatorio");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 445, -1, -1));
 
+        iconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        iconLabel.setForeground(new java.awt.Color(0, 0, 0));
+        iconLabel.setText("---");
+        getContentPane().add(iconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, -1, -1));
+
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -204,13 +217,16 @@ public class AddProduct extends javax.swing.JFrame {
         String acquiredPrice = txtAcquiredPrice.getText();
         String sellingPrice = txtSellingPrice.getText();
 
-        if (uniqueId.equals("")) {
+        if (uniqueId == null || uniqueId.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!");
-        } else if (selectedCategory == null || selectedCategory.equals("Seleccionar")) {
+        } else if (checkProductID) {
+            JOptionPane.showMessageDialog(null, "¡El ID de producto ingresado ya existe en la base de datos!");
+        }
+        else if (selectedCategory == null || selectedCategory.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(null, "¡Debes seleccionar una categoria para el producto!");
         } else if (name == null || name.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre del producto!");
-        } else if (quantity.equals("")) {
+        } else if (quantity == null || quantity.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad de unidades existentes del producto!");
         } else if (!quantity.matches(numberPattern)) {
             JOptionPane.showMessageDialog(null, "¡Debes escribir la cantidad del producto en números!");
@@ -302,6 +318,36 @@ public class AddProduct extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void txtUniqueIdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUniqueIdKeyReleased
+        
+        String productID = txtUniqueId.getText();
+
+        if (!productID.equals("")) {
+            iconLabel.setVisible(true);
+            iconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+            iconLabel.setText("");
+            checkProductID = false;
+
+            String query = "SELECT uniqueId FROM products WHERE uniqueId = ?";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+                pst.setString(1, productID);
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        checkProductID = true;
+                        iconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                        iconLabel.setText("");
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        } else {
+            iconLabel.setVisible(false);
+        }
+    }//GEN-LAST:event_txtUniqueIdKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -340,6 +386,7 @@ public class AddProduct extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboCategory;
+    private javax.swing.JLabel iconLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
