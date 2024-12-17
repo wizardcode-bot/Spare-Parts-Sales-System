@@ -14,7 +14,7 @@ public class ViewVehicle extends javax.swing.JFrame {
      */
     public ViewVehicle() {
         initComponents();
-        setSize(850,500);
+        setSize(850, 500);
         setLocationRelativeTo(null);
     }
 
@@ -148,21 +148,25 @@ public class ViewVehicle extends javax.swing.JFrame {
         TableModel model = jTable1.getModel();
         String plate = model.getValueAt(index, 0).toString();
 
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este vehículo?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este vehículo?", "Selecciona una opción",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
         if (a == 0) {
-            String query = "DELETE FROM motorbikes WHERE plate=?";
-
+            String query = "DELETE FROM motorbikes WHERE plate = ?";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
-                ps.setString(1, plate);
-                ps.executeUpdate();
+                ps.setString(1, plate); // Configura el ID en la consulta
+                int rowsAffected = ps.executeUpdate();
 
-                JOptionPane.showMessageDialog(null, "¡Vehículo eliminado exitosamente!");
-                setVisible(false);
-                new ViewVehicle().setVisible(true);
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "¡Vehículo eliminado exitosamente!");
+                    // Refrescar la vista
+                    ((DefaultTableModel) jTable1.getModel()).removeRow(index); 
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró el vehículo con la placa seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error al eliminar el vehículo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked

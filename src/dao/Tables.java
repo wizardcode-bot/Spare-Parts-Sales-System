@@ -25,13 +25,14 @@ public class Tables {
 
             String createProductsTable = "CREATE TABLE IF NOT EXISTS products ("
                     + "product_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
-                    + "uniqueId VARCHAR(255), "
-                    + "category_pk INT, "
-                    + "name VARCHAR(200), "
+                    + "uniqueId VARCHAR(255) NOT NULL, "
+                    + "category_pk INT NOT NULL, "
+                    + "name VARCHAR(200) NOT NULL, "
                     + "productBrand VARCHAR(200), "
-                    + "quantity BIGINT, "
+                    + "quantity BIGINT NOT NULL, "
                     + "acquiredPrice BIGINT, "
-                    + "sellingPrice BIGINT, "
+                    + "sellingPrice BIGINT NOT NULL, "
+                    + "productLocation VARCHAR(200) NOT NULL, "
                     + "FOREIGN KEY (category_pk) REFERENCES productCategories(category_pk))";
 
             String createBillsTable = "CREATE TABLE IF NOT EXISTS bills ("

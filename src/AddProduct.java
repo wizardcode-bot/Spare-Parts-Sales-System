@@ -216,6 +216,7 @@ public class AddProduct extends javax.swing.JFrame {
         String quantity = txtQuantity.getText();
         String acquiredPrice = txtAcquiredPrice.getText();
         String sellingPrice = txtSellingPrice.getText();
+        String productLocation = txtLocation.getText();
 
         if (uniqueId == null || uniqueId.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!");
@@ -236,6 +237,8 @@ public class AddProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto!");
         } else if (!sellingPrice.matches(numberPattern)) {
             JOptionPane.showMessageDialog(null, "¡Debes escribir el precio de venta del producto en números!");
+        }   else if (productLocation == null || productLocation.equals("")) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!");
         } else {
             
             if(productBrand == null || productBrand.equals("")){
@@ -254,7 +257,7 @@ public class AddProduct extends javax.swing.JFrame {
                     int categoryPK = rs.getInt("category_pk");
 
                     // Insertar el producto en la base de datos
-                    String insertQuery = "INSERT INTO products(uniqueId, category_pk, name, productBrand, quantity, acquiredPrice, sellingPrice) VALUES(?, ?, ?, ?, ?, ?, ?)";
+                    String insertQuery = "INSERT INTO products(uniqueId, category_pk, name, productBrand, quantity, acquiredPrice, sellingPrice, productLocation) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                     try (PreparedStatement ps = con.prepareStatement(insertQuery)) {
                         ps.setString(1, uniqueId);
                         ps.setInt(2, categoryPK);
@@ -263,6 +266,7 @@ public class AddProduct extends javax.swing.JFrame {
                         ps.setString(5, quantity);
                         ps.setString(6, acquiredPrice);
                         ps.setString(7, sellingPrice);
+                        ps.setString(8, productLocation);
 
                         ps.executeUpdate();
                         JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
@@ -292,7 +296,9 @@ public class AddProduct extends javax.swing.JFrame {
             String checkQuery = "SELECT COUNT(*) FROM productCategories WHERE categoryName = ?";
             String insertQuery = "INSERT INTO productCategories(categoryName) VALUES (?)";
 
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement checkStmt = con.prepareStatement(checkQuery); PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
+            try (Connection con = ConnectionProvider.getCon(); 
+                    PreparedStatement checkStmt = con.prepareStatement(checkQuery); 
+                    PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
 
                 // Verificar si la categoría ya existe
                 checkStmt.setString(1, newCategory);

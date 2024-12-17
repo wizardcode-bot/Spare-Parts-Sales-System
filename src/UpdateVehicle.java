@@ -3,7 +3,7 @@ import dao.ConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class UpdateVehicle extends javax.swing.JFrame {
@@ -178,39 +178,38 @@ public class UpdateVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // buscar vehiculo por placa
-        boolean checkPlateExist = false;
-        String plate = txtSearchPlate.getText();
-        if (plate.equals("")) {
+        // Buscar vehículo por placa
+        String plate = txtSearchPlate.getText().trim(); // Elimina espacios al inicio y final
+
+        if (plate.isBlank()) { // Valida cadenas vacías o solo con espacios
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de placa del vehículo!", "No hay vehículos seleccionados", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            String query = """
-            SELECT m.plate, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS ownerName
-            FROM motorbikes m
-            INNER JOIN clients c ON m.client_pk = c.client_pk
-            WHERE m.plate = ?
+            return; // Termina el método si la entrada es inválida
+        }
+
+        String query = """
+        SELECT m.plate, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS ownerName
+        FROM motorbikes m
+        INNER JOIN clients c ON m.client_pk = c.client_pk
+        WHERE m.plate = ?
         """;
 
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
-                ps.setString(1, plate);
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        txtSearchPlate.setEditable(false);
-                        checkPlateExist = true;
-                        txtBrandName.setText(rs.getString("brandName"));
-                        txtModel.setText(rs.getString("model"));
-                        txtCylinder.setText(rs.getString("cylinderCapacity"));
-                        txtColor.setText(rs.getString("color"));
-                        txtOwner.setText(rs.getString("ownerName"));
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, plate);
 
-            if (!checkPlateExist) {
-                JOptionPane.showMessageDialog(null, "¡Este vehículo no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) { // Verifica si hay un registro
+                    txtSearchPlate.setEditable(false);
+                    txtBrandName.setText(rs.getString("brandName"));
+                    txtModel.setText(rs.getString("model"));
+                    txtCylinder.setText(rs.getString("cylinderCapacity"));
+                    txtColor.setText(rs.getString("color"));
+                    txtOwner.setText(rs.getString("ownerName"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Este vehículo no está registrado!", "Vehículo no encontrado", JOptionPane.WARNING_MESSAGE);
+                }
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar el vehículo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -221,7 +220,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
         String model = txtModel.getText();
         String cylinder = txtCylinder.getText();
         String color = txtColor.getText();
-        String owner = txtOwner.getText(); 
+        String owner = txtOwner.getText();
 
         if (brandName.equals("") || model.equals("") || cylinder.equals("") || color.equals("") || owner.equals("")) {
             JOptionPane.showMessageDialog(null, "¡Debes completar todos los campos!", "Error", JOptionPane.WARNING_MESSAGE);
@@ -256,7 +255,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
             psUpdate.setString(2, model);
             psUpdate.setString(3, cylinder);
             psUpdate.setString(4, color);
-            psUpdate.setString(5, clientPK); 
+            psUpdate.setString(5, clientPK);
             psUpdate.setString(6, plate);
 
             psUpdate.executeUpdate();
