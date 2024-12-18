@@ -30,9 +30,10 @@ public class Tables {
                     + "name VARCHAR(200) NOT NULL, "
                     + "productBrand VARCHAR(200), "
                     + "quantity BIGINT NOT NULL, "
-                    + "acquiredPrice BIGINT, "
+                    + "acquiredPrice BIGINT NOT NULL, "
                     + "sellingPrice BIGINT NOT NULL, "
                     + "productLocation VARCHAR(200) NOT NULL, "
+                    + "lastModified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "
                     + "FOREIGN KEY (category_pk) REFERENCES productCategories(category_pk))";
 
             String createBillsTable = "CREATE TABLE IF NOT EXISTS bills ("
@@ -69,7 +70,7 @@ public class Tables {
             // Ejecutar las consultas
             //st.executeUpdate(createAppUserTable);
             //st.executeUpdate(insertAdmin);
-            //st.executeUpdate(createProductsTable);
+            st.executeUpdate(createProductsTable);
             //st.executeUpdate(createBillsTable);
             //st.executeUpdate(createClientsTable);
             //st.executeUpdate(createMotorbikesTable);

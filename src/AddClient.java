@@ -23,6 +23,10 @@ public class AddClient extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    private boolean isNullOrBlank(String str) {
+        return str == null || str.isBlank();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,64 +151,80 @@ public class AddClient extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+        //botón de guardar
         String name = txtName.getText();
         String mobileNumber = txtMobileNumber.getText();
         String address = txtAddress.getText();
         String email = txtEmail.getText();
         String idCard = txtIDCard.getText();
 
-        if (name.equals("")) {
+        // Validaciones
+        if (isNullOrBlank(name)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
-        } else if (mobileNumber.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(mobileNumber)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
-        } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
+            return;
+        }
+        if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
-        } else if (address.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(address)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        } else if (!email.equals("") && !email.matches(emailPattern)) {
+            return;
+        }
+        if (!isNullOrBlank(email) && !email.matches(emailPattern)) {
             JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
-        } else if (idCard.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(idCard)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
-        } else if (!idCard.matches(mobileNumberPattern) || idCard.length() > 10 || idCard.length() < 6) {
+            return;
+        }
+        if (!idCard.matches(mobileNumberPattern) || idCard.length() > 10 || idCard.length() < 6) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido!");
-        } else if (checkID == 1) {
+            return;
+        }
+        if (checkID == 1) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula ya existe!");
-        } else {
+            return;
+        }
+        
+        String query = "INSERT INTO clients (name, mobileNumber, address, email, idCard) VALUES (?,?,?,?,?)";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
-            String query = "INSERT INTO clients (name, mobileNumber, address, email, idCard) VALUES (?,?,?,?,?)";
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
-
-                if (email.equals("")) {
-                    email = "N/A";
-                }
-
-                ps.setString(1, name);
-                ps.setString(2, mobileNumber);
-                ps.setString(3, address);
-                ps.setString(4, email);
-                ps.setString(5, idCard);
-
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "¡Cliente agregado exitosamente!");
-                setVisible(false);
-                new AddClient().setVisible(true);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+            if (isNullOrBlank(email)) {
+                email = "N/A";
             }
+
+            ps.setString(1, name);
+            ps.setString(2, mobileNumber);
+            ps.setString(3, address);
+            ps.setString(4, email);
+            ps.setString(5, idCard);
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "¡Cliente agregado exitosamente!");
+            setVisible(false);
+            new AddClient().setVisible(true);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Log detallado
+            JOptionPane.showMessageDialog(null, "Ocurrió un error: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtIDCardKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDCardKeyReleased
 
-        String idCard = txtIDCard.getText();
+        String idCard = txtIDCard.getText().trim();
 
-        if (!idCard.equals("")) {
+        if (!isNullOrBlank(idCard)) {
             IDiconLabel.setVisible(true);
             IDiconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
             IDiconLabel.setText("");

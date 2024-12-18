@@ -16,6 +16,10 @@ public class UpdateProduct extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    private boolean isNullOrBlank(String str) {
+        return str == null || str.isBlank();
+    }
+
     private void loadCategories() {
         //cargar las categorías en el jcomboBox
         String query = "SELECT categoryName FROM productCategories";
@@ -44,7 +48,6 @@ public class UpdateProduct extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         txtProductId = new javax.swing.JTextField();
@@ -69,6 +72,7 @@ public class UpdateProduct extends javax.swing.JFrame {
         txtProductLocation = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtAddQuantity = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -76,13 +80,6 @@ public class UpdateProduct extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Actualizar Producto");
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -184,25 +181,20 @@ public class UpdateProduct extends javax.swing.JFrame {
         txtAddQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtAddQuantity.setForeground(new java.awt.Color(0, 0, 0));
 
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel12MouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jLabel1)
-                        .addGap(188, 188, 188)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addComponent(jLabel2)
-                        .addGap(6, 6, 6)
-                        .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addComponent(jLabel3)
@@ -254,6 +246,20 @@ public class UpdateProduct extends javax.swing.JFrame {
                                 .addGap(31, 31, 31)
                                 .addComponent(jLabel8)))))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(117, 117, 117)
+                .addComponent(jLabel2)
+                .addGap(6, 6, 6)
+                .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(258, 258, 258)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel12)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,8 +267,8 @@ public class UpdateProduct extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
+                    .addComponent(jLabel12))
+                .addGap(16, 16, 16)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,16 +325,12 @@ public class UpdateProduct extends javax.swing.JFrame {
                     .addComponent(txtProductBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtProductLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
-                .addComponent(jButton3))
+                .addComponent(jButton3)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //botón para buscar datos del producto
@@ -356,7 +358,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                         // Cargar la categoría en el JComboBox
                         String categoryName = rs.getString("categoryName");
                         comboCategory.setSelectedItem(categoryName); // Selecciona el nombre en el JComboBox
-                        
+
                     } else {
                         JOptionPane.showMessageDialog(null, "¡El ID de producto ingresado no existe!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -369,61 +371,107 @@ public class UpdateProduct extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // botón para guardar
-        String uniqueId = txtProductId.getText();
-        String name = txtName.getText();
-        String productBrand = txtProductBrand.getText();
-        String quantity = txtQuantity.getText();
-        String acquiredPrice = txtAcquiredPrice.getText();
-        String sellingPrice = txtSellingPrice.getText();
-        String addQuantity = txtAddQuantity.getText();
-        String productLocation = txtProductLocation.getText();
-        String selectedCategory = comboCategory.getSelectedItem().toString();
+        String uniqueId = txtProductId.getText().trim();
+        String name = txtName.getText().trim();
+        String productBrand = txtProductBrand.getText().trim();
+        String quantity = txtQuantity.getText().trim();
+        String acquiredPrice = txtAcquiredPrice.getText().trim();
+        String sellingPrice = txtSellingPrice.getText().trim();
+        String addQuantity = txtAddQuantity.getText().trim();
+        String productLocation = txtProductLocation.getText().trim();
+        String selectedCategory = comboCategory.getSelectedItem().toString().trim();
 
-        // SE SUMA LA CANTIDAD INGRESADA CON LA YA EXISTENTE
-        int totalQuantity = 0;
-        if (addQuantity.equals("") || addQuantity == null) {
-            totalQuantity = Integer.parseInt(quantity);
-        } else {
-            totalQuantity = Integer.parseInt(quantity) + Integer.parseInt(addQuantity);
-        }
-        
-        if (uniqueId.equals("") || uniqueId == null) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!");
-        } else if (name.equals("") || name == null) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre del producto!");
-        } else if (productBrand.equals("") || !productBrand.equals("No registrado")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la marca del producto!");
-        } else if (!addQuantity.matches(numberPattern)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad del producto en números!");
-        } else if (acquiredPrice.equals("") || acquiredPrice == null) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto!");
-        } else if (!acquiredPrice.matches(numberPattern)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto en números!");
-        } else if (sellingPrice.equals("") || sellingPrice == null) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto!");
-        } else if (!sellingPrice.matches(numberPattern)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto en números!");
-        } else if (productLocation == null || productLocation.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!");
-        }  else if (selectedCategory == null || productLocation.equals("Seleccionar")) {
-            JOptionPane.showMessageDialog(null, "¡Debes elegir una categoría para el producto!");
-        } else {
-            try {
-                Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("update products set category_pk =?, name=?, "
-                        + "productBrand=?, quantity=?, acquiredPrice=?, sellingPrice=?, productLocation=? where uniqueId=?");
-                ps.setString(1, selectedCategory);
-                ps.setString(2, name);
-                ps.setString(3, productBrand);
-                ps.setInt(4, totalQuantity);
-                ps.setString(5, uniqueId);
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "¡Producto actualizado exitosamente!");
-                setVisible(false);
-                new UpdateProduct().setVisible(true);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+        try (Connection con = ConnectionProvider.getCon()) {
+            // Verificar si el uniqueId existe en la tabla products
+            String checkUniqueIdQuery = "SELECT COUNT(*) FROM products WHERE uniqueId = ?";
+            try (PreparedStatement checkStmt = con.prepareStatement(checkUniqueIdQuery)) {
+                checkStmt.setString(1, uniqueId);
+                ResultSet rs = checkStmt.executeQuery();
+
+                if (rs.next() && rs.getInt(1) == 0) {
+                    // Si no existe, mostrar mensaje y salir
+                    JOptionPane.showMessageDialog(null, "El código de producto no existe. Verifica el ID ingresado.");
+                    return;
+                }
             }
+
+            if (isNullOrBlank(uniqueId)) {
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!");
+                return;
+            }
+            if (isNullOrBlank(name)) {
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre del producto!");
+                return;
+            }
+            if (!addQuantity.matches(numberPattern)) {
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad del producto en números!");
+                return;
+            }
+            if (isNullOrBlank(acquiredPrice) || !acquiredPrice.matches(numberPattern)) {
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto en números!");
+                return;
+            }
+            if (isNullOrBlank(sellingPrice) || !sellingPrice.matches(numberPattern)) {
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto en números!");
+                return;
+            }
+            if (isNullOrBlank(productLocation)) {
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!");
+                return;
+            }
+            if (isNullOrBlank(selectedCategory) || selectedCategory.equals("Seleccionar")) {
+                JOptionPane.showMessageDialog(null, "¡Debes elegir una categoría para el producto!");
+                return;
+            }
+
+            if (isNullOrBlank(productBrand)) {
+                productBrand = "No registrado";
+            }
+
+            // SE SUMA LA CANTIDAD INGRESADA CON LA YA EXISTENTE
+            int totalQuantity = 0;
+            if (isNullOrBlank(addQuantity)) {
+                totalQuantity = Integer.parseInt(quantity);
+            } else {
+                totalQuantity = Integer.parseInt(quantity) + Integer.parseInt(addQuantity);
+            }
+
+            if (isNullOrBlank(productBrand)) {
+                productBrand = "No registrado";
+            }
+
+            // Consultar la llave primaria de la categoría seleccionada
+            String getCategoryPKQuery = "SELECT category_pk FROM productCategories WHERE categoryName = ?";
+            try (PreparedStatement getCategoryPKStmt = con.prepareStatement(getCategoryPKQuery)) {
+                getCategoryPKStmt.setString(1, selectedCategory);
+                ResultSet rs = getCategoryPKStmt.executeQuery();
+
+                if (rs.next()) {
+                    int categoryPK = rs.getInt("category_pk");
+
+                    // Actualizar los datos del producto en la tabla products
+                    String updateQuery = "UPDATE products SET category_pk = ?, name = ?, productBrand = ?, quantity = ?, acquiredPrice = ?, sellingPrice = ?, productLocation = ? WHERE uniqueId = ?";
+                    try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
+                        ps.setInt(1, categoryPK); // Usar la llave primaria de la categoría
+                        ps.setString(2, name);
+                        ps.setString(3, productBrand);
+                        ps.setInt(4, totalQuantity);
+                        ps.setString(5, acquiredPrice);
+                        ps.setString(6, sellingPrice);
+                        ps.setString(7, productLocation);
+                        ps.setString(8, uniqueId);
+
+                        ps.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "¡Producto actualizado exitosamente!");
+                        setVisible(false);
+                        new UpdateProduct().setVisible(true);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Categoría no encontrada en la base de datos!");
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar el producto: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -461,6 +509,10 @@ public class UpdateProduct extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jLabel12MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseReleased
+        setVisible(false);
+    }//GEN-LAST:event_jLabel12MouseReleased
 
     /**
      * @param args the command line arguments
@@ -502,13 +554,13 @@ public class UpdateProduct extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> comboCategory;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
