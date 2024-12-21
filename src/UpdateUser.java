@@ -17,6 +17,10 @@ public class UpdateUser extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    private boolean isNullOrBlank(String str) {
+        return str == null || str.isBlank();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,19 +48,25 @@ public class UpdateUser extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         txtUsername = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Actualizar Usuario");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de cédula");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(133, 107, -1, -1));
 
         txtIDcard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtIDcard, new org.netbeans.lib.awtextra.AbsoluteConstraints(254, 103, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -67,10 +77,12 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(566, 101, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Rol del Usuario");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 191, -1, -1));
 
         comboUserRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboUserRole.setForeground(new java.awt.Color(255, 255, 255));
@@ -80,28 +92,36 @@ public class UpdateUser extends javax.swing.JFrame {
                 comboUserRoleActionPerformed(evt);
             }
         });
+        getContentPane().add(comboUserRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 213, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Nombre");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 264, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 285, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Nombre de usuario");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 336, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Número de teléfono");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 191, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 214, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Dirección");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 264, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 285, 300, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -112,6 +132,7 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(647, 323, 120, -1));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -120,9 +141,11 @@ public class UpdateUser extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(758, 16, 40, 30));
 
         txtUsername.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtUsername.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 363, 300, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -130,188 +153,106 @@ public class UpdateUser extends javax.swing.JFrame {
                 jLabel9MouseReleased(evt);
             }
         });
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(260, 260, 260)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(133, 133, 133)
-                        .addComponent(jLabel2)
-                        .addGap(12, 12, 12)
-                        .addComponent(txtIDcard, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel3)
-                        .addGap(280, 280, 280)
-                        .addComponent(jLabel7))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(comboUserRole, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel4)
-                        .addGap(324, 324, 324)
-                        .addComponent(jLabel8))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel5)
-                        .addGap(436, 436, 436)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))))
-                .addGap(5, 5, 5)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(txtIDcard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton2))
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel7))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(comboUserRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel8))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel5))
-                    .addComponent(jButton3))
-                .addGap(12, 12, 12)
-                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //buscar usuario por número de cédula
+        String idCard = txtIDcard.getText().trim();
 
-        int checkUserExist = 0;
-        String IDcard = txtIDcard.getText();
+        // Validar campo vacío
+        if (isNullOrBlank(idCard)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!",
+                    "No hay usuarios seleccionados", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
 
-        if (IDcard.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!", "No hay usuarios seleccionados", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        String query = "SELECT name, username, mobileNumber, address, userRole FROM appuser WHERE IDcard = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, idCard);
 
-            String query = "SELECT * FROM appuser WHERE IDcard = ?";
-            try (
-                    Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
-                ps.setString(1, IDcard);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    txtIDcard.setEditable(false);
+                    txtName.setText(rs.getString("name"));
+                    txtUsername.setText(rs.getString("username"));
+                    txtMobileNumber.setText(rs.getString("mobileNumber"));
+                    txtAddress.setText(rs.getString("address"));
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        txtIDcard.setEditable(false);
-                        checkUserExist = 1;
-                        txtName.setText(rs.getString("name"));
-                        txtUsername.setText(rs.getString("username"));
-                        txtMobileNumber.setText(rs.getString("mobileNumber"));
-                        txtAddress.setText(rs.getString("address"));
-
-                        comboUserRole.removeAllItems();
-                        if ("Administrador".equals(rs.getString("userRole"))) {
-                            comboUserRole.addItem("Administrador");
-                            comboUserRole.addItem("Vendedor");
-                        } else {
-                            comboUserRole.addItem("Vendedor");
-                            comboUserRole.addItem("Administrador");
-                        }
+                    // Configurar comboBox de roles
+                    comboUserRole.removeAllItems();
+                    String userRole = rs.getString("userRole");
+                    if ("Administrador".equals(userRole)) {
+                        comboUserRole.addItem("Administrador");
+                        comboUserRole.addItem("Vendedor");
+                    } else {
+                        comboUserRole.addItem("Vendedor");
+                        comboUserRole.addItem("Administrador");
                     }
+                } else {
+                    // Usuario no encontrado
+                    JOptionPane.showMessageDialog(null, "¡El usuario no existe!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            if (checkUserExist == 0) {
-                JOptionPane.showMessageDialog(null, "¡El usuario no existe!", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar el usuario: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
+        // Botón para guardar
         String userRole = (String) comboUserRole.getSelectedItem();
-        String name = txtName.getText();
-        String username = txtUsername.getText();
-        String mobileNumber = txtMobileNumber.getText();
-        String IDcard = txtIDcard.getText();
-        String address = txtAddress.getText();
+        String name = txtName.getText().trim();
+        String username = txtUsername.getText().trim();
+        String mobileNumber = txtMobileNumber.getText().trim();
+        String IDcard = txtIDcard.getText().trim();
+        String address = txtAddress.getText().trim();
 
-        if (IDcard.equals("")) {
+        // Validaciones
+        if (isNullOrBlank(IDcard)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
-        } else if (name.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(name)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
-        } else if (!name.matches(justLetters)) {
+            return;
+        }
+        if (!name.matches(justLetters)) {
             JOptionPane.showMessageDialog(null, "¡El nombre solo puede contener letras y espacios!");
-        } else if (username.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(username)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!");
-        } else if (mobileNumber.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(mobileNumber)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
-        } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
+            return;
+        }
+        if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
-        } else if (address.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(address)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        } else {
-            // Verificar si el nombre de usuario ya existe
-            String checkUsernameQuery = "SELECT COUNT(*) FROM appuser WHERE username = ? AND IDcard != ?";
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement psCheck = con.prepareStatement(checkUsernameQuery)) {
+            return;
+        }
 
-                psCheck.setString(1, username);  // Verificar el nombre de usuario ingresado
-                psCheck.setString(2, IDcard);    // Excluir el usuario actual (con IDcard específico)
+        // Verificar si el nombre de usuario ya existe
+        String checkUsernameQuery = "SELECT COUNT(*) FROM appuser WHERE username = ? AND IDcard != ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement psCheck = con.prepareStatement(checkUsernameQuery)) {
 
-                ResultSet rsCheck = psCheck.executeQuery();
+            psCheck.setString(1, username);  // Verificar el nombre de usuario ingresado
+            psCheck.setString(2, IDcard);    // Excluir el usuario actual (con IDcard específico)
+
+            try (ResultSet rsCheck = psCheck.executeQuery()) {
                 rsCheck.next();
                 int usernameCount = rsCheck.getInt(1);
 
@@ -319,33 +260,33 @@ public class UpdateUser extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya está en uso!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;  // Salir si el nombre de usuario ya existe
                 }
-
-                // Si el nombre de usuario es único, proceder con la actualización
-                String query = "UPDATE appuser SET userRole=?, name=?, username=?, mobileNumber=?, address=? WHERE IDcard=?";
-                try (PreparedStatement psUpdate = con.prepareStatement(query)) {
-                    psUpdate.setString(1, userRole);
-                    psUpdate.setString(2, name);
-                    psUpdate.setString(3, username);
-                    psUpdate.setString(4, mobileNumber);
-                    psUpdate.setString(5, address);
-                    psUpdate.setString(6, IDcard);
-
-                    int rowsUpdated = psUpdate.executeUpdate();
-
-                    if (rowsUpdated > 0) {
-                        JOptionPane.showMessageDialog(null, "¡Usuario actualizado exitosamente!");
-                        setVisible(false);
-                        new UpdateUser().setVisible(true);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "¡No se encontró ningún usuario con la cédula especificada!");
-                    }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
-                }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error al verificar el nombre de usuario: " + e.getMessage());
             }
+
+            // Si el nombre de usuario es único, proceder con la actualización
+            String query = "UPDATE appuser SET userRole=?, name=?, username=?, mobileNumber=?, address=? WHERE IDcard=?";
+            try (PreparedStatement psUpdate = con.prepareStatement(query)) {
+                psUpdate.setString(1, userRole);
+                psUpdate.setString(2, name);
+                psUpdate.setString(3, username);
+                psUpdate.setString(4, mobileNumber);
+                psUpdate.setString(5, address);
+                psUpdate.setString(6, IDcard);
+
+                int rowsUpdated = psUpdate.executeUpdate();
+
+                if (rowsUpdated > 0) {
+                    JOptionPane.showMessageDialog(null, "¡Usuario actualizado exitosamente!");
+                    setVisible(false);
+                    new UpdateUser().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡No se encontró ningún usuario con la cédula especificada!");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar el nombre de usuario: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -354,9 +295,7 @@ public class UpdateUser extends javax.swing.JFrame {
     }//GEN-LAST:event_comboUserRoleActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-
-        new UpdateUserHelp().setVisible(true);
+         new UpdateUserHelp().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jLabel9MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseReleased
@@ -408,6 +347,7 @@ public class UpdateUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

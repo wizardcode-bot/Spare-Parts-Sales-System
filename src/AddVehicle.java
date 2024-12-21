@@ -3,7 +3,7 @@ import dao.ConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -17,6 +17,10 @@ public class AddVehicle extends javax.swing.JFrame {
     public AddVehicle() {
         initComponents();
         setLocationRelativeTo(null);
+    }
+
+    private boolean isNullOrBlank(String str) {
+        return str == null || str.isBlank();
     }
 
     /**
@@ -184,28 +188,35 @@ public class AddVehicle extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // filtrar clientes por número de cédula
+        // Filtrar clientes por número de cédula
         boolean checkClientExist = false;
-        String filterClient = txtFilterClient.getText();
-        if (filterClient.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        String filterClient = txtFilterClient.getText().trim();
 
-            try {
-                Connection con = ConnectionProvider.getCon();
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select name from clients where idCard = '" + filterClient + "'");
+        if (isNullOrBlank(filterClient)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula del cliente!", "No hay clientes seleccionados",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String query = "SELECT name FROM clients WHERE idCard = ?";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+            pst.setString(1, filterClient);
+
+            try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     checkClientExist = true;
                     txtRelateClient.setText(rs.getString("name"));
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
             }
-            if (!checkClientExist) {
-                JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
-                //txtRelateClient.setText("");
-            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar el cliente: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (!checkClientExist) {
+            JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -214,51 +225,49 @@ public class AddVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        //botón de guardar
-        String plate = txtPlate.getText();
-        String brandName = txtBrandName.getText();
-        String model = txtModel.getText();
-        String cylinder = txtCylinder.getText();
-        String color = txtColor.getText();
-        String selectedClient = txtRelateClient.getText();
-        String idCard = txtFilterClient.getText();
-        
-        if (plate.equals("")) {
+        // Botón de guardar
+        String plate = txtPlate.getText().trim();
+        String brandName = txtBrandName.getText().trim();
+        String model = txtModel.getText().trim();
+        String cylinder = txtCylinder.getText().trim();
+        String color = txtColor.getText().trim();
+        String selectedClient = txtRelateClient.getText().trim();
+        String idCard = txtFilterClient.getText().trim();
+
+        if (isNullOrBlank(plate)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de placa!");
-        } else if (brandName.equals("")) {
+            return;
+        } else if (isNullOrBlank(brandName)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la marca del vehículo!");
-        } else if (color.equals("")) {
+            return;
+        } else if (isNullOrBlank(color)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el color del vehículo!");
-        } else if (selectedClient.equals("Seleccione un cliente")) {
+            return;
+        } else if (isNullOrBlank(selectedClient)) {
             JOptionPane.showMessageDialog(null, "¡Debes relacionar el propietario del vehículo!");
-        } else if(checkPlateExists) {
+            return;
+        } else if (checkPlateExists) {
             JOptionPane.showMessageDialog(null, "¡El número de placa ya está registrado!");
-        } else {
-            String queryGetClientPk = "SELECT client_pk FROM clients WHERE name = ? and idCard=?";
-            String queryInsertMotorbike = "INSERT INTO motorbikes (plate, brandName, model, cylinderCapacity, color, client_pk) VALUES (?,?,?,?,?,?)";
+            return;
+        }
 
-            try (Connection con = ConnectionProvider.getCon(); 
-                PreparedStatement psGetClientPk = con.prepareStatement(queryGetClientPk); 
-                PreparedStatement psInsertMotorbike = con.prepareStatement(queryInsertMotorbike)) {
+        String queryGetClientPk = "SELECT client_pk FROM clients WHERE name = ? AND idCard = ?";
+        String queryInsertMotorbike = "INSERT INTO motorbikes (plate, brandName, model, cylinderCapacity, color, client_pk) VALUES (?,?,?,?,?,?)";
 
-                // Buscar client_pk del cliente seleccionado
-                psGetClientPk.setString(1, selectedClient);
-                psGetClientPk.setString(2, idCard);
-                ResultSet rs = psGetClientPk.executeQuery();
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement psGetClientPk = con.prepareStatement(queryGetClientPk); PreparedStatement psInsertMotorbike = con.prepareStatement(queryInsertMotorbike)) {
 
+            // Buscar client_pk del cliente seleccionado
+            psGetClientPk.setString(1, selectedClient);
+            psGetClientPk.setString(2, idCard);
+
+            try (ResultSet rs = psGetClientPk.executeQuery()) {
                 if (rs.next()) {
                     int clientPk = rs.getInt("client_pk");
 
-                    // Reemplazar valores por defecto si están vacíos
-                    if (model.equals("")) {
-                        model = "No registrado";
-                    }
+                    // Reemplazar valores vacíos por "No registrado"
+                    model = isNullOrBlank(model) ? "No registrado" : model;
+                    cylinder = isNullOrBlank(cylinder) ? "No registrado" : cylinder;
 
-                    if (cylinder.equals("")) {
-                        cylinder = "No registrado";
-                    }
-
-                    // Preparar el INSERT en motorbikes
                     psInsertMotorbike.setString(1, plate);
                     psInsertMotorbike.setString(2, brandName);
                     psInsertMotorbike.setString(3, model);
@@ -274,36 +283,37 @@ public class AddVehicle extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "¡Cliente no encontrado en la base de datos!");
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
             }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar el vehículo: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtPlateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlateKeyReleased
-        String plate = txtPlate.getText();
+        String plate = txtPlate.getText().trim();
 
-        if (!plate.equals("")) {
+        if (!isNullOrBlank(plate)) {
             plateIcon.setVisible(true);
             plateIcon.setIcon(new ImageIcon("src\\images\\yes.png"));
             plateIcon.setText("");
             checkPlateExists = false;
 
-            String query = "SELECT plate FROM motorbikes WHERE plate = ?";
+            String query = "SELECT 1 FROM motorbikes WHERE plate = ? LIMIT 1";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
                 pst.setString(1, plate);
 
                 try (ResultSet rs = pst.executeQuery()) {
-                    while (rs.next()) {
+                    if (rs.next()) {
                         checkPlateExists = true;
                         plateIcon.setIcon(new ImageIcon("src\\images\\no.png"));
                         plateIcon.setText("");
                     }
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar la placa: " + e.getMessage());
+        }
         } else {
             plateIcon.setVisible(false);
         }

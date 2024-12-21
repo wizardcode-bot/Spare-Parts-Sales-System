@@ -17,6 +17,10 @@ public class UpdateClient extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    private boolean isNullOrBlank(String str) {
+        return str == null || str.isBlank();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,19 +45,24 @@ public class UpdateClient extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Actualizar Cliente");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(279, 6, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de cédula del cliente");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 115, -1, -1));
 
         txtIDCard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtIDCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(279, 112, 320, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -64,16 +73,20 @@ public class UpdateClient extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(617, 109, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Nombre");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 214, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 235, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Teléfono");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 308, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMobileNumber.addActionListener(new java.awt.event.ActionListener() {
@@ -81,18 +94,23 @@ public class UpdateClient extends javax.swing.JFrame {
                 txtMobileNumberActionPerformed(evt);
             }
         });
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 329, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Dirección");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(447, 308, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(447, 329, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Correo");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(447, 213, -1, -1));
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(447, 234, 300, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -103,6 +121,7 @@ public class UpdateClient extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(447, 364, 120, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,94 +129,11 @@ public class UpdateClient extends javax.swing.JFrame {
                 jLabel8MouseReleased(evt);
             }
         });
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel3)
-                        .addGap(306, 306, 306)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel4)
-                        .addGap(300, 300, 300)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(447, 447, 447)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel2)
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtIDCard, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(0, 115, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addContainerGap())
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(txtIDCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton2))
-                .addGap(76, 76, 76)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel3))
-                    .addComponent(jLabel6))
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(jButton3))
-        );
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -207,73 +143,96 @@ public class UpdateClient extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMobileNumberActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        int checkClientExist = 0;
-        String idCard = txtIDCard.getText();
-        if (idCard.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la cédula del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        // Botón para buscar cliente
+        String idCard = txtIDCard.getText().trim();
 
-            String query = "SELECT * FROM clients WHERE idCard = ?";
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+        if (isNullOrBlank(idCard)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la cédula del cliente!",
+                    "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        } else if (idCard == null || !idCard.matches(mobileNumberPattern)) {
+            JOptionPane.showMessageDialog(null, "La cédula debe contener solo números.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-                ps.setString(1, idCard);
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        txtIDCard.setEditable(false);
-                        checkClientExist = 1;
-                        txtName.setText(rs.getString("name"));
-                        txtMobileNumber.setText(rs.getString("mobileNumber"));
-                        txtAddress.setText(rs.getString("address"));
-                        txtEmail.setText(rs.getString("email"));
-                    }
+        String query = "SELECT name, mobileNumber, address, email FROM clients WHERE idCard = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, idCard);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    txtIDCard.setEditable(false);
+                    txtName.setText(rs.getString("name"));
+                    txtMobileNumber.setText(rs.getString("mobileNumber"));
+                    txtAddress.setText(rs.getString("address"));
+                    txtEmail.setText(rs.getString("email"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            if (checkClientExist == 0) {
-                JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar el cliente: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-        String name = txtName.getText();
-        String mobileNumber = txtMobileNumber.getText();
-        String address = txtAddress.getText();
-        String email = txtEmail.getText();
-        String idCard = txtIDCard.getText();
+        // Botón para guardar
+        String name = txtName.getText().trim();
+        String mobileNumber = txtMobileNumber.getText().trim();
+        String address = txtAddress.getText().trim();
+        String email = txtEmail.getText().trim();
+        String idCard = txtIDCard.getText().trim();
 
-        if (name.equals("")) {
+        // Validaciones de campos
+        if (isNullOrBlank(name)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
-        } else if (mobileNumber.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
-        } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
-            JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
-        } else if (address.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        } else if (!email.matches(emailPattern) && !email.equals("N/A")) {
-            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
-        } else {
-            
-            String query = "update clients set name=?, mobileNumber=?, address=?, email=? where idCard=?";
-            try (Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement(query);){
+            return;
+        }
 
-                ps.setString(1, name);
-                ps.setString(2, mobileNumber);
-                ps.setString(3, address);
-                ps.setString(4, email);
-                ps.setString(5, idCard);
-                ps.executeUpdate();
+        if (isNullOrBlank(mobileNumber)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
+            return;
+        }
+
+        if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
+            JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
+            return;
+        }
+
+        if (isNullOrBlank(address)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
+            return;
+        }
+
+        if (!email.matches(emailPattern) && !email.equalsIgnoreCase("N/A")) {
+            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
+            return;
+        }
+
+        // Consulta de actualización
+        String query = "UPDATE clients SET name=?, mobileNumber=?, address=?, email=? WHERE idCard=?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, name);
+            ps.setString(2, mobileNumber);
+            ps.setString(3, address);
+            ps.setString(4, email);
+            ps.setString(5, idCard);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "¡Cliente actualizado exitosamente!");
-                setVisible(false);
-                new UpdateClient().setVisible(true);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+            } else {
+                JOptionPane.showMessageDialog(null, "¡No se encontró un cliente con esa cédula!", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
+            setVisible(false);
+            new UpdateClient().setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -325,6 +284,7 @@ public class UpdateClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField txtAddress;

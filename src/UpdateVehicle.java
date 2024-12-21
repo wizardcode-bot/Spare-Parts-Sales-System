@@ -16,6 +16,10 @@ public class UpdateVehicle extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    private boolean isNullOrBlank(String str) {
+        return str == null || str.isBlank();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,6 +49,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
         txtFilterClient = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -54,17 +59,22 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 formComponentShown(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Actualizar vehículo");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de placa del vehículo");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 102, -1, -1));
 
         txtSearchPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearchPlate.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtSearchPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(267, 98, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -75,41 +85,52 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 95, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Marca");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 189, -1, -1));
 
         txtBrandName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtBrandName.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtBrandName, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 210, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Modelo");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 276, -1, -1));
 
         txtModel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtModel.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 297, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cilindraje");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 359, -1, -1));
 
         txtCylinder.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCylinder.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtCylinder, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 382, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Color");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 189, -1, -1));
 
         txtColor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtColor.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 210, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Propietario");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 276, -1, -1));
 
         txtOwner.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtOwner.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 297, 300, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -120,13 +141,16 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 386, 120, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Filtrar por número de cédula");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 332, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFilterClient.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 355, 200, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -137,6 +161,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(676, 352, 94, -1));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -144,116 +169,10 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jLabel10MouseReleased(evt);
             }
         });
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(202, 202, 202)
-                .addComponent(jLabel10)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(jLabel2)
-                        .addGap(6, 6, 6)
-                        .addComponent(txtSearchPlate, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(jLabel3)
-                        .addGap(350, 350, 350)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(txtBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(86, 86, 86)
-                        .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(jLabel4)
-                        .addGap(341, 341, 341)
-                        .addComponent(jLabel7))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(86, 86, 86)
-                        .addComponent(txtOwner, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(470, 470, 470)
-                        .addComponent(jLabel8))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(jLabel5)
-                        .addGap(330, 330, 330)
-                        .addComponent(txtFilterClient, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(txtCylinder, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(86, 86, 86)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel10))
-                .addGap(10, 10, 10)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(txtSearchPlate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton2))
-                .addGap(66, 66, 66)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel7))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtOwner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(jLabel8)
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(txtFilterClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton4))
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCylinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jButton3))))
-        );
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -262,9 +181,10 @@ public class UpdateVehicle extends javax.swing.JFrame {
         // Buscar vehículo por placa
         String plate = txtSearchPlate.getText().trim(); // Elimina espacios al inicio y final
 
-        if (plate.isBlank()) { // Valida cadenas vacías o solo con espacios
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de placa del vehículo!", "No hay vehículos seleccionados", JOptionPane.INFORMATION_MESSAGE);
-            return; // Termina el método si la entrada es inválida
+        if (isNullOrBlank(plate)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de placa del vehículo!", ""
+                    + "No hay vehículos seleccionados", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         String query = """
@@ -278,7 +198,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
             ps.setString(1, plate);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) { // Verifica si hay un registro
+                if (rs.next()) {
                     txtSearchPlate.setEditable(false);
                     txtBrandName.setText(rs.getString("brandName"));
                     txtModel.setText(rs.getString("model"));
@@ -286,7 +206,8 @@ public class UpdateVehicle extends javax.swing.JFrame {
                     txtColor.setText(rs.getString("color"));
                     txtOwner.setText(rs.getString("ownerName"));
                 } else {
-                    JOptionPane.showMessageDialog(null, "¡Este vehículo no está registrado!", "Vehículo no encontrado", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "¡Este vehículo no está registrado!", "Vehículo no encontrado",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
         } catch (SQLException e) {
@@ -296,14 +217,14 @@ public class UpdateVehicle extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Guardar los datos
-        String plate = txtSearchPlate.getText();
-        String brandName = txtBrandName.getText();
-        String model = txtModel.getText();
-        String cylinder = txtCylinder.getText();
-        String color = txtColor.getText();
-        String owner = txtOwner.getText();
+        String plate = txtSearchPlate.getText().trim();
+        String brandName = txtBrandName.getText().trim();
+        String model = txtModel.getText().trim();
+        String cylinder = txtCylinder.getText().trim();
+        String color = txtColor.getText().trim();
+        String owner = txtOwner.getText().trim();
 
-        if (brandName.equals("") || model.equals("") || cylinder.equals("") || color.equals("") || owner.equals("")) {
+        if (isNullOrBlank(brandName) || isNullOrBlank(model) || isNullOrBlank(cylinder) || isNullOrBlank(color) || isNullOrBlank(owner)) {
             JOptionPane.showMessageDialog(null, "¡Debes completar todos los campos!", "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -323,11 +244,10 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al buscar el cliente: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // actualizar los datos del vehículo
         String queryUpdate = "UPDATE motorbikes SET brandName = ?, model = ?, cylinderCapacity = ?, color = ?, client_pk = ? WHERE plate = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement psUpdate = con.prepareStatement(queryUpdate)) {
@@ -344,7 +264,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
             setVisible(false);
             new UpdateVehicle().setVisible(true);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al actualizar el vehículo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -353,32 +273,37 @@ public class UpdateVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // filtrar clientes por número de cédula
-        boolean checkClientExist = false;
-        String filterClient = txtFilterClient.getText();
-        if (filterClient.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        // Filtrar clientes por número de cédula
+        String filterClient = txtFilterClient.getText().trim();
 
-            String query = "SELECT name FROM clients WHERE idCard = ?";
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+        if (isNullOrBlank(filterClient)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula del cliente!", "No hay clientes seleccionados",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
 
-                ps.setString(1, filterClient);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        checkClientExist = true;
-                        txtOwner.setText(rs.getString("name"));
-                    }
+        // Validar que el número de cédula solo contenga dígitos
+        if (!filterClient.matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula solo puede contener dígitos!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String query = "SELECT name FROM clients WHERE idCard = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, filterClient);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    txtOwner.setText(rs.getString("name"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
+                    txtOwner.setText(""); // Limpia el campo si no se encuentra el cliente
                 }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            if (!checkClientExist) {
-                JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
-                // txtRelateClient.setText("");
-            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar el cliente: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -434,6 +359,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtBrandName;
     private javax.swing.JTextField txtColor;

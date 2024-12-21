@@ -3,6 +3,7 @@ import dao.ConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -13,8 +14,8 @@ public class AddUser extends javax.swing.JFrame {
 
     //public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
-    public int checkUsername = 0;
-    public int checkID = 0;
+    public boolean checkUsername = false;
+    public boolean checkID = false;
     public String hashedPassword = "";
 
     /**
@@ -25,6 +26,11 @@ public class AddUser extends javax.swing.JFrame {
         userIconLabel.setVisible(false);
         IDiconLabel.setVisible(false);
         setLocationRelativeTo(null);
+    }
+
+    private boolean isNullOrBlank(String str) {
+        //verificar si es null o está vacío
+        return str == null || str.isBlank();
     }
 
     /**
@@ -61,44 +67,57 @@ public class AddUser extends javax.swing.JFrame {
         IDiconLabel = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Añadir Usuario");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(295, 9, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Rol de usuario *");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 120, -1, -1));
 
         comboUserRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboUserRole.setForeground(new java.awt.Color(255, 255, 255));
         comboUserRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Vendedor", " " }));
+        getContentPane().add(comboUserRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 142, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Nombre *");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 186, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 214, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Fecha de Nacimiento");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 256, -1, -1));
 
         dateDOB.setForeground(new java.awt.Color(255, 255, 255));
         dateDOB.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(dateDOB, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 284, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Número de teléfono *");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 326, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 354, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Número de cédula (sin puntos ni espacios) *");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 120, -1, -1));
 
         txtIDcard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtIDcard.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -106,10 +125,12 @@ public class AddUser extends javax.swing.JFrame {
                 txtIDcardKeyReleased(evt);
             }
         });
+        getContentPane().add(txtIDcard, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 143, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Nombre de usuario *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 186, -1, -1));
 
         txtUsername.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -117,14 +138,17 @@ public class AddUser extends javax.swing.JFrame {
                 txtUsernameKeyReleased(evt);
             }
         });
+        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 214, 300, -1));
 
         userIconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         userIconLabel.setForeground(new java.awt.Color(0, 0, 0));
         userIconLabel.setText("---");
+        getContentPane().add(userIconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(778, 218, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Contraseña *");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 256, -1, -1));
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
@@ -132,12 +156,15 @@ public class AddUser extends javax.swing.JFrame {
                 txtPasswordActionPerformed(evt);
             }
         });
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 284, 300, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Dirección");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 326, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 354, 300, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(0, 0, 0));
@@ -148,6 +175,7 @@ public class AddUser extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 383, 100, -1));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -155,14 +183,18 @@ public class AddUser extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(758, 16, 40, 30));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         IDiconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         IDiconLabel.setForeground(new java.awt.Color(0, 0, 0));
         IDiconLabel.setText("---");
+        getContentPane().add(IDiconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(778, 147, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("(*) Indica campo obligatorio");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 450, -1, -1));
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -170,133 +202,10 @@ public class AddUser extends javax.swing.JFrame {
                 jLabel13MouseReleased(evt);
             }
         });
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(192, 192, 192)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel2)
-                        .addGap(312, 312, 312)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(comboUserRole, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)
-                        .addComponent(txtIDcard, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(IDiconLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel3)
-                        .addGap(353, 353, 353)
-                        .addComponent(jLabel7))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(userIconLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel4)
-                        .addGap(288, 288, 288)
-                        .addComponent(jLabel9))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(dateDOB, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel5)
-                        .addGap(278, 278, 278)
-                        .addComponent(jLabel10))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)
-                        .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(466, 466, 466)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel11)))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addGap(13, 13, 13))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel6))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(comboUserRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(txtIDcard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(IDiconLabel)))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel7))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(userIconLabel)))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel9))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateDOB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel10))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addComponent(jButton1)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel11))
-        );
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -306,133 +215,148 @@ public class AddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void txtUsernameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyReleased
+        // Verificar si el nombre de usuario ya existe
+        String username = txtUsername.getText().trim();
 
-        String username = txtUsername.getText();
-        if (!username.equals("")) {
-            userIconLabel.setVisible(true);
-            userIconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
-            userIconLabel.setText("");
-            checkUsername = 0;
-
-            String query = "SELECT username FROM appuser WHERE username = ?";
-            try (
-                    Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
-
-                pst.setString(1, username);
-
-                try (ResultSet rs = pst.executeQuery()) {
-                    while (rs.next()) {
-                        checkUsername = 1;
-                        userIconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
-                        userIconLabel.setText("");
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-        } else {
+        if (isNullOrBlank(username)) {
             userIconLabel.setVisible(false);
+            checkUsername = false;
+            return;
         }
 
+        userIconLabel.setVisible(true);
+        userIconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+        userIconLabel.setText("");
+        checkUsername = false;
+
+        String query = "SELECT 1 FROM appuser WHERE username = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+            pst.setString(1, username);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    checkUsername = true;
+                    userIconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar el nombre de usuario: " + e.getMessage());
+        }
     }//GEN-LAST:event_txtUsernameKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        // método para guardar los datos
         String userRole = (String) comboUserRole.getSelectedItem();
-        String name = txtName.getText();
+        String name = txtName.getText().trim();
         SimpleDateFormat dFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date date = dateDOB.getDate();
-        String dob = "";
+        String dob = (date != null) ? dFormat.format(date) : "";
+        String mobileNumber = txtMobileNumber.getText().trim();
+        String IDcard = txtIDcard.getText().trim();
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        String address = txtAddress.getText().trim();
 
-        if (date != null) {
-            dob = dFormat.format(dateDOB.getDate());
-        }
-        String mobileNumber = txtMobileNumber.getText();
-        String IDcard = txtIDcard.getText();
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        String address = txtAddress.getText();
-
-        if (name.equals("")) {
+        if (isNullOrBlank(name)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
-        } else if (dob.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(dob)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la fecha de nacimiento!");
-        } else if (mobileNumber.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(mobileNumber)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
-        } else if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
+            return;
+        }
+        if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido!");
-        } else if (IDcard.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(IDcard)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
-        } else if (!IDcard.matches(mobileNumberPattern) || IDcard.length() > 10 || IDcard.length() < 6) {
+            return;
+        }
+        if (!IDcard.matches(mobileNumberPattern) || IDcard.length() < 6 || IDcard.length() > 10) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido!");
-        }  else if (checkID == 1) {
+            return;
+        }
+        if (checkID) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula ya existe!");
-        }  else if (username.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(username)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre de usuario!");
-        } else if (checkUsername == 1) {
+            return;
+        }
+        if (checkUsername) {
             JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya existe!");
-        } else if (password.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(password)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la contraseña!");
-        } else if (address.equals("")) {
+            return;
+        }
+        if (isNullOrBlank(address)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
-        } else {
-            String query = "INSERT INTO appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
-            try (Connection con = ConnectionProvider.getCon(); 
-                 PreparedStatement ps = con.prepareStatement(query)) {
+            return;
+        }
 
-                ps.setString(1, userRole);
-                ps.setString(2, name);
-                ps.setString(3, dob);
-                ps.setString(4, mobileNumber);
-                ps.setString(5, IDcard);
-                ps.setString(6, username);
-                ps.setString(7, hashedPassword);
-                ps.setString(8, address);
+        String query = "INSERT INTO appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "¡Usuario agregado exitosamente!");
-                setVisible(false);
-                new AddUser().setVisible(true);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            ps.setString(1, userRole);
+            ps.setString(2, name);
+            ps.setString(3, dob);
+            ps.setString(4, mobileNumber);
+            ps.setString(5, IDcard);
+            ps.setString(6, username);
+            ps.setString(7, hashedPassword);
+            ps.setString(8, address);
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "¡Usuario agregado exitosamente!");
+            setVisible(false);
+            new AddUser().setVisible(true);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al agregar el usuario: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-
         new AddUserHelp().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void txtIDcardKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDcardKeyReleased
-        String idCard = txtIDcard.getText();
+        String idCard = txtIDcard.getText().trim();
 
-        if (!idCard.equals("")) {
-            IDiconLabel.setVisible(true);
-            IDiconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
-            IDiconLabel.setText("");
-            checkID = 0;
-
-            String query = "SELECT IDcard FROM appuser WHERE IDcard = ?";
-            try (Connection con = ConnectionProvider.getCon();
-                PreparedStatement pst = con.prepareStatement(query)) {
-
-                pst.setString(1, idCard);
-
-                try (ResultSet rs = pst.executeQuery()) {
-                    while (rs.next()) {
-                        checkID = 1;
-                        IDiconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
-                        IDiconLabel.setText("");
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-        } else {
+        if (isNullOrBlank(idCard)) {
             IDiconLabel.setVisible(false);
+            return;
+        }
+
+        IDiconLabel.setVisible(true);
+        IDiconLabel.setIcon(new ImageIcon("src\\images\\yes.png"));
+        IDiconLabel.setText("");
+        checkID = false;
+
+        String query = "SELECT 1 FROM appuser WHERE IDcard = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+            pst.setString(1, idCard);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    checkID = true;
+                    IDiconLabel.setIcon(new ImageIcon("src\\images\\no.png"));
+                    IDiconLabel.setText("");
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error en la base de datos: " + e.getMessage());
         }
     }//GEN-LAST:event_txtIDcardKeyReleased
 
@@ -484,6 +408,7 @@ public class AddUser extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
