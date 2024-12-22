@@ -119,7 +119,7 @@ public class AddProduct extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Cantidad *");
+        jLabel5.setText("Cantidad de unidades adquiridas *");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 121, -1, -1));
 
         txtQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -137,12 +137,14 @@ public class AddProduct extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
         jButton2.setText("Guardar");
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.setIconTextGap(10);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 361, 100, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 361, 110, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
@@ -220,51 +222,72 @@ public class AddProduct extends javax.swing.JFrame {
         //botón para guardar los productos
         String uniqueId = txtUniqueId.getText().trim();
         String selectedCategory = comboCategory.getSelectedItem().toString();
-        String name = txtName.getText();
-        String productBrand = txtProductName.getText();
-        String quantity = txtQuantity.getText();
-        String acquiredPrice = txtAcquiredPrice.getText();
-        String sellingPrice = txtSellingPrice.getText();
-        String productLocation = txtLocation.getText();
+        String name = txtName.getText().trim();
+        String productBrand = txtProductName.getText().trim();
+        String quantity = txtQuantity.getText().trim();
+        String acquiredPrice = txtAcquiredPrice.getText().trim();
+        String sellingPrice = txtSellingPrice.getText().trim();
+        String productLocation = txtLocation.getText().trim();
 
         if (isNullOrBlank(uniqueId)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (checkProductID) {
-            JOptionPane.showMessageDialog(null, "¡El ID de producto ingresado ya existe en la base de datos!");
+            JOptionPane.showMessageDialog(null, "¡El ID de producto ingresado ya existe en la base de datos!",  "Error", 
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (isNullOrBlank(selectedCategory) || selectedCategory.equals("Seleccionar")) {
-            JOptionPane.showMessageDialog(null, "¡Debes seleccionar una categoría para el producto!");
+            JOptionPane.showMessageDialog(null, "¡Debes seleccionar una categoría para el producto!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(name)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre del producto!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la descripción del producto!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(quantity)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad de unidades existentes del producto!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad de unidades existentes del producto!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!quantity.matches(numberPattern)) {
-            JOptionPane.showMessageDialog(null, "¡Debes escribir la cantidad del producto en números!");
+            JOptionPane.showMessageDialog(null, "¡Debes escribir la cantidad del producto en números!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int nQuantity = Integer.parseInt(quantity); //se convierte la cantidad a valor entero
+        if (nQuantity < 1) {
+            JOptionPane.showMessageDialog(null, "¡La cantidad de productos ingresada debe ser mayor a cero!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(acquiredPrice)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!acquiredPrice.matches(numberPattern)) {
+            JOptionPane.showMessageDialog(null, "¡Debes escribir el precio de adquisición del producto en números!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(sellingPrice)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!sellingPrice.matches(numberPattern)) {
-            JOptionPane.showMessageDialog(null, "¡Debes escribir el precio de venta del producto en números!");
+            JOptionPane.showMessageDialog(null, "¡Debes escribir el precio de venta del producto en números!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(productLocation)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -302,7 +325,8 @@ public class AddProduct extends javax.swing.JFrame {
                     new AddProduct().setVisible(true);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Categoría no encontrada en la base de datos.");
+                JOptionPane.showMessageDialog(null, "Categoría no encontrada en la base de datos.",  "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al guardar el producto: " + e.getMessage());
@@ -313,7 +337,7 @@ public class AddProduct extends javax.swing.JFrame {
         //botón para añadir nueva categoría de productos
         String newCategory = txtNewCategory.getText();
 
-        if (newCategory != null && !newCategory.isEmpty()) {
+        if (!isNullOrBlank(newCategory)) {
 
             String checkQuery = "SELECT COUNT(*) FROM productCategories WHERE categoryName = ?";
             String insertQuery = "INSERT INTO productCategories(categoryName) VALUES (?)";
@@ -327,7 +351,8 @@ public class AddProduct extends javax.swing.JFrame {
                 ResultSet rs = checkStmt.executeQuery();
 
                 if (rs.next() && rs.getInt(1) > 0) {
-                    JOptionPane.showMessageDialog(null, "La categoría ya existe.");
+                    JOptionPane.showMessageDialog(null, "La categoría ingresada ya existe.",  "Error", 
+                            JOptionPane.ERROR_MESSAGE);
                     return; 
                 }
 
@@ -343,6 +368,9 @@ public class AddProduct extends javax.swing.JFrame {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error al añadir la nueva categoría: " + e.getMessage());
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes ingresar el nombre de la nueva categoría",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -10,8 +10,11 @@ public class AddClient extends javax.swing.JFrame {
 
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
+    private final String justLetters = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$";
     public int checkNickname = 0;
     public int checkID = 0;
+    AddProduct product = new AddProduct();
+    String help = product.numberPattern;
 
     /**
      * Creates new form AddClient
@@ -105,12 +108,14 @@ public class AddClient extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
         jButton2.setText("Guardar");
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.setIconTextGap(10);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 282, 101, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 282, 110, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
@@ -158,37 +163,49 @@ public class AddClient extends javax.swing.JFrame {
         String email = txtEmail.getText();
         String idCard = txtIDCard.getText();
 
-        // Validaciones
         if (isNullOrBlank(name)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre del cliente!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!name.matches(justLetters)){
+            JOptionPane.showMessageDialog(null, "¡El nombre de contener solamente letras!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(mobileNumber)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!mobileNumber.matches(mobileNumberPattern) || mobileNumber.length() != 10) {
-            JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!");
+            JOptionPane.showMessageDialog(null, "¡El número de teléfono es inválido!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(address)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!isNullOrBlank(email) && !email.matches(emailPattern)) {
-            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!");
+            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (isNullOrBlank(idCard)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!");
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!idCard.matches(mobileNumberPattern) || idCard.length() > 10 || idCard.length() < 6) {
-            JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido!");
+        if (!idCard.matches(mobileNumberPattern) || idCard.length() < 6 || idCard.length() > 10) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido, debe contener entre 6 a 10 digitos!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (checkID == 1) {
-            JOptionPane.showMessageDialog(null, "¡El número de cédula ya existe!");
+            JOptionPane.showMessageDialog(null, "¡El número de cédula ya existe!",  "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -211,7 +228,6 @@ public class AddClient extends javax.swing.JFrame {
             new AddClient().setVisible(true);
 
         } catch (Exception e) {
-            e.printStackTrace(); // Log detallado
             JOptionPane.showMessageDialog(null, "Ocurrió un error: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton2ActionPerformed
