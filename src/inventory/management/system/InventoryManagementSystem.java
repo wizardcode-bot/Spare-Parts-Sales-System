@@ -1,10 +1,6 @@
 
 package inventory.management.system;
 
-/**
- *
- * @author HOME
- */
 public class InventoryManagementSystem {
 
     /**

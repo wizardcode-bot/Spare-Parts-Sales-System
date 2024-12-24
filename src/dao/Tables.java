@@ -27,7 +27,7 @@ public class Tables {
                     + "product_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
                     + "uniqueId VARCHAR(255) NOT NULL, "
                     + "category_pk INT NOT NULL, "
-                    + "name VARCHAR(200) NOT NULL, "
+                    + "description VARCHAR(200) NOT NULL, "
                     + "productBrand VARCHAR(200), "
                     + "quantity BIGINT NOT NULL, "
                     + "acquiredPrice BIGINT NOT NULL, "
@@ -70,7 +70,7 @@ public class Tables {
             // Ejecutar las consultas
             //st.executeUpdate(createAppUserTable);
             //st.executeUpdate(insertAdmin);
-            st.executeUpdate(createProductsTable);
+            //st.executeUpdate(createProductsTable);
             //st.executeUpdate(createBillsTable);
             //st.executeUpdate(createClientsTable);
             //st.executeUpdate(createMotorbikesTable);
