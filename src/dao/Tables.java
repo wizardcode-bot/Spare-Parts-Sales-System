@@ -37,12 +37,13 @@ public class Tables {
                     + "FOREIGN KEY (category_pk) REFERENCES productCategories(category_pk))";
 
             String createBillsTable = "CREATE TABLE IF NOT EXISTS bills ("
-                    + "bill_pk INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "billId VARCHAR(200), "
-                    + "billDate VARCHAR(50), "
-                    + "totalPaid BIGINT, "
-                    + "generatedBy VARCHAR(50), "
-                    + "relatedClient VARCHAR(200))";
+                    + "bill_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
+                    + "billId VARCHAR(200) NOT NULL, "
+                    + "billDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+                    + "totalPaid BIGINT NOT NULL, "
+                    + "relatedClient VARCHAR(200) NOT NULL,"
+                    + "appuser_pk INT, " //llave primaria de el usuario(username) que hizo la venta
+                    + "FOREIGN KEY (appuser_pk) REFERENCES appuser(appuser_pk))";
 
             String createClientsTable = "CREATE TABLE IF NOT EXISTS clients ("
                     + "client_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
@@ -67,6 +68,21 @@ public class Tables {
                     + "category_pk INT AUTO_INCREMENT PRIMARY KEY,"
                     + "categoryName VARCHAR(100) NOT NULL)";
 
+            String createSoldProducts = "CREATE TABLE IF NOT EXISTS SoldProducts("
+                    + "soldProduct_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "quantity int NOT NULL,"
+                    + "salePrice BIGINT NOT NULL,"
+                    + "saleDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                    + "product_pk BIGINT,"
+                    + "FOREIGN KEY (product_pk) REFERENCES products(product_pk))";
+
+            String createProductsBills = "CREATE TABLE IF NOT EXISTS products_bills("
+                    + "productsBills_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "bill_pk BIGINT,"
+                    + "soldProduct_pk BIGINT,"
+                    + "FOREIGN KEY (bill_pk) REFERENCES bills(bill_pk),"
+                    + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk))";
+
             // Ejecutar las consultas
             //st.executeUpdate(createAppUserTable);
             //st.executeUpdate(insertAdmin);
@@ -75,6 +91,8 @@ public class Tables {
             //st.executeUpdate(createClientsTable);
             //st.executeUpdate(createMotorbikesTable);
             //st.executeUpdate(createCategories);
+            //st.executeUpdate(createSoldProducts);
+            //st.executeUpdate(createProductsBills);
             JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

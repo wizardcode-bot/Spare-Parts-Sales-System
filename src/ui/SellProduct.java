@@ -1,6 +1,5 @@
 package ui;
 
-
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -15,14 +14,15 @@ import java.util.Calendar;
 import java.util.Date;
 import dao.ProductsUtils;
 import java.io.FileOutputStream;
+import common.Validations;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SellProduct extends javax.swing.JFrame {
 
-    public String numberPattern = "^[0-9]*$";
-    private int finalTotalPrice = 0;
+    private long finalTotalPrice = 0;
     private String billId = "";
     private String username = "";
-    private String selectedClient = "";
 
     /**
      * Creates new form SellProduct
@@ -38,15 +38,12 @@ public class SellProduct extends javax.swing.JFrame {
         setSize(1366, 778);
     }
 
-    private boolean isNullOrBlank(String str) {
-        return str == null || str.isBlank();
-    }
-
     private void productName(String nameOrUniqueId) {
+        //mostrar código y descripción de cada producto en la tabla
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT * FROM products WHERE name LIKE ? OR uniqueId LIKE ?";
+        String query = "SELECT * FROM products WHERE description LIKE ? OR uniqueId LIKE ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -55,7 +52,7 @@ public class SellProduct extends javax.swing.JFrame {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    model.addRow(new Object[]{rs.getString("uniqueId") + "   -   " + rs.getString("name")});
+                    model.addRow(new Object[]{rs.getString("uniqueId") + "   -   " + rs.getString("description")});
                 }
             }
         } catch (SQLException e) {
@@ -65,11 +62,81 @@ public class SellProduct extends javax.swing.JFrame {
 
     private void clearProductFields() {
         txtUniqueId.setText("");
-        txtName.setText("");
-        txtCompanyName.setText("");
+        txtDescription.setText("");
+        txtProductBrand.setText("");
         txtPricePerUnit.setText("");
         txtNoOfUnits.setText("");
         txtTotalPrice.setText("");
+    }
+
+    private void updateProductQuantity() {
+        // método para actualizar la cantidad del producto en inventario
+        DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+        if (cartTable.getRowCount() != 0) {
+            try (Connection con = ConnectionProvider.getCon()) {
+                for (int i = 0; i < cartTable.getRowCount(); i++) {
+                    String productIdString = dtm.getValueAt(i, 0).toString().trim();
+                    int quantityToReduce = Integer.parseInt(dtm.getValueAt(i, 4).toString());
+
+                    String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?";
+                    try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
+                        ps.setInt(1, quantityToReduce);
+                        ps.setString(2, productIdString);
+                        ps.executeUpdate();
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+
+    private void generatePDF() {
+        // Crear factura
+        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+        String selectedClient = comboRelateClient.getSelectedItem().toString();
+        String relatedClient = selectedClient.equals("Seleccione un cliente") ? "No registrado" : selectedClient;
+
+        try {
+            // Obtener la fecha actual
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String dateString = now.format(formatter);
+            PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
+            doc.open();
+            Paragraph companyName = new Paragraph("                                MOTOREPUESTOS GOOFY");
+            doc.add(companyName);
+            Paragraph starLine = new Paragraph("\n************************************************************************************************************\n");
+            doc.add(starLine);
+            Paragraph details = new Paragraph("\tID de factura: " + billId + "\nFecha: " + dateString + "\nPrecio Total Pagado: "
+                    + finalTotalPrice + "\nVendedor: " + username + "\nCliente: " + relatedClient);
+            doc.add(details);
+            doc.add(starLine);
+            PdfPTable tbl = new PdfPTable(6);
+            tbl.addCell("ID del producto");
+            tbl.addCell("Descripción");
+            tbl.addCell("Marca");
+            tbl.addCell("Precio por unidad");
+            tbl.addCell("Cantidad");
+            tbl.addCell("Sub Total");
+            for (int i = 0; i < cartTable.getRowCount(); i++) {
+                tbl.addCell(cartTable.getValueAt(i, 0).toString());
+                tbl.addCell(cartTable.getValueAt(i, 1).toString());
+                tbl.addCell(cartTable.getValueAt(i, 2).toString());
+                tbl.addCell(cartTable.getValueAt(i, 3).toString());
+                tbl.addCell(cartTable.getValueAt(i, 4).toString());
+                tbl.addCell(cartTable.getValueAt(i, 5).toString());
+            }
+            doc.add(tbl);
+            doc.add(starLine);
+            Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
+            doc.add(thanksMsg);
+            // Abrir PDF
+            OpenPdf.openById(String.valueOf(billId));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        doc.close();
     }
 
     public String getUniqueId(String prefix) {
@@ -94,9 +161,9 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtUniqueId = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
+        txtDescription = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtCompanyName = new javax.swing.JTextField();
+        txtProductBrand = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtPricePerUnit = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -190,19 +257,19 @@ public class SellProduct extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Nombre");
+        jLabel4.setText("Descripción");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 216, -1, -1));
 
-        txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 238, 300, -1));
+        txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 238, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marca");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 283, -1, -1));
 
-        txtCompanyName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtCompanyName, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 305, 300, -1));
+        txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 305, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -237,6 +304,7 @@ public class SellProduct extends javax.swing.JFrame {
         btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
         btnAddToCart.setText("Añadir al carrito");
+        btnAddToCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddToCart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddToCartActionPerformed(evt);
@@ -276,6 +344,7 @@ public class SellProduct extends javax.swing.JFrame {
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
         jButton3.setText("Generar venta e Imprimir");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -289,7 +358,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Filtrar por nombre clave");
+        jLabel11.setText("Filtrar por número de cédula");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 406, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -299,6 +368,7 @@ public class SellProduct extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/filter.png"))); // NOI18N
         jButton2.setText("Filtrar");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -317,6 +387,7 @@ public class SellProduct extends javax.swing.JFrame {
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 703, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jLabel14MouseReleased(evt);
@@ -334,8 +405,8 @@ public class SellProduct extends javax.swing.JFrame {
         productName("");
         cargarClientes();
         txtUniqueId.setEditable(false);
-        txtName.setEditable(false);
-        txtCompanyName.setEditable(false);
+        txtDescription.setEditable(false);
+        txtProductBrand.setEditable(false);
         txtPricePerUnit.setEditable(false);
         txtTotalPrice.setEditable(false);
     }//GEN-LAST:event_formComponentShown
@@ -348,13 +419,14 @@ public class SellProduct extends javax.swing.JFrame {
     private void txtNoOfUnitsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoOfUnitsKeyReleased
         //calcular el precio total de acuerdo a la cantidad de unidades a vender
         String noOfUnits = txtNoOfUnits.getText().trim();
-        
-        if (!isNullOrBlank(noOfUnits)) {
+
+        if (!Validations.isNullOrBlank(noOfUnits)) {
             String price = txtPricePerUnit.getText().trim();
-            
-            if (!noOfUnits.matches(numberPattern)) {
+
+            if (!noOfUnits.matches(Validations.numberPattern)) {
                 JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad en números.",
                         "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
             int totalPrice = Integer.parseInt(noOfUnits) * Integer.parseInt(price);
@@ -370,36 +442,42 @@ public class SellProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchMouseClicked
 
     private void productsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsTableMouseClicked
-        // TODO add your handling code here:
+        // mostrar los datos del producto al seleccionarlo en la tabla
+        txtPricePerUnit.setEditable(true);
         int index = productsTable.getSelectedRow();
         TableModel model = productsTable.getModel();
         String nameOrUniqueId = model.getValueAt(index, 0).toString();
 
         String uniqueId[] = nameOrUniqueId.split("-", 0);
-        try {
-            Connection con = ConnectionProvider.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from products where uniqueId=" + uniqueId[0] + "");
-            while (rs.next()) {
-                txtUniqueId.setText(uniqueId[0]);
-                txtName.setText(rs.getString("name"));
-                txtCompanyName.setText(rs.getString("companyName"));
-                txtPricePerUnit.setText(rs.getString("price"));
-                txtNoOfUnits.setText("");
-                txtTotalPrice.setText("");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
 
+        String query = "SELECT * FROM products WHERE uniqueId = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
+            pst.setString(1, uniqueId[0]);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    txtUniqueId.setText(uniqueId[0]);
+                    txtDescription.setText(rs.getString("description"));
+                    txtProductBrand.setText(rs.getString("productBrand"));
+                    txtPricePerUnit.setText(rs.getString("sellingPrice"));
+                    txtNoOfUnits.setText("");
+                    txtTotalPrice.setText("");
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_productsTableMouseClicked
 
     private void btnAddToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToCartActionPerformed
-        // TODO add your handling code here:
+        // Añadir al carrito
+        txtPricePerUnit.setEditable(false);
         DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
 
-        String noOfUnits = txtNoOfUnits.getText();
-        String uniqueId = txtUniqueId.getText();
+        String noOfUnits = txtNoOfUnits.getText().trim();
+        String uniqueId = txtUniqueId.getText().trim();
 
         if (!noOfUnits.isEmpty() && !uniqueId.isEmpty()) {
             // Verificar si el producto ya está en el carrito
@@ -413,48 +491,57 @@ public class SellProduct extends javax.swing.JFrame {
             }
 
             if (rowIndex == -1) {
-                // Si el producto no está en el carrito, agregar uno nuevo
-                try {
-                    Connection con = ConnectionProvider.getCon();
-                    Statement st = con.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT * FROM products WHERE uniqueId=" + uniqueId);
+                // Si el producto no está en el carrito, buscar en la base de datos
+                String query = "SELECT * FROM products WHERE uniqueId = ?";
+                try (
+                        Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+                    pst.setString(1, uniqueId); // Sustituir el parámetro único ID
+                    try (ResultSet rs = pst.executeQuery()) {
+                        if (rs.next()) {
+                            int availableQuantity = rs.getInt("quantity");
 
-                    if (rs.next()) {
-                        int availableQuantity = rs.getInt("quantity");
+                            if (availableQuantity >= Integer.parseInt(noOfUnits)) {
+                                String description = txtDescription.getText();
+                                String productBrand = txtProductBrand.getText();
+                                String pricePerUnit = txtPricePerUnit.getText();
+                                String totalPrice = txtTotalPrice.getText();
 
-                        if (availableQuantity >= Integer.parseInt(noOfUnits)) {
-                            String name = txtName.getText();
-                            String companyName = txtCompanyName.getText();
-                            String pricePerUnit = txtPricePerUnit.getText();
-                            String totalPrice = txtTotalPrice.getText();
+                                dtm.addRow(new Object[]{uniqueId, description, productBrand, pricePerUnit, noOfUnits, totalPrice});
 
-                            dtm.addRow(new Object[]{uniqueId, name, companyName, pricePerUnit, noOfUnits, totalPrice});
-
-                            int totalPriceInt = Integer.parseInt(totalPrice);
-                            finalTotalPrice += totalPriceInt;
-                            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
-                            JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
-                            clearProductFields();
+                                int totalPriceInt = Integer.parseInt(totalPrice);
+                                finalTotalPrice += totalPriceInt;
+                                lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+                                JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
+                                clearProductFields();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
+                                        + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan " + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Producto no encontrado en la base de datos.", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e);
+                    JOptionPane.showMessageDialog(null, "Error al añadir el producto: " + e.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 // Si el producto ya está en el carrito, mostrar un mensaje de error
-                JOptionPane.showMessageDialog(null, "El producto ya está en el carrito. No puedes modificar la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "El producto ya está en el carrito. No puedes modificar la cantidad.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto y el número de unidades!", "No hay productos seleccionados", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto y el número de unidades!",
+                    "No hay productos seleccionados", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnAddToCartActionPerformed
 
     private void cartTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartTableMouseClicked
-        // TODO add your handling code here:
+        // eliminar producto del carrito
         int index = cartTable.getSelectedRow();
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
         if (a == 0) {
             TableModel model = cartTable.getModel();
             String total = model.getValueAt(index, 5).toString();
@@ -465,104 +552,76 @@ public class SellProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_cartTableMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        selectedClient = comboRelateClient.getSelectedItem().toString();
-        if (selectedClient.equals("Seleccione un cliente")) {
-            selectedClient = "No registrado";
+        // BOTÓN GENERAR VENTA E IMPRIMIR
+        
+        // Validar si hay productos en el carrito
+        if (finalTotalPrice == 0) {
+            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.",
+                    "No hay productos seleccionados", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
-        if (finalTotalPrice != 0) {
-            billId = getUniqueId("Factura -");
+        // Obtener el cliente relacionado
+        String selectedClient = comboRelateClient.getSelectedItem().toString();
+        String relatedClient = selectedClient.equals("Seleccione un cliente") ? "No registrado" : selectedClient;
 
-            DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
-            if (cartTable.getRowCount() != 0) {
-                for (int i = 0; i < cartTable.getRowCount(); i++) {
-                    try {
-                        Connection con = ConnectionProvider.getCon();
-                        Statement st = con.createStatement();
-                        String productIdString = dtm.getValueAt(i, 0).toString().trim();
-                        int productId = Integer.parseInt(productIdString);
-                        st.executeUpdate("update products set quantity=quantity - " + Integer.parseInt(dtm.getValueAt(i, 4).toString()) + " where uniqueId=" + productId);
+        // Actualizar la cantidad de productos en el inventario
+        updateProductQuantity();
 
-                        //st.executeUpdate("update products set quantity=quantity - " + Integer.parseInt(dtm.getValueAt(i, 4).toString()) + " where uniqueId=" + Integer.parseInt(dtm.getValueAt(i, 0).toString()));
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, e);
+        // Generar ID único para la factura
+        billId = getUniqueId("Factura - ");
+
+        try (Connection con = ConnectionProvider.getCon()) {
+            // Obtener la clave primaria del usuario actual
+            String userQuery = "SELECT appuser_pk FROM appuser WHERE username = ?";
+            int appuserPk;
+
+            try (PreparedStatement psUser = con.prepareStatement(userQuery)) {
+                psUser.setString(1, username);
+                try (ResultSet rs = psUser.executeQuery()) {
+                    if (rs.next()) {
+                        appuserPk = rs.getInt("appuser_pk");
+                    } else {
+                        throw new Exception("No se encontró el usuario: " + username);
                     }
                 }
             }
-            try {
-                SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
-                Calendar cal = Calendar.getInstance();
-                Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into bills(billId, billDate, totalPaid, generatedBy, relatedClient) values(?,?,?,?,?)");
-                ps.setString(1, billId);
-                ps.setString(2, myFormat.format(cal.getTime()));
-                ps.setInt(3, finalTotalPrice);
-                ps.setString(4, username);
-                ps.setString(5, selectedClient);
+
+            // Insertar datos en la tabla bills
+            String insertBillQuery = "INSERT INTO bills (billId, billDate, totalPaid, relatedClient, appuser_pk) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = con.prepareStatement(insertBillQuery)) {
+                ps.setString(1, billId); // ID de la factura
+                ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now())); // Fecha actual
+                ps.setLong(3, finalTotalPrice); // Total pagado
+                ps.setString(4, relatedClient); // Cliente relacionado
+                ps.setInt(5, appuserPk); // Clave primaria del usuario
                 ps.executeUpdate();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
             }
 
-            //Create Bill
-            com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+            // Notificar éxito
+            JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-            try {
-                PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
-                doc.open();
-                Paragraph CompanyName = new Paragraph("                                Sistema de Inventario para venta de respuestos");
-                doc.add(CompanyName);
-                Paragraph starLine = new Paragraph("\n************************************************************************************************************\n");
-                doc.add(starLine);
-                Paragraph details = new Paragraph("\tID de factura: " + billId + "\nFecha: " + new Date() + "\nPrecio Total Pagado: " + finalTotalPrice + "\nVendedor: " + username + "\nCliente: " + selectedClient);
-                doc.add(details);
-                doc.add(starLine);
-                PdfPTable tbl = new PdfPTable(6);
-                tbl.addCell("ID del producto");
-                tbl.addCell("Nombre");
-                tbl.addCell("Marca");
-                tbl.addCell("Precio por unidad");
-                tbl.addCell("Cantidad");
-                tbl.addCell("Sub Total");
-                for (int i = 0; i < cartTable.getRowCount(); i++) {
-                    String a = cartTable.getValueAt(i, 0).toString();
-                    String b = cartTable.getValueAt(i, 1).toString();
-                    String c = cartTable.getValueAt(i, 2).toString();
-                    String d = cartTable.getValueAt(i, 3).toString();
-                    String e = cartTable.getValueAt(i, 4).toString();
-                    String f = cartTable.getValueAt(i, 5).toString();
-                    tbl.addCell(a);
-                    tbl.addCell(b);
-                    tbl.addCell(c);
-                    tbl.addCell(d);
-                    tbl.addCell(e);
-                    tbl.addCell(f);
-                }
+            // Generar el PDF de la venta
+            generatePDF();
 
-                doc.add(tbl);
-                doc.add(starLine);
-                Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
-                doc.add(thanksMsg);
-                //Open pdf
-                OpenPdf.openById(String.valueOf(billId));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-            doc.close();;
+            // Reiniciar la ventana de venta
             setVisible(false);
             new SellProduct(username).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            // Mostrar y registrar errores
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // filtrar clientes por nombre clave
-        int checkClientExist = 0;
-        String filterClient = txtFilterClient.getText();
-        if (filterClient.equals("")) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre clave del cliente!", "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
+        boolean checkClientExist = false;
+        String filterClient = txtFilterClient.getText().trim();
+        if (Validations.isNullOrBlank(filterClient)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula del cliente!", "No hay clientes seleccionados",
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
 
             try {
@@ -570,13 +629,13 @@ public class SellProduct extends javax.swing.JFrame {
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select name from clients where nickname = '" + filterClient + "'");
                 if (rs.next()) {
-                    checkClientExist = 1;
+                    checkClientExist = true;
                     comboRelateClient.setSelectedItem(rs.getString("name"));
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
-            if (checkClientExist == 0) {
+            if (!checkClientExist) {
                 JOptionPane.showMessageDialog(null, "¡Este cliente no está registrado!", "Error", JOptionPane.ERROR_MESSAGE);
                 comboRelateClient.setSelectedItem("Seleccione un cliente");
             }
@@ -665,11 +724,11 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblFinalTotalPrice;
     private javax.swing.JTable productsTable;
-    private javax.swing.JTextField txtCompanyName;
+    private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtFilterClient;
-    private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNoOfUnits;
     private javax.swing.JTextField txtPricePerUnit;
+    private javax.swing.JTextField txtProductBrand;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTotalPrice;
     private javax.swing.JTextField txtUniqueId;
