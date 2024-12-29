@@ -479,7 +479,7 @@ public class SellProduct extends javax.swing.JFrame {
         String noOfUnits = txtNoOfUnits.getText().trim();
         String uniqueId = txtUniqueId.getText().trim();
 
-        if (!noOfUnits.isEmpty() && !uniqueId.isEmpty()) {
+        if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(uniqueId)) {
             // Verificar si el producto ya está en el carrito
             int rowIndex = -1;
 
@@ -553,65 +553,115 @@ public class SellProduct extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // BOTÓN GENERAR VENTA E IMPRIMIR
-        
-        // Validar si hay productos en el carrito
-        if (finalTotalPrice == 0) {
-            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.",
-                    "No hay productos seleccionados", JOptionPane.INFORMATION_MESSAGE);
+
+        String selectedClient = comboRelateClient.getSelectedItem().toString();
+        String relatedClient = selectedClient.equals("Seleccione un cliente") ? "Consumidor final" : selectedClient;
+
+        if (cartTable.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "El carrito está vacío. Agrega productos antes de continuar.",
+                    "Carrito vacío", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Obtener el cliente relacionado
-        String selectedClient = comboRelateClient.getSelectedItem().toString();
-        String relatedClient = selectedClient.equals("Seleccione un cliente") ? "No registrado" : selectedClient;
-
-        // Actualizar la cantidad de productos en el inventario
-        updateProductQuantity();
-
-        // Generar ID único para la factura
-        billId = getUniqueId("Factura - ");
-
-        try (Connection con = ConnectionProvider.getCon()) {
-            // Obtener la clave primaria del usuario actual
-            String userQuery = "SELECT appuser_pk FROM appuser WHERE username = ?";
-            int appuserPk;
-
-            try (PreparedStatement psUser = con.prepareStatement(userQuery)) {
-                psUser.setString(1, username);
-                try (ResultSet rs = psUser.executeQuery()) {
-                    if (rs.next()) {
-                        appuserPk = rs.getInt("appuser_pk");
-                    } else {
-                        throw new Exception("No se encontró el usuario: " + username);
+        if (finalTotalPrice != 0) {
+            billId = getUniqueId("Factura - ");
+            try (Connection con = ConnectionProvider.getCon()) {
+                // Obtener appuser_pk
+                String userQuery = "SELECT appuser_pk FROM appuser WHERE username = ?";
+                int appuserPk = -1;
+                try (PreparedStatement psUser = con.prepareStatement(userQuery)) {
+                    psUser.setString(1, username);
+                    try (ResultSet rs = psUser.executeQuery()) {
+                        if (rs.next()) {
+                            appuserPk = rs.getInt("appuser_pk");
+                        } else {
+                            throw new Exception("No se encontró el usuario: " + username);
+                        }
                     }
                 }
+
+                // Insertar en la tabla bills
+                String insertBillQuery = "INSERT INTO bills (billId, billDate, totalPaid, relatedClient, appuser_pk) VALUES (?, ?, ?, ?, ?)";
+                int billPk;
+                try (PreparedStatement psBill = con.prepareStatement(insertBillQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                    psBill.setString(1, billId);
+                    psBill.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+                    psBill.setLong(3, finalTotalPrice);
+                    psBill.setString(4, relatedClient);
+                    psBill.setInt(5, appuserPk);
+                    psBill.executeUpdate();
+
+                    // Obtener la llave primaria generada para bills
+                    try (ResultSet generatedKeys = psBill.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            billPk = generatedKeys.getInt(1);
+                        } else {
+                            throw new Exception("Error al obtener el ID de la factura.");
+                        }
+                    }
+                }
+
+                // Insertar productos en SoldProducts y asociarlos con la factura en products_bills
+                String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
+                String insertProductsBillsQuery = "INSERT INTO products_bills (bill_pk, soldProduct_pk) VALUES (?, ?)";
+
+                DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    String uniqueId = dtm.getValueAt(i, 0).toString(); // uniqueId del producto
+                    int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
+                    long salePrice = Long.parseLong(dtm.getValueAt(i, 5).toString());
+
+                    // Obtener product_pk a partir del uniqueId
+                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
+                    long productPk = -1;
+                    try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
+                        psProduct.setString(1, uniqueId);
+                        try (ResultSet rs = psProduct.executeQuery()) {
+                            if (rs.next()) {
+                                productPk = rs.getLong("product_pk");
+                            } else {
+                                throw new Exception("No se encontró el producto con ID único: " + uniqueId);
+                            }
+                        }
+                    }
+
+                    // Insertar en SoldProducts
+                    long soldProductPk;
+                    try (PreparedStatement psSoldProduct = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        psSoldProduct.setInt(1, quantity);
+                        psSoldProduct.setLong(2, salePrice);
+                        psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+                        psSoldProduct.setLong(4, productPk);
+                        psSoldProduct.executeUpdate();
+
+                        try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
+                            if (generatedKeys.next()) {
+                                soldProductPk = generatedKeys.getLong(1);
+                            } else {
+                                throw new Exception("Error al obtener el ID del producto vendido.");
+                            }
+                        }
+                    }
+
+                    // Insertar en products_bills
+                    try (PreparedStatement psProductsBills = con.prepareStatement(insertProductsBillsQuery)) {
+                        psProductsBills.setInt(1, billPk);
+                        psProductsBills.setLong(2, soldProductPk);
+                        psProductsBills.executeUpdate();
+                    }
+                }
+
+                JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            // Insertar datos en la tabla bills
-            String insertBillQuery = "INSERT INTO bills (billId, billDate, totalPaid, relatedClient, appuser_pk) VALUES (?, ?, ?, ?, ?)";
-            try (PreparedStatement ps = con.prepareStatement(insertBillQuery)) {
-                ps.setString(1, billId); // ID de la factura
-                ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now())); // Fecha actual
-                ps.setLong(3, finalTotalPrice); // Total pagado
-                ps.setString(4, relatedClient); // Cliente relacionado
-                ps.setInt(5, appuserPk); // Clave primaria del usuario
-                ps.executeUpdate();
-            }
-
-            // Notificar éxito
-            JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-            // Generar el PDF de la venta
-            generatePDF();
-
-            // Reiniciar la ventana de venta
+            generatePDF(); // Crear PDF de la venta
             setVisible(false);
             new SellProduct(username).setVisible(true);
-
-        } catch (Exception e) {
-            // Mostrar y registrar errores
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados", 
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

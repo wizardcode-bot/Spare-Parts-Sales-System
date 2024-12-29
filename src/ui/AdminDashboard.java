@@ -212,7 +212,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new SellerDashboard().setVisible(true);
+        setVisible(false);
+        new SellerDashboard(username).setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

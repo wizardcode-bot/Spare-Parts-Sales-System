@@ -131,7 +131,8 @@ public class Login extends javax.swing.JFrame {
                         }
                     } else {
                         // Contraseña incorrecta
-                        JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", 
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
