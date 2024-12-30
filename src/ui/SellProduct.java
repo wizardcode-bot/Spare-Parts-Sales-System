@@ -1,5 +1,6 @@
 package ui;
 
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -8,10 +9,7 @@ import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import javax.swing.table.TableModel;
-import java.util.Calendar;
-import java.util.Date;
 import dao.ProductsUtils;
 import java.io.FileOutputStream;
 import common.Validations;
@@ -91,11 +89,31 @@ public class SellProduct extends javax.swing.JFrame {
         }
     }
 
+    private String getClientIdCard(String selectedClient) {
+        String idCard = null; // Para almacenar el idCard consultado
+        String query = "SELECT idCard FROM clients WHERE name = ?";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+            // Configura el parámetro de la consulta
+            pst.setString(1, selectedClient);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    idCard = rs.getString("idCard");
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar el idCard: " + e.getMessage());
+        }
+        return idCard;
+    }
+
     private void generatePDF() {
         // Crear factura
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
         String selectedClient = comboRelateClient.getSelectedItem().toString();
-        String relatedClient = selectedClient.equals("Seleccione un cliente") ? "No registrado" : selectedClient;
+        String idCard = getClientIdCard(selectedClient); // Consultar el idCard
+        final String NIT = "10122012334-5";
 
         try {
             // Obtener la fecha actual
@@ -104,13 +122,17 @@ public class SellProduct extends javax.swing.JFrame {
             String dateString = now.format(formatter);
             PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
             doc.open();
-            Paragraph companyName = new Paragraph("                                MOTOREPUESTOS GOOFY");
-            doc.add(companyName);
-            Paragraph starLine = new Paragraph("\n************************************************************************************************************\n");
-            doc.add(starLine);
-            Paragraph details = new Paragraph("\tID de factura: " + billId + "\nFecha: " + dateString + "\nPrecio Total Pagado: "
-                    + finalTotalPrice + "\nVendedor: " + username + "\nCliente: " + relatedClient);
+            Paragraph title = new Paragraph("Factura de venta" + "\nMOTOREPUESTOS GOOFY" + "\nNIT: " + NIT);
+            title.setAlignment(Element.ALIGN_CENTER);
+            doc.add(title);
+            Paragraph details = new Paragraph("\nID de factura: " + billId
+                    + "\nFecha y hora de expedición: " + dateString
+                    + "\nPrecio Total Pagado: " + finalTotalPrice
+                    + "\nVendedor: " + username
+                    + "\nCliente: " + selectedClient
+                    + "\nNIT/CC: " + (idCard != null ? idCard : "No disponible"));
             doc.add(details);
+            Paragraph starLine = new Paragraph("\n************************************************************************************************************\n");
             doc.add(starLine);
             PdfPTable tbl = new PdfPTable(6);
             tbl.addCell("ID del producto");
@@ -159,7 +181,6 @@ public class SellProduct extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         productsTable = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        txtUniqueId = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtDescription = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -183,7 +204,7 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        txtUniqueId = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -192,18 +213,14 @@ public class SellProduct extends javax.swing.JFrame {
                 formComponentShown(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Vender Producto");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(546, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 62, 1366, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Buscar producto por ID o nombre");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 143, -1, -1));
 
         txtSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -216,7 +233,6 @@ public class SellProduct extends javax.swing.JFrame {
                 txtSearchKeyReleased(evt);
             }
         });
-        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 167, 370, -1));
 
         productsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         productsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -245,44 +261,36 @@ public class SellProduct extends javax.swing.JFrame {
             productsTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 203, 370, 390));
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ID del Producto");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 137, -1, -1));
-
-        txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 165, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Descripción");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 216, -1, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 238, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marca");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 283, -1, -1));
 
         txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 305, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Precio por Unidad");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(965, 137, -1, -1));
 
         txtPricePerUnit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(965, 165, 300, -1));
+        txtPricePerUnit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPricePerUnitKeyReleased(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Número de Unidades");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(965, 216, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNoOfUnits.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -290,15 +298,12 @@ public class SellProduct extends javax.swing.JFrame {
                 txtNoOfUnitsKeyReleased(evt);
             }
         });
-        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(965, 238, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Precio Total");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(965, 283, -1, -1));
 
         txtTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(965, 305, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
@@ -310,7 +315,6 @@ public class SellProduct extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 343, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -318,9 +322,17 @@ public class SellProduct extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID del Producto", "Nombre", "Marca", "Precio Por Unidad", "N° de Unidades", "Precio Total"
+                "ID del Producto", "Descripción", "Marca", "Precio Por Unidad", "N° de Unidades", "Precio Total"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         cartTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cartTableMouseClicked(evt);
@@ -328,17 +340,13 @@ public class SellProduct extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 473, 684, 220));
-
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio total:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 613, -1, -1));
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblFinalTotalPrice.setText("---");
-        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 613, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -350,19 +358,15 @@ public class SellProduct extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 663, -1, -1));
 
         comboRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        comboRelateClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un cliente", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(comboRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 369, 300, -1));
+        comboRelateClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un cliente" }));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Filtrar por número de cédula");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 406, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 430, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -374,17 +378,14 @@ public class SellProduct extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(793, 427, 100, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Relacionar Cliente");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(587, 348, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto que a eliminar ");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 703, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -393,10 +394,156 @@ public class SellProduct extends javax.swing.JFrame {
                 jLabel14MouseReleased(evt);
             }
         });
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(546, 546, 546)
+                .addComponent(jLabel1)
+                .addGap(486, 486, 486)
+                .addComponent(jLabel14))
+            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabel2))
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel9)
+                                .addGap(22, 22, 22)
+                                .addComponent(lblFinalTotalPrice))
+                            .addComponent(jButton3))))
+                .addGap(80, 80, 80)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel12)
+                                    .addComponent(comboRelateClient, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtFilterClient, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(325, 325, 325)
+                                .addComponent(btnAddToCart))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(183, 183, 183)
+                                .addComponent(jLabel13)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)
+                            .addComponent(txtUniqueId, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                            .addComponent(txtDescription)
+                            .addComponent(txtProductBrand))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel6)
+                            .addComponent(txtPricePerUnit, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtNoOfUnits)
+                            .addComponent(jLabel8)
+                            .addComponent(txtTotalPrice))
+                        .addGap(298, 298, 298))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel14))
+                .addGap(9, 9, 9)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(9, 9, 9)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addGap(4, 4, 4)
+                            .addComponent(txtPricePerUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtUniqueId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(211, 211, 211)
+                                .addComponent(btnAddToCart))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtNoOfUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(9, 9, 9)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(7, 7, 7)
+                                        .addComponent(txtProductBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(7, 7, 7)
+                                        .addComponent(txtTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(66, 66, 66)
+                                .addComponent(jLabel12)
+                                .addGap(6, 6, 6)
+                                .addComponent(comboRelateClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel11)
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(3, 3, 3)
+                                        .addComponent(txtFilterClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jButton2))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel13)
+                        .addGap(42, 42, 42))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(lblFinalTotalPrice))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)
+                        .addGap(47, 47, 47))))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -424,8 +571,9 @@ public class SellProduct extends javax.swing.JFrame {
             String price = txtPricePerUnit.getText().trim();
 
             if (!noOfUnits.matches(Validations.numberPattern)) {
-                JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad en números.",
+                JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad de unidades a vender en números.",
                         "Error", JOptionPane.ERROR_MESSAGE);
+                txtNoOfUnits.setText("");
                 return;
             }
 
@@ -478,8 +626,23 @@ public class SellProduct extends javax.swing.JFrame {
 
         String noOfUnits = txtNoOfUnits.getText().trim();
         String uniqueId = txtUniqueId.getText().trim();
+        String pricePerUnit = txtPricePerUnit.getText().trim();
 
-        if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(uniqueId)) {
+        if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(uniqueId) && !Validations.isNullOrBlank(pricePerUnit)) {
+
+            if (!pricePerUnit.matches(Validations.numberPattern) || !noOfUnits.matches(Validations.numberPattern)) {
+                JOptionPane.showMessageDialog(null, "El número de unidades y precio del producto deben ser ingresados en números", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int nUnits = Integer.parseInt(noOfUnits); //se convierte el string #units a entero para la comparación
+            if (nUnits <= 0) {
+                JOptionPane.showMessageDialog(null, "El número de unidades a vender debe ser mayor a cero", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             // Verificar si el producto ya está en el carrito
             int rowIndex = -1;
 
@@ -503,7 +666,7 @@ public class SellProduct extends javax.swing.JFrame {
                             if (availableQuantity >= Integer.parseInt(noOfUnits)) {
                                 String description = txtDescription.getText();
                                 String productBrand = txtProductBrand.getText();
-                                String pricePerUnit = txtPricePerUnit.getText();
+                                //String pricePerUnit = txtPricePerUnit.getText();
                                 String totalPrice = txtTotalPrice.getText();
 
                                 dtm.addRow(new Object[]{uniqueId, description, productBrand, pricePerUnit, noOfUnits, totalPrice});
@@ -533,7 +696,7 @@ public class SellProduct extends javax.swing.JFrame {
             }
         } else {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto y el número de unidades!",
-                    "No hay productos seleccionados", JOptionPane.INFORMATION_MESSAGE);
+                    "No hay productos seleccionados", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAddToCartActionPerformed
 
@@ -564,7 +727,7 @@ public class SellProduct extends javax.swing.JFrame {
         }
 
         if (finalTotalPrice != 0) {
-            billId = getUniqueId("Factura - ");
+            billId = getUniqueId("Factura-");
             try (Connection con = ConnectionProvider.getCon()) {
                 // Obtener appuser_pk
                 String userQuery = "SELECT appuser_pk FROM appuser WHERE username = ?";
@@ -651,6 +814,7 @@ public class SellProduct extends javax.swing.JFrame {
                     }
                 }
 
+                updateProductQuantity(); //actualizar la cantidad del producto en inventario
                 JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -660,7 +824,7 @@ public class SellProduct extends javax.swing.JFrame {
             setVisible(false);
             new SellProduct(username).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados", 
+            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados",
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -677,7 +841,7 @@ public class SellProduct extends javax.swing.JFrame {
             try {
                 Connection con = ConnectionProvider.getCon();
                 Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select name from clients where nickname = '" + filterClient + "'");
+                ResultSet rs = st.executeQuery("select name from clients where idCard = '" + filterClient + "'");
                 if (rs.next()) {
                     checkClientExist = true;
                     comboRelateClient.setSelectedItem(rs.getString("name"));
@@ -697,20 +861,46 @@ public class SellProduct extends javax.swing.JFrame {
         setVisible(false);
     }//GEN-LAST:event_jLabel14MouseReleased
 
+    private void txtPricePerUnitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPricePerUnitKeyReleased
+        String pricePerUnit = txtPricePerUnit.getText();
+
+        if (!pricePerUnit.matches(Validations.numberPattern)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio del producto en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtPricePerUnit.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtPricePerUnitKeyReleased
+
     /* Método para cargar los clientes en el jComboBox */
     private void cargarClientes() {
-        try {
-            Connection con = ConnectionProvider.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from clients");
-            comboRelateClient.removeAllItems();
-            comboRelateClient.addItem("Seleccione un cliente");
+        String query = "SELECT * FROM clients";
+        String targetIdCard = "222222222222";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            comboRelateClient.removeAllItems(); // Limpiar el comboBox
+
+            int indexToSelect = 0; // Índice del cliente por defecto
+            int currentIndex = 0; // Índice actual al recorrer los resultados
 
             while (rs.next()) {
-                comboRelateClient.addItem(rs.getString("name"));
+                String clientName = rs.getString("name");
+                String idCard = rs.getString("idCard");
+                comboRelateClient.addItem(clientName);
+
+                // Si el idCard coincide, guardar su índice
+                if (targetIdCard.equals(idCard)) {
+                    indexToSelect = currentIndex;
+                }
+                currentIndex++;
             }
+
+            // Establecer como seleccionado el cliente deseado
+            comboRelateClient.setSelectedIndex(indexToSelect);
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error al cargar clientes: " + e.getMessage());
         }
     }
 
@@ -756,7 +946,6 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
