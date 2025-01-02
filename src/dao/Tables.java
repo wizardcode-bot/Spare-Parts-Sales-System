@@ -41,20 +41,21 @@ public class Tables {
                     + "billId VARCHAR(200) NOT NULL, "
                     + "billDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
                     + "totalPaid BIGINT NOT NULL, "
-                    + "relatedClient VARCHAR(200) NOT NULL,"
+                    + "paymentTerm varchar(50), " //contado o crédito
+                    + "client_pk BIGINT," //llave primaria de el cliente que hizo la compra
                     + "appuser_pk INT, " //llave primaria de el usuario(username) que hizo la venta
                     + "FOREIGN KEY (appuser_pk) REFERENCES appuser(appuser_pk))";
 
             String createClientsTable = "CREATE TABLE IF NOT EXISTS clients ("
                     + "client_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
-                    + "name VARCHAR(200), "
+                    + "name VARCHAR(200) NOT NULL, "
                     + "mobileNumber VARCHAR(100), "
                     + "address VARCHAR(200), "
                     + "email VARCHAR(200), "
-                    + "idCard VARCHAR(50))";
+                    + "idCard VARCHAR(100) NOT NULL)";
 
             String createMotorbikesTable = "CREATE TABLE IF NOT EXISTS motorbikes ("
-                    + "motorbike_pk INT AUTO_INCREMENT PRIMARY KEY, " //convertir en bigint
+                    + "motorbike_pk BIGINT AUTO_INCREMENT PRIMARY KEY, " 
                     + "plate VARCHAR(50) NOT NULL, "
                     + "brandName VARCHAR(100) NOT NULL, "
                     + "model VARCHAR(100), "

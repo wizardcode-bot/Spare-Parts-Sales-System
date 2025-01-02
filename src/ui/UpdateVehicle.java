@@ -48,7 +48,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         txtFilterClient = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -65,16 +65,16 @@ public class UpdateVehicle extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Actualizar vehículo");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 65, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de placa del vehículo");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 102, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 107, -1, -1));
 
         txtSearchPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearchPlate.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtSearchPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(267, 98, 300, -1));
+        getContentPane().add(txtSearchPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(267, 103, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -86,52 +86,52 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 95, 100, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 100, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Marca");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 189, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 194, -1, -1));
 
         txtBrandName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtBrandName.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtBrandName, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 210, 300, -1));
+        getContentPane().add(txtBrandName, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 215, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Modelo");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 276, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 281, -1, -1));
 
         txtModel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtModel.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 297, 300, -1));
+        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 302, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cilindraje");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 359, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 364, -1, -1));
 
         txtCylinder.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCylinder.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtCylinder, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 382, 300, -1));
+        getContentPane().add(txtCylinder, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 387, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Color");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 189, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 194, -1, -1));
 
         txtColor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtColor.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 210, 300, -1));
+        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 215, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Propietario");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 276, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 281, -1, -1));
 
         txtOwner.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtOwner.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 297, 300, -1));
+        getContentPane().add(txtOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 302, 300, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -145,16 +145,16 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 386, 120, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 391, 120, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Filtrar por número de cédula");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 332, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 337, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFilterClient.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 355, 200, -1));
+        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 360, 200, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -166,16 +166,15 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(676, 352, 94, -1));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(676, 357, 94, -1));
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
-        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jLabel10MouseReleased(evt);
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -323,9 +322,9 @@ public class UpdateVehicle extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jLabel10MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseReleased
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         setVisible(false);
-    }//GEN-LAST:event_jLabel10MouseReleased
+    }//GEN-LAST:event_jLabel11MouseClicked
 
     /**
      * @param args the command line arguments
@@ -367,7 +366,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
