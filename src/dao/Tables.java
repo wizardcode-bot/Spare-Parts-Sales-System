@@ -9,16 +9,15 @@ public class Tables {
     public static void main(String[] args) {
         try (Connection con = ConnectionProvider.getCon(); Statement st = con.createStatement()) {
 
-            String createAppUserTable = "CREATE TABLE IF NOT EXISTS appuser ("
-                    + "appuser_pk INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "userRole VARCHAR(50), "
-                    + "name VARCHAR(200), "
-                    + "dob VARCHAR(50), "
-                    + "mobileNumber VARCHAR(100), "
-                    + "IDcard VARCHAR(100), "
-                    + "username VARCHAR(200), "
-                    + "password VARCHAR(255), "
-                    + "address VARCHAR(200))";
+            String createAppUserTable = "CREATE TABLE IF NOT EXISTS appusers ("
+                    + "appuser_pk BIGINT PRIMARY KEY, " //cédula
+                    + "userRole VARCHAR(50) NOT NULL, "
+                    + "name VARCHAR(200) NOT NULL, "
+                    + "dob VARCHAR(50) NOT NULL, "
+                    + "mobileNumber VARCHAR(15) NOT NULL, "
+                    + "username VARCHAR(50) NOT NULL, "
+                    + "password VARCHAR(255) NOT NULL, "
+                    + "address VARCHAR(100) NOT NULL)";
 
             String insertAdmin = "INSERT INTO appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) "
                     + "VALUES ('Admin', 'Admin', '16-12-1992', '0000111122', '1006465848', 'admin', 'admin', 'Colombia')";
@@ -41,27 +40,28 @@ public class Tables {
                     + "billId VARCHAR(200) NOT NULL, "
                     + "billDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
                     + "totalPaid BIGINT NOT NULL, "
-                    + "paymentTerm varchar(50), " //contado o crédito
-                    + "client_pk BIGINT," //llave primaria de el cliente que hizo la compra
-                    + "appuser_pk INT, " //llave primaria de el usuario(username) que hizo la venta
-                    + "FOREIGN KEY (appuser_pk) REFERENCES appuser(appuser_pk))";
+                    + "paymentTerm varchar(50) NOT NULL, " //contado o crédito
+                    + "cashPaid BIGINT DEFAULT 0, " //pago en efectivo
+                    + "transferPaid BIGINT DEFAULT 0," //pago por transferencia
+                    + "client_pk VARCHAR(20)," //llave primaria de el cliente que hizo la compra
+                    + "appuser_pk BIGINT, " //llave primaria de el usuario(vendedor) que hizo la venta
+                    + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk),"
+                    + "FOREIGN KEY (appuser_pk) REFERENCES appusers(appuser_pk))";
 
             String createClientsTable = "CREATE TABLE IF NOT EXISTS clients ("
-                    + "client_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
+                    + "client_pk VARCHAR(20) PRIMARY KEY, " //Cédula o NIT
                     + "name VARCHAR(200) NOT NULL, "
-                    + "mobileNumber VARCHAR(100), "
-                    + "address VARCHAR(200), "
-                    + "email VARCHAR(200), "
-                    + "idCard VARCHAR(100) NOT NULL)";
+                    + "mobileNumber VARCHAR(15) NOT NULL, "
+                    + "address VARCHAR(100) NOT NULL, "
+                    + "email VARCHAR(200) NOT NULL)";
 
             String createMotorbikesTable = "CREATE TABLE IF NOT EXISTS motorbikes ("
-                    + "motorbike_pk BIGINT AUTO_INCREMENT PRIMARY KEY, " 
-                    + "plate VARCHAR(50) NOT NULL, "
+                    + "motorbike_pk VARCHAR(10) PRIMARY KEY, " //placa
                     + "brandName VARCHAR(100) NOT NULL, "
-                    + "model VARCHAR(100), "
-                    + "cylinderCapacity VARCHAR(100), "
+                    + "model VARCHAR(100) NOT NULL, "
+                    + "cylinderCapacity VARCHAR(100) NOT NULL, "
                     + "color VARCHAR(50) NOT NULL, "
-                    + "client_pk BIGINT, "
+                    + "client_pk varchar(20), "
                     + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk) "
                     + "ON DELETE SET NULL ON UPDATE RESTRICT)";
 
@@ -83,8 +83,24 @@ public class Tables {
                     + "soldProduct_pk BIGINT,"
                     + "FOREIGN KEY (bill_pk) REFERENCES bills(bill_pk),"
                     + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk))";
+            
+            String createServices = "CREATE TABLE IF NOT EXISTS services("
+                    + "service_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "motorbike_pk VARCHAR(10),"
+                    + "state VARCHAR(50) NOT NULL,"
+                    + "lastModified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+                    + "FOREIGN KEY (motorbike_pk) REFERENCES motorbikes(motorbike_pk))";
+            
+            String createServiceDetails = "CREATE TABLE IF NOT EXISTS serviceDetails("
+                    + "serviceDetails_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "service_pk BIGINT,"
+                    + "serviceName VARCHAR(200) NOT NULL,"
+                    + "servicePrice BIGINT NOT NULL,"
+                    + "mechanic VARCHAR(200) NOT NULL,"
+                    + "FOREIGN KEY (service_pk) REFERENCES services(service_pk) ON DELETE CASCADE)";
 
-            // Ejecutar las consultas
+            // EJECUTAR LAS CONSULTAS
+            
             //st.executeUpdate(createAppUserTable);
             //st.executeUpdate(insertAdmin);
             //st.executeUpdate(createProductsTable);
@@ -94,6 +110,9 @@ public class Tables {
             //st.executeUpdate(createCategories);
             //st.executeUpdate(createSoldProducts);
             //st.executeUpdate(createProductsBills);
+            //st.executeUpdate(createServices);
+            //st.executeUpdate(createServiceDetails);
+            
             JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

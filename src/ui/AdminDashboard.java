@@ -68,7 +68,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 422, 360, 108));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 428, 360, 108));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -83,7 +83,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 559, 360, 108));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 571, 360, 108));
 
         jButton6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton6.setForeground(new java.awt.Color(0, 0, 0));
@@ -98,7 +98,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 559, 360, 108));
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 571, 360, 108));
 
         jButton7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 0, 0));
@@ -168,7 +168,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 422, 360, 108));
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 428, 360, 108));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -181,8 +181,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la sesión?","Selecciona una opción",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí","No"},"Sí");
         if(a == 0){
-            setVisible(false);
             new Login().setVisible(true);
+            dispose();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -212,8 +212,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        setVisible(false);
         new SellerDashboard(username).setVisible(true);
+        dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

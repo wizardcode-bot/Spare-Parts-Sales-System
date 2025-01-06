@@ -1,6 +1,5 @@
 package ui;
 
-
 import java.sql.*;
 import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
@@ -8,8 +7,7 @@ import common.Validations;
 
 public class UpdateClient extends javax.swing.JFrame {
 
-    
-        /**
+    /**
      * Creates new form UpdateClient
      */
     public UpdateClient() {
@@ -126,6 +124,7 @@ public class UpdateClient extends javax.swing.JFrame {
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 64, 850, 10));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel9MouseClicked(evt);
@@ -151,13 +150,9 @@ public class UpdateClient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la cédula del cliente!",
                     "No hay clientes seleccionados", JOptionPane.INFORMATION_MESSAGE);
             return;
-        } else if (!idCard.matches(Validations.numberPattern)) {
-            JOptionPane.showMessageDialog(null, "La cédula debe contener solo números.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
         }
 
-        String query = "SELECT name, mobileNumber, address, email FROM clients WHERE idCard = ?";
+        String query = "SELECT name, mobileNumber, address, email FROM clients WHERE client_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, idCard);
@@ -190,38 +185,39 @@ public class UpdateClient extends javax.swing.JFrame {
 
         // Validaciones de campos
         if (Validations.isNullOrBlank(name)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!", "Advertencia", 
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre o razón social del cliente!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (Validations.isNullOrBlank(mobileNumber)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!", "Advertencia", 
+        if (!mobileNumber.equals("No registrado") && !Validations.isNullOrBlank(mobileNumber)) {
+            if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
+                JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        if (address.length() > 60) {
+            JOptionPane.showMessageDialog(null, "¡Se recomienda que la dirección no contenga más de 60 caracteres!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
-            JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (Validations.isNullOrBlank(address)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (!email.matches(Validations.emailPattern) && !email.equalsIgnoreCase("N/A")) {
-            JOptionPane.showMessageDialog(null, "¡El correo electrónico es inválido!", "Advertencia", 
+        if (!email.matches(Validations.emailPattern) && !email.equalsIgnoreCase("No registrado") && !Validations.isNullOrBlank(email)) {
+            JOptionPane.showMessageDialog(null, "¡El correo electrónico no es válido!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Consulta de actualización
-        String query = "UPDATE clients SET name=?, mobileNumber=?, address=?, email=? WHERE idCard=?";
+        String query = "UPDATE clients SET name=?, mobileNumber=?, address=?, email=? WHERE client_pk=?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+
+            mobileNumber = Validations.isNullOrBlank(mobileNumber) ? "No registrado" : mobileNumber;
+            address = Validations.isNullOrBlank(address) ? "No registrado" : address;
+            email = Validations.isNullOrBlank(email) ? "No registrado" : email;
+
             ps.setString(1, name);
             ps.setString(2, mobileNumber);
             ps.setString(3, address);
@@ -231,12 +227,12 @@ public class UpdateClient extends javax.swing.JFrame {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "¡Cliente actualizado exitosamente!",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "¡No se encontró un cliente con esa cédula!", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            setVisible(false);
+            dispose();
             new UpdateClient().setVisible(true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -244,7 +240,7 @@ public class UpdateClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
     /**

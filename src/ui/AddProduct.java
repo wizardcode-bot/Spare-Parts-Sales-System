@@ -205,6 +205,7 @@ public class AddProduct extends javax.swing.JFrame {
         getContentPane().add(iconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 146, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel14MouseClicked(evt);
@@ -322,7 +323,7 @@ public class AddProduct extends javax.swing.JFrame {
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    setVisible(false);
+                    dispose();
                     new AddProduct().setVisible(true);
                 }
             } else {
@@ -407,7 +408,7 @@ public class AddProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUniqueIdKeyReleased
 
     private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel14MouseClicked
 
     /**

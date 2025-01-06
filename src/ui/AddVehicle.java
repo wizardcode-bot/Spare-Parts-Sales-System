@@ -176,6 +176,7 @@ public class AddVehicle extends javax.swing.JFrame {
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 441, -1, -1));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel12MouseClicked(evt);
@@ -202,7 +203,7 @@ public class AddVehicle extends javax.swing.JFrame {
             return;
         }
 
-        String query = "SELECT name FROM clients WHERE idCard = ?";
+        String query = "SELECT name FROM clients WHERE client_pk = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -258,14 +259,18 @@ public class AddVehicle extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes relacionar el propietario del vehículo!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
+        }  else if (Validations.isNullOrBlank(idCard)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de cédula o Nit del propietario!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         } else if (checkPlateExists) {
             JOptionPane.showMessageDialog(null, "¡El número de placa ya está registrado!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String queryGetClientPk = "SELECT client_pk FROM clients WHERE name = ? AND idCard = ?";
-        String queryInsertMotorbike = "INSERT INTO motorbikes (plate, brandName, model, cylinderCapacity, color, client_pk) VALUES (?,?,?,?,?,?)";
+        String queryGetClientPk = "SELECT client_pk FROM clients WHERE name = ? AND client_pk = ?";
+        String queryInsertMotorbike = "INSERT INTO motorbikes (motorbike_pk, brandName, model, cylinderCapacity, color, client_pk) VALUES (?,?,?,?,?,?)";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement psGetClientPk = con.prepareStatement(queryGetClientPk); 
                 PreparedStatement psInsertMotorbike = con.prepareStatement(queryInsertMotorbike)) {
@@ -276,7 +281,7 @@ public class AddVehicle extends javax.swing.JFrame {
 
             try (ResultSet rs = psGetClientPk.executeQuery()) {
                 if (rs.next()) {
-                    int clientPk = rs.getInt("client_pk");
+                    String clientPk = rs.getString("client_pk");
 
                     // Reemplazar valores vacíos por "No registrado"
                     model = Validations.isNullOrBlank(model) ? "No registrado" : model;
@@ -287,13 +292,13 @@ public class AddVehicle extends javax.swing.JFrame {
                     psInsertMotorbike.setString(3, model);
                     psInsertMotorbike.setString(4, cylinder);
                     psInsertMotorbike.setString(5, color);
-                    psInsertMotorbike.setInt(6, clientPk);
+                    psInsertMotorbike.setString(6, clientPk);
 
                     psInsertMotorbike.executeUpdate();
 
                     JOptionPane.showMessageDialog(null, "¡Vehículo agregado exitosamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    setVisible(false);
+                    dispose();
                     new AddVehicle().setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "¡Cliente no encontrado en la base de datos!", "Error", 
@@ -307,6 +312,8 @@ public class AddVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtPlateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlateKeyReleased
+        // revisar si ya existe la placa en la base de datos
+        
         String plate = txtPlate.getText().trim();
 
         if (!Validations.isNullOrBlank(plate)) {
@@ -315,7 +322,7 @@ public class AddVehicle extends javax.swing.JFrame {
             plateIcon.setText("");
             checkPlateExists = false;
 
-            String query = "SELECT 1 FROM motorbikes WHERE plate = ? LIMIT 1";
+            String query = "SELECT 1 FROM motorbikes WHERE motorbike_pk = ? LIMIT 1";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
                 pst.setString(1, plate);
@@ -336,7 +343,7 @@ public class AddVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPlateKeyReleased
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel12MouseClicked
 
     /**

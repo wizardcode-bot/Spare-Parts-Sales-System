@@ -23,7 +23,7 @@ public class ViewVehicle extends javax.swing.JFrame {
     private void loadAllData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Limpia la tabla antes de cargar los datos
-        String query = "SELECT m.plate, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS clientName "
+        String query = "SELECT m.motorbike_pk, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS clientName "
                 + "FROM motorbikes m "
                 + "JOIN clients c ON m.client_pk = c.client_pk";
 
@@ -31,12 +31,12 @@ public class ViewVehicle extends javax.swing.JFrame {
 
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rs.getString("plate"),
+                    rs.getString("motorbike_pk"),
                     rs.getString("brandName"),
                     rs.getString("model"),
                     rs.getString("cylinderCapacity"),
                     rs.getString("color"),
-                    rs.getString("clientName") // Obtén el nombre del cliente
+                    rs.getString("clientName") // Obténer el nombre del cliente
                 });
             }
         } catch (Exception e) {
@@ -125,6 +125,7 @@ public class ViewVehicle extends javax.swing.JFrame {
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 64, 850, 10));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
@@ -143,6 +144,8 @@ public class ViewVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // eliminar vehículo seleccionado
+        
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         String plate = model.getValueAt(index, 0).toString();
@@ -151,7 +154,7 @@ public class ViewVehicle extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
         if (a == 0) {
-            String query = "DELETE FROM motorbikes WHERE plate = ?";
+            String query = "DELETE FROM motorbikes WHERE motorbike_pk = ?";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
                 ps.setString(1, plate); // Configura el ID en la consulta
@@ -173,17 +176,19 @@ public class ViewVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void txtFilterPlateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterPlateKeyReleased
+        //filtrar por número de placa
+        
         String filterText = txtFilterPlate.getText().trim();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
         String query;
         if (!filterText.isEmpty()) {
-            query = "SELECT m.plate, m.brandName, m.model, "
+            query = "SELECT m.motorbike_pk, m.brandName, m.model, "
                     + "m.cylinderCapacity, m.color, c.name AS clientName "
                     + "FROM motorbikes m "
                     + "INNER JOIN clients c ON m.client_pk = c.client_pk "
-                    + "WHERE m.plate LIKE ?";
+                    + "WHERE m.motorbike_pk LIKE ?";
         } else {
             loadAllData();
             return;
@@ -194,12 +199,12 @@ public class ViewVehicle extends javax.swing.JFrame {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     model.addRow(new Object[]{
-                        rs.getString("plate"),
+                        rs.getString("motorbike_pk"),
                         rs.getString("brandName"),
                         rs.getString("model"),
                         rs.getString("cylinderCapacity"),
                         rs.getString("color"),
-                        rs.getString("clientName") // Aquí obtenemos el nombre del propietario
+                        rs.getString("clientName") // obtener el nombre del propietario
                     });
                 }
             }
@@ -209,7 +214,7 @@ public class ViewVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFilterPlateKeyReleased
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     /**

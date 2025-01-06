@@ -84,6 +84,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, -1, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel9MouseClicked(evt);
@@ -106,7 +107,7 @@ public class Login extends javax.swing.JFrame {
         //verificar si el usuario existe
         boolean userFound = false;
 
-        String query = "SELECT password, userRole FROM appuser WHERE username = ?";
+        String query = "SELECT password, userRole FROM appusers WHERE username = ?";
 
         try (
                 Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
@@ -122,15 +123,15 @@ public class Login extends javax.swing.JFrame {
                     if (BCrypt.checkpw(password, hashedPassword)) {
                         // Determinar el rol del usuario
                         String userRole = rs.getString("userRole");
-                        setVisible(false);
                         if ("Administrador".equals(userRole)) {
                             new AdminDashboard(username).setVisible(true);
                         } else {
                             new SellerDashboard(username).setVisible(true);
                         }
+                        dispose();
                     } else {
                         // Contraseña incorrecta
-                        JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", 
+                        JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -150,7 +151,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
     /**

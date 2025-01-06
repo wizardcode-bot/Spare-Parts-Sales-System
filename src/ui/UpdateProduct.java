@@ -211,6 +211,7 @@ public class UpdateProduct extends javax.swing.JFrame {
         getContentPane().add(txtAddQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(616, 200, 140, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel14MouseClicked(evt);
@@ -376,7 +377,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                         ps.executeUpdate();
                         JOptionPane.showMessageDialog(null, "¡Producto actualizado exitosamente!", 
                                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                        setVisible(false);
+                        dispose();
                         new UpdateProduct().setVisible(true);
                     }
                 } else {
@@ -427,7 +428,7 @@ public class UpdateProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel14MouseClicked
 
     /**

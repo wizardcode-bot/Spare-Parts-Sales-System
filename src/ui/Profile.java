@@ -131,6 +131,7 @@ public class Profile extends javax.swing.JFrame {
         getContentPane().add(txtDoB, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 229, 300, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel9MouseClicked(evt);
@@ -148,7 +149,7 @@ public class Profile extends javax.swing.JFrame {
 
         txtDoB.setEditable(false);
         
-        String query = "SELECT name, dob, mobileNumber, address FROM appuser WHERE username = ?";
+        String query = "SELECT name, dob, mobileNumber, address FROM appusers WHERE username = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -196,7 +197,7 @@ public class Profile extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         } else {
-            String updateQuery = "UPDATE appuser SET name = ?, mobileNumber = ?, address = ? WHERE username = ?";
+            String updateQuery = "UPDATE appusers SET name = ?, mobileNumber = ?, address = ? WHERE username = ?";
             
 
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(updateQuery)) {
@@ -209,7 +210,7 @@ public class Profile extends javax.swing.JFrame {
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Perfil actualizado exitosamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                setVisible(false);
+                dispose();
                 new Profile(username).setVisible(true);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Error al actualizar el perfil: " + e.getMessage());
@@ -222,7 +223,7 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
     /**

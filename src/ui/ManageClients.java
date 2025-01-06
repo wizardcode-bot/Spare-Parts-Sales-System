@@ -1,13 +1,6 @@
 package ui;
 
 
-import ui.AddVehicle;
-import ui.UpdateClient;
-import ui.UpdateVehicle;
-import ui.ViewClient;
-import ui.ViewVehicle;
-
-
 public class ManageClients extends javax.swing.JFrame {
 
     /**
@@ -57,7 +50,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(303, 143, 360, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(258, 143, 360, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -72,7 +65,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(706, 143, 360, 108));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 143, 360, 108));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -87,7 +80,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(303, 287, 360, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(258, 287, 360, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -108,7 +101,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(706, 287, 360, 108));
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 287, 360, 108));
 
         jButton6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton6.setForeground(new java.awt.Color(0, 0, 0));
@@ -123,7 +116,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(303, 432, 360, 108));
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(258, 432, 360, 108));
 
         jButton7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 0, 0));
@@ -138,7 +131,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton7ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(706, 432, 360, 108));
+        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 432, 360, 108));
 
         jButton8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(0, 0, 0));
@@ -153,7 +146,7 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton8ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(514, 570, 360, 108));
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(493, 576, 360, 108));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -174,7 +167,7 @@ public class ManageClients extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

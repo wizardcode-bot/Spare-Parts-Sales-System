@@ -187,6 +187,7 @@ public class AddUser extends javax.swing.JFrame {
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 450, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel14MouseClicked(evt);
@@ -219,7 +220,7 @@ public class AddUser extends javax.swing.JFrame {
         userIconLabel.setText("");
         checkUsername = false;
 
-        String query = "SELECT 1 FROM appuser WHERE username = ?";
+        String query = "SELECT 1 FROM appusers WHERE username = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, username);
@@ -294,6 +295,11 @@ public class AddUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (username.length() > 40) {
+            JOptionPane.showMessageDialog(null, "¡Se recomienda que el nombre de usuario no contenga más de 40 caracteres!", "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (Validations.isNullOrBlank(password)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la contraseña!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
@@ -304,19 +310,24 @@ public class AddUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (address.length()>60) {
+            JOptionPane.showMessageDialog(null, "¡Se recomienda que la dirección no contenga más de 60 caracteres!", "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (checkUsername) {
             JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya existe!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String query = "INSERT INTO appuser (userRole, name, dob, mobileNumber, IDcard, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO appusers (appuser_pk, userRole, name, dob, mobileNumber, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setString(1, userRole);
-            ps.setString(2, name);
-            ps.setString(3, dob);
-            ps.setString(4, mobileNumber);
-            ps.setString(5, IDcard);
+            ps.setString(1, IDcard);
+            ps.setString(2, userRole);
+            ps.setString(3, name);
+            ps.setString(4, dob);
+            ps.setString(5, mobileNumber);
             ps.setString(6, username);
             ps.setString(7, hashedPassword);
             ps.setString(8, address);
@@ -324,7 +335,7 @@ public class AddUser extends javax.swing.JFrame {
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "¡Usuario agregado exitosamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            setVisible(false);
+            dispose();
             new AddUser().setVisible(true);
 
         } catch (SQLException e) {
@@ -341,7 +352,7 @@ public class AddUser extends javax.swing.JFrame {
             return;
         }
 
-        String query = "SELECT 1 FROM appuser WHERE IDcard = ?";
+        String query = "SELECT 1 FROM appusers WHERE appuser_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, idCard);
@@ -365,7 +376,7 @@ public class AddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDcardKeyReleased
 
     private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel14MouseClicked
 
     /**

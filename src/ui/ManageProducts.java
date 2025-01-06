@@ -1,9 +1,5 @@
 package ui;
 
-import ui.AddProduct;
-import ui.UpdateProduct;
-import ui.ViewProduct;
-
 
 public class ManageProducts extends javax.swing.JFrame {
 
@@ -99,6 +95,7 @@ public class ManageProducts extends javax.swing.JFrame {
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(449, 298, 335, 108));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -125,7 +122,7 @@ public class ManageProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
     /**

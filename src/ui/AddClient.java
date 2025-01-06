@@ -179,8 +179,8 @@ public class AddClient extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (idCard.length() < 6 || idCard.length() > 11) {
-            JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido, debe contener entre 6 a 11 dígitos!", "Advertencia",
+        if (idCard.length() < 6 || idCard.length() > 12) {
+            JOptionPane.showMessageDialog(null, "¡El número de cédula o NIT no es válido, debe contener entre 6 a 11 dígitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -190,7 +190,7 @@ public class AddClient extends javax.swing.JFrame {
             return;
         }
 
-        String query = "INSERT INTO clients (name, mobileNumber, address, email, idCard) VALUES (?,?,?,?,?)";
+        String query = "INSERT INTO clients (client_pk, name, mobileNumber, address, email) VALUES (?,?,?,?,?)";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
             
@@ -198,16 +198,16 @@ public class AddClient extends javax.swing.JFrame {
             address = Validations.isNullOrBlank(address) ? "No registrado" : address;
             email = Validations.isNullOrBlank(email) ? "No registrado" : email;
 
-            ps.setString(1, name);
-            ps.setString(2, mobileNumber);
-            ps.setString(3, address);
-            ps.setString(4, email);
-            ps.setString(5, idCard);
+            ps.setString(1, idCard);
+            ps.setString(2, name);
+            ps.setString(3, mobileNumber);
+            ps.setString(4, address);
+            ps.setString(5, email);
 
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "¡Cliente agregado exitosamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            setVisible(false);
+            dispose();
             new AddClient().setVisible(true);
 
         } catch (Exception e) {
@@ -219,12 +219,12 @@ public class AddClient extends javax.swing.JFrame {
 
         String idCard = txtIDCard.getText().trim();
 
-        if (Validations.isNullOrBlank(idCard) || idCard.length() < 6 || idCard.length() > 11) {
+        if (Validations.isNullOrBlank(idCard) || idCard.length() < 6 || idCard.length() > 12) {
             IDiconLabel.setVisible(false);
             return;
         }
 
-        String query = "SELECT idCard FROM clients WHERE idCard = ?";
+        String query = "SELECT client_pk FROM clients WHERE client_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, idCard);
@@ -249,7 +249,7 @@ public class AddClient extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDCardKeyReleased
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     /**

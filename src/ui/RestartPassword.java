@@ -175,6 +175,7 @@ public class RestartPassword extends javax.swing.JFrame {
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(608, 284, 170, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel8MouseClicked(evt);
@@ -202,7 +203,7 @@ public class RestartPassword extends javax.swing.JFrame {
             return;
         }
 
-        String query = "SELECT name, userRole, username FROM appuser WHERE idCard = ?";
+        String query = "SELECT name, userRole, username FROM appusers WHERE idCard = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, idCard);
@@ -266,7 +267,7 @@ public class RestartPassword extends javax.swing.JFrame {
 
         String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
-        String query = "UPDATE appuser SET password = ? WHERE idCard = ?";
+        String query = "UPDATE appusers SET password = ? WHERE idCard = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, hashedPassword);
@@ -287,7 +288,7 @@ public class RestartPassword extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
     /**

@@ -65,9 +65,17 @@ public class ViewUser extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Rol", "Fecha de Nacimiento", "Teléfono", "Cédula", "Usuario", "Dirección"
+                "ID", "Nombre", "Rol", "Fecha de Nacimiento", "Teléfono", "Usuario", "Dirección"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -107,6 +115,7 @@ public class ViewUser extends javax.swing.JFrame {
         getContentPane().add(txtFilterID, new org.netbeans.lib.awtextra.AbsoluteConstraints(261, 83, 300, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -120,7 +129,7 @@ public class ViewUser extends javax.swing.JFrame {
     private void loadAllData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Limpia la tabla antes de cargar los datos
-        String query = "SELECT * FROM appuser";
+        String query = "SELECT * FROM appusers";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
@@ -131,7 +140,6 @@ public class ViewUser extends javax.swing.JFrame {
                     rs.getString("userRole"),
                     rs.getString("dob"),
                     rs.getString("mobileNumber"),
-                    rs.getString("IDcard"),
                     rs.getString("username"),
                     rs.getString("address")
                 });
@@ -150,7 +158,7 @@ public class ViewUser extends javax.swing.JFrame {
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
-        String usernameTable = model.getValueAt(index, 6).toString();
+        String usernameTable = model.getValueAt(index, 5).toString();
 
         if (username.equals(usernameTable)) {
             JOptionPane.showMessageDialog(null, "¡No puedes eliminar tu propia cuenta!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -159,7 +167,7 @@ public class ViewUser extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
             if (a == 0) {
-                String query = "DELETE FROM appuser WHERE appuser_pk = ?";
+                String query = "DELETE FROM appusers WHERE appuser_pk = ?";
                 try (
                         Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
                     ps.setString(1, id);
@@ -169,7 +177,7 @@ public class ViewUser extends javax.swing.JFrame {
                     } else {
                         JOptionPane.showMessageDialog(null, "No se encontró al usuario con el ID proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    setVisible(false);
+                    dispose();
                     new ViewUser(username).setVisible(true);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -190,7 +198,7 @@ public class ViewUser extends javax.swing.JFrame {
 
         String query;
         if (!filterText.isEmpty()) {
-            query = "SELECT * FROM appuser WHERE IDcard LIKE ? OR name LIKE ?";
+            query = "SELECT * FROM appusers WHERE appuser_pk LIKE ? OR name LIKE ?";
         } else {
             loadAllData(); // Si el campo está vacío, carga todos los datos
             return;
@@ -207,7 +215,6 @@ public class ViewUser extends javax.swing.JFrame {
                     rs.getString("userRole"),
                     rs.getString("dob"),
                     rs.getString("mobileNumber"),
-                    rs.getString("IDcard"),
                     rs.getString("username"),
                     rs.getString("address")
                 });
@@ -221,7 +228,7 @@ public class ViewUser extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFilterIDKeyReleased
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
     /**

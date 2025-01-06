@@ -149,7 +149,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("Filtrar por número de cédula");
+        jLabel8.setText("Filtrar por número de cédula o NIT");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 337, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -169,6 +169,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(676, 357, 94, -1));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel11MouseClicked(evt);
@@ -184,7 +185,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Buscar vehículo por placa
-        String plate = txtSearchPlate.getText().trim(); // Elimina espacios al inicio y final
+        String plate = txtSearchPlate.getText().trim(); 
 
         if (Validations.isNullOrBlank(plate)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de placa del vehículo!", ""
@@ -193,10 +194,10 @@ public class UpdateVehicle extends javax.swing.JFrame {
         }
 
         String query = """
-        SELECT m.plate, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS ownerName
+        SELECT m.motorbike_pk, m.brandName, m.model, m.cylinderCapacity, m.color, c.name AS ownerName, c.client_pk AS ID
         FROM motorbikes m
         INNER JOIN clients c ON m.client_pk = c.client_pk
-        WHERE m.plate = ?
+        WHERE m.motorbike_pk = ?
         """;
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
@@ -210,6 +211,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
                     txtCylinder.setText(rs.getString("cylinderCapacity"));
                     txtColor.setText(rs.getString("color"));
                     txtOwner.setText(rs.getString("ownerName"));
+                    txtFilterClient.setText(rs.getString("ID"));
                 } else {
                     JOptionPane.showMessageDialog(null, "¡Este vehículo no está registrado!", "Vehículo no encontrado",
                             JOptionPane.ERROR_MESSAGE);
@@ -229,20 +231,22 @@ public class UpdateVehicle extends javax.swing.JFrame {
         String cylinder = txtCylinder.getText().trim();
         String color = txtColor.getText().trim();
         String owner = txtOwner.getText().trim();
+        String idCard = txtFilterClient.getText().trim();
 
         if (Validations.isNullOrBlank(brandName) || Validations.isNullOrBlank(model) || Validations.isNullOrBlank(cylinder)
-                || Validations.isNullOrBlank(color) || Validations.isNullOrBlank(owner)) {
+                || Validations.isNullOrBlank(color) || Validations.isNullOrBlank(owner) || Validations.isNullOrBlank(idCard)) {
             JOptionPane.showMessageDialog(null, "¡Debes completar todos los campos!", "Advertencia", 
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String clientPK = null;
-        String queryClientPK = "SELECT client_pk FROM clients WHERE name = ?";
+        String queryClientPK = "SELECT client_pk FROM clients WHERE name = ? AND client_pk = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement psClient = con.prepareStatement(queryClientPK)) {
 
             psClient.setString(1, owner);
+            psClient.setString(2, idCard);
             try (ResultSet rs = psClient.executeQuery()) {
                 if (rs.next()) {
                     clientPK = rs.getString("client_pk");
@@ -258,7 +262,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
             return;
         }
 
-        String queryUpdate = "UPDATE motorbikes SET brandName = ?, model = ?, cylinderCapacity = ?, color = ?, client_pk = ? WHERE plate = ?";
+        String queryUpdate = "UPDATE motorbikes SET brandName = ?, model = ?, cylinderCapacity = ?, color = ?, client_pk = ? WHERE motorbike_pk = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement psUpdate = con.prepareStatement(queryUpdate)) {
 
@@ -272,7 +276,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
             psUpdate.executeUpdate();
             JOptionPane.showMessageDialog(null, "¡Vehículo actualizado exitosamente!","Éxito", 
                     JOptionPane.INFORMATION_MESSAGE);
-            setVisible(false);
+            dispose();
             new UpdateVehicle().setVisible(true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al actualizar el vehículo: " + e.getMessage(), "Error", 
@@ -294,14 +298,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
             return;
         }
 
-        // Validar que el número de cédula solo contenga dígitos
-        if (!filterClient.matches("\\d+")) {
-            JOptionPane.showMessageDialog(null, "¡El número de cédula solo puede contener dígitos!", "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String query = "SELECT name FROM clients WHERE idCard = ?";
+        String query = "SELECT name FROM clients WHERE client_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, filterClient);
@@ -323,7 +320,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel11MouseClicked
 
     /**

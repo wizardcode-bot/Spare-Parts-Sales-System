@@ -1,14 +1,20 @@
 package ui;
 
-
 public class ManageServices extends javax.swing.JFrame {
+
+    private String username = null;
 
     /**
      * Creates new form ManageServices
      */
     public ManageServices() {
         initComponents();
-        setSize(850,500);
+    }
+
+    public ManageServices(String tempUsername) {
+        initComponents();
+        username = tempUsername;
+        setSize(850, 500);
         setLocationRelativeTo(null);
     }
 
@@ -48,6 +54,11 @@ public class ManageServices extends javax.swing.JFrame {
         jButton2.setText("Nuevo servicio");
         jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton2.setIconTextGap(20);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(101, 151, 300, 108));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -68,6 +79,7 @@ public class ManageServices extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
@@ -82,8 +94,12 @@ public class ManageServices extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new NewService(username).setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

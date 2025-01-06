@@ -27,10 +27,10 @@ public class updatePassword extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    public static void updatePassword(String username, String currentPassword, String newPassword) {
+    public void updatePassword(String username, String currentPassword, String newPassword) {
 
-        String verifyQuery = "SELECT password FROM appuser WHERE username = ?";
-        String updateQuery = "UPDATE appuser SET password = ? WHERE username = ?";
+        String verifyQuery = "SELECT password FROM appusers WHERE username = ?";
+        String updateQuery = "UPDATE appusers SET password = ? WHERE username = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement verifyStmt = con.prepareStatement(verifyQuery); 
                 PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
@@ -50,7 +50,7 @@ public class updatePassword extends javax.swing.JFrame {
                         if (rowsUpdated > 0) {
                             JOptionPane.showMessageDialog(null, "¡Contraseña actualizada exitosamente!",
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            new updatePassword().setVisible(false);
+                            dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Error al actualizar la contraseña. Inténtalo nuevamente.", "Error", 
                     JOptionPane.ERROR_MESSAGE);
@@ -132,6 +132,7 @@ public class updatePassword extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 51, 480, 10));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/smallClose.png"))); // NOI18N
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -159,7 +160,7 @@ public class updatePassword extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
     /**

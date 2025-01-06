@@ -68,6 +68,7 @@ public class ViewBill extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 83, 838, 401));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -84,7 +85,10 @@ public class ViewBill extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Mostrar datos en la tabla
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        String query = "SELECT billId, billDate, totalPaid, generatedBy, relatedClient FROM bills";
+        String query = "SELECT b.billId, b.billDate, b.totalPaid, a.name AS generatedBy, c.name AS relatedClient "
+                 + "FROM bills b "
+                 + "JOIN appusers a ON b.appuser_pk = a.appuser_pk "
+                 + "JOIN clients c ON b.client_pk = c.client_pk";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
@@ -113,7 +117,7 @@ public class ViewBill extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
     /**

@@ -32,7 +32,6 @@ public class ViewClient extends javax.swing.JFrame {
                     rs.getString("mobileNumber"),
                     rs.getString("address"),
                     rs.getString("email"),
-                    rs.getString("idCard")
                 });
             }
         } catch (Exception e) {
@@ -79,9 +78,17 @@ public class ViewClient extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Teléfono", "Dirección", "Correo", "Número de cédula"
+                "ID", "Nombre", "Teléfono", "Dirección", "Correo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -117,6 +124,7 @@ public class ViewClient extends javax.swing.JFrame {
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 64, 850, 10));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
@@ -154,7 +162,7 @@ public class ViewClient extends javax.swing.JFrame {
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "¡Cliente eliminado exitosamente!","Éxito", 
                             JOptionPane.INFORMATION_MESSAGE);
-                    setVisible(false);
+                    dispose();
                     new ViewClient().setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "¡No se encontró al cliente para eliminar!", "Error", 
@@ -176,7 +184,7 @@ public class ViewClient extends javax.swing.JFrame {
 
         String query;
         if (!filterText.isEmpty()) {
-            query = "SELECT * FROM clients WHERE idCard LIKE ? OR name LIKE ?";
+            query = "SELECT * FROM clients WHERE client_pk LIKE ? OR name LIKE ?";
         } else {
             loadAllData(); // Si el campo está vacío, carga todos los datos
             return;
@@ -192,8 +200,7 @@ public class ViewClient extends javax.swing.JFrame {
                         rs.getString("name"),
                         rs.getString("mobileNumber"),
                         rs.getString("address"),
-                        rs.getString("email"),
-                        rs.getString("idCard")
+                        rs.getString("email"),                        
                     });
                 }
             }
@@ -207,7 +214,7 @@ public class ViewClient extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFilterIDActionPerformed
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     /**

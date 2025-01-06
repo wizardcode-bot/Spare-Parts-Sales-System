@@ -4,12 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/common/Validations.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/NewService.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/dao/Tables.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Login.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/SellProduct.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/AddClient.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/updatePassword.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/AdminDashboard.java</file>
         </group>
     </open-files>
 </project-private>

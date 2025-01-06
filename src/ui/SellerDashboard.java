@@ -41,6 +41,7 @@ public class SellerDashboard extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,7 +67,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(661, 144, 360, 108));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(721, 144, 360, 108));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -81,7 +82,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 570, 360, 108));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 573, 360, 108));
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton5.setForeground(new java.awt.Color(0, 0, 0));
@@ -96,7 +97,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 144, 360, 108));
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 144, 360, 108));
 
         jButton6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton6.setForeground(new java.awt.Color(0, 0, 0));
@@ -110,7 +111,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(661, 283, 360, 108));
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(721, 286, 360, 108));
 
         jButton7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 0, 0));
@@ -124,7 +125,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton7ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(661, 427, 360, 108));
+        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(721, 430, 360, 108));
 
         jButton8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(0, 0, 0));
@@ -138,7 +139,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton8ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(661, 570, 360, 108));
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(721, 573, 360, 108));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(0, 0, 0));
@@ -153,7 +154,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 283, 360, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 286, 360, -1));
 
         jButton9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton9.setForeground(new java.awt.Color(0, 0, 0));
@@ -168,7 +169,19 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton9ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 427, 360, -1));
+        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 430, 360, -1));
+
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 0, 0));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/avatar.png"))); // NOI18N
+        jButton3.setText("Administrador");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -177,11 +190,12 @@ public class SellerDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        //cerrar sesión
         int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la sesión?","Selecciona una opción",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí","No"},"Sí");
         if(a == 0){
-            setVisible(false);
             new Login().setVisible(true);
+            dispose();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -214,8 +228,14 @@ public class SellerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new ManageServices().setVisible(true);
+        new ManageServices(username).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // botón para volver al panel de admin
+        new AdminDashboard(username).setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -256,6 +276,7 @@ public class SellerDashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
