@@ -75,7 +75,7 @@ public class Tables {
                     + "salePrice BIGINT NOT NULL,"
                     + "saleDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
                     + "product_pk BIGINT,"
-                    + "FOREIGN KEY (product_pk) REFERENCES products(product_pk))";
+                    + "FOREIGN KEY (product_pk) REFERENCES products(product_pk) ON DELETE CASCADE)";
 
             String createProductsBills = "CREATE TABLE IF NOT EXISTS products_bills("
                     + "productsBills_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
@@ -96,8 +96,8 @@ public class Tables {
                     + "soldProductsServices_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
                     + "service_pk BIGINT,"
                     + "soldProduct_pk BIGINT,"
-                    + "FOREIGN KEY (service_pk) REFERENCES services(service_pk),"
-                    + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk))";
+                    + "FOREIGN KEY (service_pk) REFERENCES services(service_pk) ON DELETE CASCADE,"
+                    + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk) ON DELETE CASCADE)";
 
             // EJECUTAR LAS CONSULTAS
             
