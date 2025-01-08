@@ -88,16 +88,16 @@ public class Tables {
                     + "service_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
                     + "motorbike_pk VARCHAR(10),"
                     + "state VARCHAR(50) NOT NULL,"
+                    + "totalPrice BIGINT NOT NULL,"
                     + "lastModified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
                     + "FOREIGN KEY (motorbike_pk) REFERENCES motorbikes(motorbike_pk))";
             
-            String createServiceDetails = "CREATE TABLE IF NOT EXISTS serviceDetails("
-                    + "serviceDetails_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+            String createSoldProductsServices = "CREATE TABLE IF NOT EXISTS soldProducts_services("
+                    + "soldProductsServices_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
                     + "service_pk BIGINT,"
-                    + "serviceName VARCHAR(200) NOT NULL,"
-                    + "servicePrice BIGINT NOT NULL,"
-                    + "mechanic VARCHAR(200) NOT NULL,"
-                    + "FOREIGN KEY (service_pk) REFERENCES services(service_pk) ON DELETE CASCADE)";
+                    + "soldProduct_pk BIGINT,"
+                    + "FOREIGN KEY (service_pk) REFERENCES services(service_pk),"
+                    + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk))";
 
             // EJECUTAR LAS CONSULTAS
             
@@ -111,7 +111,7 @@ public class Tables {
             //st.executeUpdate(createSoldProducts);
             //st.executeUpdate(createProductsBills);
             //st.executeUpdate(createServices);
-            //st.executeUpdate(createServiceDetails);
+            //st.executeUpdate(createSoldProductsServices);
             
             JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {

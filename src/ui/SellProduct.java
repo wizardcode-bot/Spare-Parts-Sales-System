@@ -174,8 +174,9 @@ public class SellProduct extends javax.swing.JFrame {
             OpenPdf.openById(String.valueOf(billId));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
+        } finally {
+            doc.close();
         }
-        doc.close();
     }
 
     public String getUniqueId(String prefix) {

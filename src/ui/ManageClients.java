@@ -2,12 +2,18 @@ package ui;
 
 
 public class ManageClients extends javax.swing.JFrame {
+    
+    private String username = null;
 
     /**
      * Creates new form ManageClients
      */
     public ManageClients() {
         initComponents();
+    }
+    public ManageClients(String tempUsername) {
+        initComponents();
+        username = tempUsername;
         setSize(1366, 768);
         setLocationRelativeTo(null);
     }
@@ -159,7 +165,7 @@ public class ManageClients extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewClient().setVisible(true);
+        new ViewClient(username).setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -175,7 +181,7 @@ public class ManageClients extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        new ViewVehicle().setVisible(true);
+        new ViewVehicle(username).setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

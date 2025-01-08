@@ -1,6 +1,5 @@
 package ui;
 
-
 import dao.ConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,12 +9,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class ViewVehicle extends javax.swing.JFrame {
+    
+    private String username = null;
 
     /**
      * Creates new form ViewVehicle
      */
     public ViewVehicle() {
         initComponents();
+    }
+    public ViewVehicle(String tempUsername) {
+        initComponents();
+        username = tempUsername;
         setSize(850, 500);
         setLocationRelativeTo(null);
     }
@@ -144,12 +149,42 @@ public class ViewVehicle extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // eliminar vehículo seleccionado
-        
+        // Eliminar vehículo seleccionado con validación de rol
+
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         String plate = model.getValueAt(index, 0).toString();
 
+        // Consultar el rol del usuario actual
+        String userRole = "";
+        String roleQuery = "SELECT userRole FROM appusers WHERE username = ?";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(roleQuery)) {
+
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    userRole = rs.getString("userRole");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró información para el usuario actual.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar el rol del usuario: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar el rol
+        if (!"Administrador".equalsIgnoreCase(userRole)) {
+            JOptionPane.showMessageDialog(null, "No tienes permiso para eliminar vehículos.",
+                    "Permiso denegado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Confirmar y eliminar vehículo
         int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este vehículo?", "Selecciona una opción",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
@@ -163,21 +198,21 @@ public class ViewVehicle extends javax.swing.JFrame {
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "¡Vehículo eliminado exitosamente!");
                     // Refrescar la vista
-                    ((DefaultTableModel) jTable1.getModel()).removeRow(index); 
+                    ((DefaultTableModel) jTable1.getModel()).removeRow(index);
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se encontró el vehículo con la placa seleccionada.", "Error", 
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No se encontró el vehículo con la placa seleccionada.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error al eliminar el vehículo: " + e.getMessage(), "Error", 
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error al eliminar el vehículo: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void txtFilterPlateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterPlateKeyReleased
         //filtrar por número de placa
-        
+
         String filterText = txtFilterPlate.getText().trim();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);

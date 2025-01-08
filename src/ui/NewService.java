@@ -19,11 +19,13 @@ import java.time.format.DateTimeFormatter;
 
 public class NewService extends javax.swing.JFrame {
 
-    private long finalTotalPrice = 0;
     private String billId = "";
     private String username = "";
+    private String serviceState = "";
+    private long finalTotalPrice = 0;
     private long cashPaidInt = 0;
     private long transferPaidInt = 0;
+    private long totalPriceLong = 0;
 
     /**
      * Creates new form SellProduct
@@ -112,36 +114,59 @@ public class NewService extends javax.swing.JFrame {
         return idCard;
     }
 
-    private void generatePDF() {
+    private void generatePDF(String clientID) {
         // Crear factura
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
-        String selectedClient = comboRelateVehicle.getSelectedItem().toString();
-        String idCard = getClientIdCard(selectedClient); // Consultar el idCard
+        String client_pk = clientID;
+        String clientName = null;
         String paymentTerm = comboPayment.getSelectedItem().toString();
         final String NIT = "119887284-4";
         final String ADDRESS = "Cra 18 # 11 - 62 Centro - Cumaral";
         String vendorName = Validations.getNameByUsername(username);
 
-        try {
+        try (Connection con = ConnectionProvider.getCon()) {
+            // Consulta para obtener el nombre del cliente
+            String query = "SELECT name FROM clients WHERE client_pk = ?";
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setString(1, client_pk);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        clientName = rs.getString("name");
+                    } else {
+                        throw new Exception("No se encontró un cliente con el ID proporcionado.");
+                    }
+                }
+            }
+
             // Obtener la fecha actual
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dateString = now.format(formatter);
+
+            // Crear el PDF
             PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
             doc.open();
-            Paragraph title = new Paragraph("Factura de venta" + "\nMOTOREPUESTOS GOOFY" + "\nNIT: " + NIT + "\nDirección: " + ADDRESS
+
+            // Título
+            Paragraph title = new Paragraph("Factura de venta\nMOTOREPUESTOS GOOFY\nNIT: " + NIT + "\nDirección: " + ADDRESS
                     + "\nNo Responsable De IVA");
             title.setAlignment(Element.ALIGN_CENTER);
             doc.add(title);
+
+            // Detalles del cliente
             Paragraph details = new Paragraph("\nID de factura: " + billId
                     + "\nFecha y hora de expedición: " + dateString
                     + "\nVendedor: " + vendorName
-                    + "\nCliente: " + selectedClient
-                    + "\nNIT/CC: " + (idCard != null ? idCard : "No disponible"));
+                    + "\nCliente: " + (clientName != null ? clientName : "Desconocido")
+                    + "\nNIT/CC: " + client_pk);
             doc.add(details);
+
+            // Línea divisoria
             Paragraph hyphenLine = new Paragraph("-".repeat(130) + "\n\n");
             hyphenLine.setAlignment(Element.ALIGN_CENTER);
             doc.add(hyphenLine);
+
+            // Tabla de productos
             PdfPTable tbl = new PdfPTable(6);
             tbl.addCell("ID del producto");
             tbl.addCell("Descripción");
@@ -149,6 +174,7 @@ public class NewService extends javax.swing.JFrame {
             tbl.addCell("Precio por unidad");
             tbl.addCell("Cantidad");
             tbl.addCell("Sub Total");
+
             for (int i = 0; i < cartTable.getRowCount(); i++) {
                 tbl.addCell(cartTable.getValueAt(i, 0).toString());
                 tbl.addCell(cartTable.getValueAt(i, 1).toString());
@@ -158,25 +184,35 @@ public class NewService extends javax.swing.JFrame {
                 tbl.addCell(cartTable.getValueAt(i, 5).toString());
             }
             doc.add(tbl);
+
+            // Detalle de pago
             Paragraph paymentTitle = new Paragraph("-".repeat(40) + "Detalle De Pago" + "-".repeat(40) + "\n");
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
+
             Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
             Paragraph total = new Paragraph("\nPrecio Total Pagado: " + finalTotalPrice, boldFont);
             doc.add(total);
+
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
                     + "\nTransferencia: " + transferPaidInt);
             doc.add(paymentDetails);
+
             doc.add(hyphenLine);
+
+            // Mensaje de agradecimiento
             Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
             doc.add(thanksMsg);
+
             // Abrir PDF
             OpenPdf.openById(String.valueOf(billId));
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            doc.close();
         }
-        doc.close();
     }
 
     public String getUniqueId(String prefix) {
@@ -232,6 +268,7 @@ public class NewService extends javax.swing.JFrame {
         txtTransferPaid = new javax.swing.JTextField();
         txtDescription = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -240,14 +277,18 @@ public class NewService extends javax.swing.JFrame {
                 formComponentShown(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nuevo Servicio");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(532, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 62, 1366, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Buscar producto por ID o descripción");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 107, -1, -1));
 
         txtSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -260,6 +301,7 @@ public class NewService extends javax.swing.JFrame {
                 txtSearchKeyReleased(evt);
             }
         });
+        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 131, 370, -1));
 
         productsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         productsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -289,23 +331,30 @@ public class NewService extends javax.swing.JFrame {
             productsTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 172, 370, -1));
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ID del Producto");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 107, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Descripción");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 166, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marca");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 225, -1, -1));
 
         txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 246, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Precio por Unidad");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 107, -1, -1));
 
         txtPricePerUnit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPricePerUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -313,10 +362,12 @@ public class NewService extends javax.swing.JFrame {
                 txtPricePerUnitKeyReleased(evt);
             }
         });
+        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 128, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Número de Unidades *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 169, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNoOfUnits.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -324,12 +375,15 @@ public class NewService extends javax.swing.JFrame {
                 txtNoOfUnitsKeyReleased(evt);
             }
         });
+        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 190, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Precio Total");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 225, -1, -1));
 
         txtTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 246, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
@@ -341,6 +395,7 @@ public class NewService extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 440, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -366,33 +421,41 @@ public class NewService extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 487, 802, 233));
+
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio total:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 441, -1, -1));
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblFinalTotalPrice.setText("---");
+        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 441, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
-        jButton3.setText("Generar venta e Imprimir");
+        jButton3.setText("Finalizar servicio e Imprimir");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(137, 669, -1, -1));
 
         comboRelateVehicle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboRelateVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un vehículo" }));
+        getContentPane().add(comboRelateVehicle, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 307, 300, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Filtrar por placa");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 343, -1, -1));
 
         txtFilterPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 367, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -404,14 +467,17 @@ public class NewService extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 364, 100, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Relacionar vehículo *");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 287, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 726, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -420,8 +486,10 @@ public class NewService extends javax.swing.JFrame {
                 jLabel14MouseReleased(evt);
             }
         });
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 128, 300, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(0, 0, 0));
@@ -433,238 +501,62 @@ public class NewService extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 398, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Forma de pago *");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 287, -1, -1));
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Crédito" }));
+        getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 307, 300, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Medio de pago *");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 343, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Efectivo ($)");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 381, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Transferencia ($)");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 411, -1, -1));
 
         txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCashPaidKeyReleased(evt);
             }
         });
+        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 376, 200, -1));
 
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTransferPaidKeyReleased(evt);
             }
         });
+        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 406, 190, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 190, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveProgress.png"))); // NOI18N
         jButton4.setText("Guardar proceso");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 605, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(532, 532, 532)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel14)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addComponent(jLabel2)
-                        .addGap(183, 183, 183)
-                        .addComponent(jLabel3)
-                        .addGap(405, 405, 405)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54)
-                        .addComponent(txtUniqueId, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(202, 202, 202)
-                        .addComponent(txtPricePerUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(69, 69, 69)
-                                        .addComponent(jButton3))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(162, 162, 162)
-                                .addComponent(jButton4)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(54, 54, 54)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(433, 433, 433)
-                                        .addComponent(jLabel7))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(202, 202, 202)
-                                        .addComponent(txtNoOfUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(466, 466, 466)
-                                        .addComponent(jLabel8))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtProductBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(202, 202, 202)
-                                        .addComponent(txtTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addGap(381, 381, 381)
-                                        .addComponent(jLabel10))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(comboRelateVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(202, 202, 202)
-                                        .addComponent(comboPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addGap(429, 429, 429)
-                                        .addComponent(jLabel15))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtFilterPlate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton1))
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(196, 196, 196)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel16)
-                                                .addGap(29, 29, 29)
-                                                .addComponent(txtCashPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel17)
-                                                .addGap(7, 7, 7)
-                                                .addComponent(txtTransferPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addGap(22, 22, 22)
-                                        .addComponent(lblFinalTotalPrice)
-                                        .addGap(464, 464, 464)
-                                        .addComponent(btnAddToCart))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 802, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13)
-                                .addGap(234, 234, 234)))))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel14))
-                .addGap(9, 9, 9)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtUniqueId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPricePerUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(jLabel7)))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNoOfUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel8))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtProductBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel10))
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboRelateVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel15))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(txtFilterPlate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jButton1))
-                            .addComponent(jButton2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(5, 5, 5)
-                                        .addComponent(jLabel16))
-                                    .addComponent(txtCashPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(5, 5, 5)
-                                        .addComponent(jLabel17))
-                                    .addComponent(txtTransferPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAddToCart)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel9)
-                                .addComponent(lblFinalTotalPrice)))
-                        .addGap(14, 14, 14)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel13)))
-                .addGap(27, 27, 27))
-        );
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
+        getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -838,11 +730,11 @@ public class NewService extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // BOTÓN GENERAR VENTA E IMPRIMIR
 
-        String selectedClient = comboRelateVehicle.getSelectedItem().toString();
-        String clientID = getClientIdCard(selectedClient);
+        String selectedVehicle = comboRelateVehicle.getSelectedItem().toString();
         String paymentTerm = comboPayment.getSelectedItem().toString();
         String cashPaid = txtCashPaid.getText();
         String transferPaid = txtTransferPaid.getText();
+        serviceState = "Terminado";
 
         if (cartTable.getRowCount() == 0) {
             JOptionPane.showMessageDialog(null, "El carrito está vacío. Agrega productos antes de continuar.",
@@ -856,21 +748,27 @@ public class NewService extends javax.swing.JFrame {
             return;
         }
 
+        if ("Seleccione un vehículo".equals(selectedVehicle)) {
+            JOptionPane.showMessageDialog(null, "¡Debes relacionar un vehículo al servicio!.",
+                    "No hay vehículo relacionado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
-            cashPaidInt = Integer.parseInt(cashPaid);  // Convierte a entero
-            transferPaidInt = Integer.parseInt(transferPaid);  // Convierte a entero
+            cashPaidInt = Integer.parseInt(cashPaid);
+            transferPaidInt = Integer.parseInt(transferPaid);
 
             if (cashPaidInt + transferPaidInt != finalTotalPrice) {
                 JOptionPane.showMessageDialog(null, "La suma de efectivo y transferencia debe ser igual al total pagado.");
                 return;
             }
         } catch (NumberFormatException e) {
-            // Manejo de excepción si el texto no es un número válido
             JOptionPane.showMessageDialog(null, "Por favor ingrese un número válido.");
+            return;
         }
 
         if (finalTotalPrice != 0) {
-            billId = getUniqueId("FACT-"); //genera el código de la factura            
+            billId = getUniqueId("FACT-"); // Genera el código de la factura            
 
             try (Connection con = ConnectionProvider.getCon()) {
                 // Obtener appuser_pk
@@ -883,6 +781,20 @@ public class NewService extends javax.swing.JFrame {
                             appuserPk = rs.getInt("appuser_pk");
                         } else {
                             throw new Exception("No se encontró el usuario: " + username);
+                        }
+                    }
+                }
+
+                // Obtener client_pk relacionado con motorbike_pk
+                String clientQuery = "SELECT client_pk FROM motorbikes WHERE motorbike_pk = ?";
+                String clientID = null;
+                try (PreparedStatement psClient = con.prepareStatement(clientQuery)) {
+                    psClient.setString(1, selectedVehicle);
+                    try (ResultSet rs = psClient.executeQuery()) {
+                        if (rs.next()) {
+                            clientID = rs.getString("client_pk");
+                        } else {
+                            throw new Exception("No se encontró un cliente asociado al vehículo seleccionado.");
                         }
                     }
                 }
@@ -902,17 +814,25 @@ public class NewService extends javax.swing.JFrame {
                     psBill.setInt(8, appuserPk);
                     psBill.executeUpdate();
 
-                    // Obtener la llave primaria generada para bills
                     try (ResultSet generatedKeys = psBill.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
-                            billPk = generatedKeys.getInt(1);
+                            billPk = generatedKeys.getLong(1);
                         } else {
                             throw new Exception("Error al obtener el ID de la factura.");
                         }
                     }
                 }
 
-                // Insertar productos en SoldProducts y asociarlos con la factura en products_bills
+                // Insertar en la tabla services
+                String insertServiceQuery = "INSERT INTO services (motorbike_pk, state, totalPrice) VALUES (?, ?, ?)";
+                try (PreparedStatement psService = con.prepareStatement(insertServiceQuery)) {
+                    psService.setString(1, selectedVehicle);
+                    psService.setString(2, serviceState);
+                    psService.setLong(3, finalTotalPrice);
+                    psService.executeUpdate();
+                }
+
+                // Insertar productos en SoldProducts y asociarlos con la factura
                 String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
                 String insertProductsBillsQuery = "INSERT INTO products_bills (bill_pk, soldProduct_pk) VALUES (?, ?)";
 
@@ -954,7 +874,7 @@ public class NewService extends javax.swing.JFrame {
                         }
                     }
 
-                    // Insertar en products_bills
+                    // Asociar el producto vendido con la factura en products_bills
                     try (PreparedStatement psProductsBills = con.prepareStatement(insertProductsBillsQuery)) {
                         psProductsBills.setLong(1, billPk);
                         psProductsBills.setLong(2, soldProductPk);
@@ -962,13 +882,12 @@ public class NewService extends javax.swing.JFrame {
                     }
                 }
 
-                updateProductQuantity(); //actualizar la cantidad del producto en inventario
+                updateProductQuantity(); // Actualizar la cantidad del producto en inventario
+                generatePDF(clientID); // Crear PDF de la venta
                 JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            generatePDF(); // Crear PDF de la venta
             dispose();
             new NewService(username).setVisible(true);
         } else {
@@ -1046,7 +965,7 @@ public class NewService extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // botón para agregar vehículo
-        AddVehicle addVehicleWindow = new AddVehicle();
+        ManageClients addVehicleWindow = new ManageClients();
         addVehicleWindow.setVisible(true);
 
         // Agregar un WindowListener para detectar cuándo se cierra la ventana
@@ -1057,6 +976,131 @@ public class NewService extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // BOTÓN DE GUARDAR PROCESO
+
+        String selectedVehicle = comboRelateVehicle.getSelectedItem().toString().trim();
+        serviceState = "En proceso";
+
+        if ("Seleccione un vehículo".equals(selectedVehicle)) {
+            JOptionPane.showMessageDialog(null, "¡Debes relacionar un vehículo al servicio!.",
+                    "No hay vehículo relacionado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (cartTable.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "El carrito está vacío. Agrega productos antes de continuar.",
+                    "Carrito vacío", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        try {
+            String totalPrice = lblFinalTotalPrice.getText();
+            totalPriceLong = Long.parseLong(totalPrice);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El precio total debe ser un número válido.", "Error de formato",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (finalTotalPrice != 0) {
+            try (Connection con = ConnectionProvider.getCon()) {
+                // Verificar si existe un servicio con el mismo vehículo y estado "En proceso"
+                String checkQuery = "SELECT COUNT(*) AS count FROM services WHERE motorbike_pk = ? AND state = ?";
+                try (PreparedStatement psCheck = con.prepareStatement(checkQuery)) {
+                    psCheck.setString(1, selectedVehicle); // motorbike_pk
+                    psCheck.setString(2, serviceState); // Estado "En proceso"
+                    try (ResultSet rs = psCheck.executeQuery()) {
+                        if (rs.next() && rs.getInt("count") > 0) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Ya existe un servicio en proceso para este vehículo.",
+                                    "Servicio duplicado",
+                                    JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+                    }
+                }
+
+                // Insertar en services
+                String insertServiceQuery = "INSERT INTO services (motorbike_pk, state, totalPrice) VALUES (?, ?, ?)";
+                long servicePk;
+                try (PreparedStatement psService = con.prepareStatement(insertServiceQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                    psService.setString(1, selectedVehicle); // motorbike_pk
+                    psService.setString(2, serviceState); // Estado del servicio
+                    psService.setLong(3, totalPriceLong); // Precio actual del servicio
+                    psService.executeUpdate();
+
+                    try (ResultSet generatedKeys = psService.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            servicePk = generatedKeys.getLong(1);
+                        } else {
+                            throw new Exception("Error al obtener el ID del servicio.");
+                        }
+                    }
+                }
+
+                // Insertar productos en SoldProducts y asociarlos con el servicio en soldProducts_services
+                String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
+                String insertSoldProductsServicesQuery = "INSERT INTO soldProducts_services (service_pk, soldProduct_pk) VALUES (?, ?)";
+
+                DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    String uniqueId = dtm.getValueAt(i, 0).toString(); // uniqueId del producto
+                    int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
+                    long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
+
+                    // Obtener product_pk a partir del uniqueId
+                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
+                    long productPk = -1;
+                    try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
+                        psProduct.setString(1, uniqueId);
+                        try (ResultSet rs = psProduct.executeQuery()) {
+                            if (rs.next()) {
+                                productPk = rs.getLong("product_pk");
+                            } else {
+                                throw new Exception("No se encontró el producto con ID único: " + uniqueId);
+                            }
+                        }
+                    }
+
+                    // Insertar en SoldProducts
+                    long soldProductPk;
+                    try (PreparedStatement psSoldProduct = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        psSoldProduct.setInt(1, quantity);
+                        psSoldProduct.setLong(2, salePrice);
+                        psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+                        psSoldProduct.setLong(4, productPk);
+                        psSoldProduct.executeUpdate();
+
+                        try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
+                            if (generatedKeys.next()) {
+                                soldProductPk = generatedKeys.getLong(1);
+                            } else {
+                                throw new Exception("Error al obtener el ID del producto vendido.");
+                            }
+                        }
+                    }
+
+                    // Asociar service_pk con soldProduct_pk en soldProducts_services
+                    try (PreparedStatement psSoldProductsServices = con.prepareStatement(insertSoldProductsServicesQuery)) {
+                        psSoldProductsServices.setLong(1, servicePk); // service_pk
+                        psSoldProductsServices.setLong(2, soldProductPk); // soldProduct_pk
+                        psSoldProductsServices.executeUpdate();
+                    }
+                }
+
+                updateProductQuantity(); // Actualizar la cantidad del producto en inventario
+                JOptionPane.showMessageDialog(null, "Servicio guardado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            dispose();
+            new NewService(username).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /* Método para cargar las placas en el jComboBox */
     private void loadVehicles() {
@@ -1069,7 +1113,7 @@ public class NewService extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String plateNumber = rs.getString("motorbike_pk");
-                comboRelateVehicle.addItem(plateNumber); 
+                comboRelateVehicle.addItem(plateNumber);
             }
 
         } catch (Exception e) {
@@ -1131,6 +1175,7 @@ public class NewService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

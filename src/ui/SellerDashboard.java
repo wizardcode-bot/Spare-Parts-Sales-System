@@ -1,11 +1,11 @@
 package ui;
 
-
+import dao.ConnectionProvider;
+import java.sql.*;
 import javax.swing.JOptionPane;
 
-
 public class SellerDashboard extends javax.swing.JFrame {
-    
+
     private String username = "";
 
     /**
@@ -14,7 +14,7 @@ public class SellerDashboard extends javax.swing.JFrame {
     public SellerDashboard() {
         initComponents();
     }
-    
+
     public SellerDashboard(String tempUsername) {
         initComponents();
         username = tempUsername;
@@ -158,8 +158,8 @@ public class SellerDashboard extends javax.swing.JFrame {
 
         jButton9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton9.setForeground(new java.awt.Color(0, 0, 0));
-        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addClients.png"))); // NOI18N
-        jButton9.setText(" Registrar Cliente");
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/manageClients.png"))); // NOI18N
+        jButton9.setText("Gestionar Clientes");
         jButton9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton9.setIconTextGap(20);
@@ -169,7 +169,7 @@ public class SellerDashboard extends javax.swing.JFrame {
                 jButton9ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 430, 360, -1));
+        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 430, 360, 108));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -191,18 +191,18 @@ public class SellerDashboard extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         //cerrar sesión
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la sesión?","Selecciona una opción",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí","No"},"Sí");
-        if(a == 0){
+        int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la sesión?", "Selecciona una opción",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+        if (a == 0) {
             new Login().setVisible(true);
             dispose();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la aplicación?","Selecciona una opción",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí","No"},"Sí");
-        if(a == 0){
+        int a = JOptionPane.showOptionDialog(null, "¿Quieres cerrar la aplicación?", "Selecciona una opción",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+        if (a == 0) {
             System.exit(0);
         }
     }//GEN-LAST:event_jButton8ActionPerformed
@@ -224,7 +224,7 @@ public class SellerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        new AddClient().setVisible(true);
+        new ManageClients().setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -232,7 +232,36 @@ public class SellerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // botón para volver al panel de admin
+        // Validar rol antes de abrir el panel de administrador
+        String userRole = "";
+        String roleQuery = "SELECT userRole FROM appusers WHERE username = ?";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(roleQuery)) {
+
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    userRole = rs.getString("userRole");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró información para el usuario actual.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar el rol del usuario: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar el rol
+        if (!"Administrador".equalsIgnoreCase(userRole)) {
+            JOptionPane.showMessageDialog(null, "No tienes permiso para acceder al panel de administración.",
+                    "Permiso denegado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Abrir el panel de administrador si el rol es válido
         new AdminDashboard(username).setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed

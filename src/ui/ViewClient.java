@@ -1,6 +1,5 @@
 package ui;
 
-
 import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -9,11 +8,18 @@ import javax.swing.table.TableModel;
 
 public class ViewClient extends javax.swing.JFrame {
 
+    private String username = null;
+
     /**
      * Creates new form ViewClient
      */
     public ViewClient() {
         initComponents();
+    }
+
+    public ViewClient(String tempUsername) {
+        initComponents();
+        username = tempUsername;
         setSize(850, 500);
         setLocationRelativeTo(null);
     }
@@ -31,8 +37,7 @@ public class ViewClient extends javax.swing.JFrame {
                     rs.getString("name"),
                     rs.getString("mobileNumber"),
                     rs.getString("address"),
-                    rs.getString("email"),
-                });
+                    rs.getString("email"),});
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -143,11 +148,41 @@ public class ViewClient extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // eliminar cliente
+        // Eliminar cliente con validación de rol
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
 
+        // Consultar el rol del usuario actual
+        String userRole = "";
+        String roleQuery = "SELECT userRole FROM appusers WHERE username = ?";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(roleQuery)) {
+
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    userRole = rs.getString("userRole");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró información para el usuario actual.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al consultar el rol del usuario: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar el rol
+        if (!"Administrador".equalsIgnoreCase(userRole)) {
+            JOptionPane.showMessageDialog(null, "No tienes permiso para eliminar clientes.",
+                    "Permiso denegado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Confirmar y eliminar cliente
         int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar a este cliente?", "Selecciona una opción",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
@@ -160,17 +195,17 @@ public class ViewClient extends javax.swing.JFrame {
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "¡Cliente eliminado exitosamente!","Éxito", 
+                    JOptionPane.showMessageDialog(null, "¡Cliente eliminado exitosamente!", "Éxito",
                             JOptionPane.INFORMATION_MESSAGE);
                     dispose();
-                    new ViewClient().setVisible(true);
+                    new ViewClient(username).setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(null, "¡No se encontró al cliente para eliminar!", "Error", 
+                    JOptionPane.showMessageDialog(null, "¡No se encontró al cliente para eliminar!", "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error al eliminar el cliente: " + e.getMessage(), "Error", 
+                JOptionPane.showMessageDialog(null, "Error al eliminar el cliente: " + e.getMessage(), "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -200,8 +235,7 @@ public class ViewClient extends javax.swing.JFrame {
                         rs.getString("name"),
                         rs.getString("mobileNumber"),
                         rs.getString("address"),
-                        rs.getString("email"),                        
-                    });
+                        rs.getString("email"),});
                 }
             }
         } catch (Exception e) {
