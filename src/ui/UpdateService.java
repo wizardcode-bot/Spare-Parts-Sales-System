@@ -16,6 +16,10 @@ import java.io.FileOutputStream;
 import common.Validations;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class UpdateService extends javax.swing.JFrame {
 
@@ -26,6 +30,7 @@ public class UpdateService extends javax.swing.JFrame {
     private long cashPaidInt = 0;
     private long transferPaidInt = 0;
     private long totalPriceLong = 0;
+    private long servicePKLong = 0;
 
     /**
      * Creates new form SellProduct
@@ -39,6 +44,116 @@ public class UpdateService extends javax.swing.JFrame {
         username = tempUsername;
         setLocationRelativeTo(null);
         setSize(1366, 778);
+    }
+
+    private long getProductPk(Connection con, String uniqueId) throws SQLException {
+        //método para obtener la llave primaria de cada producto
+        String query = "SELECT product_pk FROM products WHERE uniqueId = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, uniqueId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("product_pk");
+                } else {
+                    throw new SQLException("No se encontró el producto con unique_id: " + uniqueId);
+                }
+            }
+        }
+    }
+
+    private boolean isProductAlreadyInService(Connection con, long servicePk, long productPk) throws SQLException {
+        //método para consultar si han sido agregados nuevos productos al carrito
+        String query = "SELECT 1 FROM soldProducts_services sps "
+                + "INNER JOIN soldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk "
+                + "WHERE sps.service_pk = ? AND sp.product_pk = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setLong(1, servicePk);
+            ps.setLong(2, productPk);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Retorna true si el producto ya está asociado
+            }
+        }
+    }
+
+    private long insertSoldProduct(Connection con, int quantity, long salePrice, long productPk) throws SQLException {
+        //método para insertar productos en la tabla soldProducts
+        String query = "INSERT INTO soldProducts (quantity, salePrice, product_pk) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, quantity);
+            ps.setLong(2, salePrice);
+            ps.setLong(3, productPk);
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getLong(1); // Devuelve la clave primaria generada.
+                } else {
+                    throw new SQLException("No se pudo obtener la clave primaria del producto vendido.");
+                }
+            }
+        }
+    }
+
+    private void associateProductWithBill(Connection con, long billPk, long soldProductPk) throws SQLException {
+        //asocia productos vendidos en cada factura
+        String query = "INSERT INTO products_bills (bill_pk, soldProduct_pk) VALUES (?, ?)";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setLong(1, billPk);
+            ps.setLong(2, soldProductPk);
+            ps.executeUpdate();
+        }
+    }
+
+    private void updateProductQuantity(Map<Long, Integer> productsToUpdateQuantity) throws SQLException {
+        //modifica el inventario según lo ingresado o descontado del carrito
+        String query = "UPDATE products SET quantity = quantity - ? WHERE product_pk = ?";
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+            for (Map.Entry<Long, Integer> entry : productsToUpdateQuantity.entrySet()) {
+                ps.setInt(1, entry.getValue()); // Cantidad a descontar
+                ps.setLong(2, entry.getKey());  // product_pk
+                ps.addBatch();
+            }
+            ps.executeBatch(); // Ejecuta todas las actualizaciones en una sola operación
+        }
+    }
+
+    private long insertBill(Connection con, String billId, long totalPrice, String paymentTerm,
+            long cashPaid, long transferPaid, String clientPk, long appuserPk) throws SQLException {
+        //insertar en tabla bills
+        String query = "INSERT INTO bills (billId, totalPaid, paymentTerm, cashPaid, transferPaid, client_pk, appuser_pk) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, billId);
+            ps.setLong(2, totalPrice);
+            ps.setString(3, paymentTerm);
+            ps.setLong(4, cashPaid);
+            ps.setLong(5, transferPaid);
+            ps.setString(6, clientPk);
+            ps.setLong(7, appuserPk);
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getLong(1); // Devuelve la clave primaria generada.
+                } else {
+                    throw new SQLException("No se pudo obtener la clave primaria de la factura.");
+                }
+            }
+        }
+    }
+
+    private void updateService(Connection con, String vehiclePlate, String serviceState, long totalPrice) throws SQLException {
+        //actualizar tabla services
+
+        String query = "UPDATE services SET motorbike_pk = ?, state = ?, totalPrice = ? WHERE service_pk = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, vehiclePlate);
+            ps.setString(2, serviceState);
+            ps.setLong(3, totalPrice);
+            ps.setLong(4, servicePKLong);
+            ps.executeUpdate();
+        }
+
     }
 
     private void productName(String nameOrUniqueId) {
@@ -72,49 +187,7 @@ public class UpdateService extends javax.swing.JFrame {
         txtTotalPrice.setText("");
     }
 
-    private void updateProductQuantity() {
-        // método para actualizar la cantidad del producto en inventario
-        DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
-        if (cartTable.getRowCount() != 0) {
-            try (Connection con = ConnectionProvider.getCon()) {
-                for (int i = 0; i < cartTable.getRowCount(); i++) {
-                    String productIdString = dtm.getValueAt(i, 0).toString().trim();
-                    int quantityToReduce = Integer.parseInt(dtm.getValueAt(i, 4).toString());
-
-                    String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?";
-                    try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
-                        ps.setInt(1, quantityToReduce);
-                        ps.setString(2, productIdString);
-                        ps.executeUpdate();
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-    }
-
-    //POR ACTUALIZAR
-    private String getClientIdCard(String selectedClient) {
-        String idCard = null; // Para almacenar el idCard consultado
-        String query = "SELECT client_pk FROM clients WHERE name = ?";
-
-        try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
-            // Configura el parámetro de la consulta
-            pst.setString(1, selectedClient);
-
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    idCard = rs.getString("client_pk");
-                }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al consultar el ID del cliente: " + e.getMessage());
-        }
-        return idCard;
-    }
-
-    private void generatePDF(String clientID) {
+    private void generatePDF(String clientID, Long lblTotalPrice, Long cashPaidInt, Long transferPaidInt) {
         // Crear factura
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
         String client_pk = clientID;
@@ -191,7 +264,7 @@ public class UpdateService extends javax.swing.JFrame {
             doc.add(paymentTitle);
 
             Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Paragraph total = new Paragraph("\nPrecio Total Pagado: " + finalTotalPrice, boldFont);
+            Paragraph total = new Paragraph("\nPrecio Total Pagado: " + lblTotalPrice, boldFont);
             doc.add(total);
 
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
@@ -267,6 +340,7 @@ public class UpdateService extends javax.swing.JFrame {
         btnSearchService = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         txtPlate = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -276,14 +350,18 @@ public class UpdateService extends javax.swing.JFrame {
                 formComponentShown(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Actualizar Servicio");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(526, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 62, 1366, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Buscar producto por ID o descripción");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 106, -1, -1));
 
         txtSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -296,6 +374,7 @@ public class UpdateService extends javax.swing.JFrame {
                 txtSearchKeyReleased(evt);
             }
         });
+        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 134, 370, -1));
 
         productsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         productsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -325,23 +404,30 @@ public class UpdateService extends javax.swing.JFrame {
             productsTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 167, 370, -1));
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ID del Producto");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 231, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Descripción");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 295, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marca");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 350, -1, -1));
 
         txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 371, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Precio por Unidad");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 106, -1, -1));
 
         txtPricePerUnit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPricePerUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -349,10 +435,12 @@ public class UpdateService extends javax.swing.JFrame {
                 txtPricePerUnitKeyReleased(evt);
             }
         });
+        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 127, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Número de Unidades *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 175, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNoOfUnits.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -360,12 +448,15 @@ public class UpdateService extends javax.swing.JFrame {
                 txtNoOfUnitsKeyReleased(evt);
             }
         });
+        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 196, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Precio Total");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 231, -1, -1));
 
         txtTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
@@ -377,6 +468,7 @@ public class UpdateService extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 447, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -395,6 +487,7 @@ public class UpdateService extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        cartTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cartTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cartTableMouseClicked(evt);
@@ -402,13 +495,17 @@ public class UpdateService extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 494, 802, 233));
+
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio total:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 448, -1, -1));
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblFinalTotalPrice.setText("---");
+        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 448, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -420,10 +517,12 @@ public class UpdateService extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(137, 664, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 733, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -432,41 +531,53 @@ public class UpdateService extends javax.swing.JFrame {
                 jLabel14MouseReleased(evt);
             }
         });
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 252, 300, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Forma de pago *");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 293, -1, -1));
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Crédito" }));
+        getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 314, 300, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Medio de pago *");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 350, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Efectivo ($)");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 388, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Transferencia ($)");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 418, -1, -1));
 
+        txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCashPaidKeyReleased(evt);
             }
         });
+        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 383, 200, -1));
 
+        txtTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTransferPaidKeyReleased(evt);
             }
         });
+        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 413, 190, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 316, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -478,12 +589,15 @@ public class UpdateService extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 600, -1, -1));
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Ingrese el ID del servicio a actualizar");
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 106, -1, -1));
 
         txtServiceID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtServiceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 217, -1));
 
         btnSearchService.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSearchService.setForeground(new java.awt.Color(0, 0, 0));
@@ -497,206 +611,18 @@ public class UpdateService extends javax.swing.JFrame {
                 btnSearchServiceActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSearchService, new org.netbeans.lib.awtextra.AbsoluteConstraints(715, 129, 102, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Placa del vehículo");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 175, -1, -1));
 
         txtPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 196, 222, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(477, 477, 477)
-                        .addComponent(jLabel14))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(94, 94, 94)
-                                        .addComponent(jButton4))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(69, 69, 69)
-                                        .addComponent(jButton3))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(81, 81, 81)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(54, 54, 54)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(22, 22, 22)
-                                .addComponent(lblFinalTotalPrice)
-                                .addGap(464, 464, 464)
-                                .addComponent(btnAddToCart))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 802, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(296, 296, 296)
-                                .addComponent(jLabel13))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(txtUniqueId, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtProductBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel11)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtPlate, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtServiceID, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnSearchService, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(177, 177, 177)
-                                        .addComponent(jLabel8))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(177, 177, 177)
-                                        .addComponent(txtTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(177, 177, 177)
-                                        .addComponent(jLabel10))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(177, 177, 177)
-                                        .addComponent(comboPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(277, 277, 277)
-                                        .addComponent(jLabel15))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(177, 177, 177)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel16)
-                                                .addGap(29, 29, 29)
-                                                .addComponent(txtCashPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel17)
-                                                .addGap(7, 7, 7)
-                                                .addComponent(txtTransferPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(177, 177, 177)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtNoOfUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel7)
-                                            .addComponent(txtPricePerUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel6))))))
-                        .addGap(0, 66, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel14))
-                .addGap(9, 9, 9)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jLabel2)
-                        .addGap(6, 6, 6))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtServiceID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearchService)))
-                    .addComponent(txtPricePerUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButton4)
-                        .addGap(11, 11, 11)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtNoOfUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPlate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(6, 6, 6)
-                                .addComponent(txtTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(6, 6, 6)
-                                .addComponent(txtUniqueId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(6, 6, 6)
-                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(5, 5, 5)
-                                        .addComponent(jLabel16))
-                                    .addComponent(txtCashPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtProductBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel17))
-                            .addComponent(txtTransferPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAddToCart)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(lblFinalTotalPrice))))
-                        .addGap(14, 14, 14)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel13))))
-        );
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -709,6 +635,9 @@ public class UpdateService extends javax.swing.JFrame {
         txtPricePerUnit.setEditable(false);
         txtTotalPrice.setEditable(false);
         txtPlate.setEditable(false);
+        txtPlate.setEditable(false);
+        btnSearchService.setEnabled(true);
+        txtServiceID.setEditable(true);
     }//GEN-LAST:event_formComponentShown
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
@@ -718,24 +647,41 @@ public class UpdateService extends javax.swing.JFrame {
 
     private void txtNoOfUnitsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoOfUnitsKeyReleased
         //calcular el precio total de acuerdo a la cantidad de unidades a vender
+
         String noOfUnits = txtNoOfUnits.getText().trim();
+        String price = txtPricePerUnit.getText().trim();
 
-        if (!Validations.isNullOrBlank(noOfUnits)) {
-            String price = txtPricePerUnit.getText().trim();
+        try {
+            if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(price)) {
+                if (!noOfUnits.matches(Validations.numberPattern)) {
+                    JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad de unidades a vender en números.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    txtNoOfUnits.setText("");
+                    txtTotalPrice.setText("");
+                    return;
+                }
 
-            if (!noOfUnits.matches(Validations.numberPattern)) {
-                JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad de unidades a vender en números.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                txtNoOfUnits.setText("");
-                return;
+                int units = Integer.parseInt(noOfUnits);
+                int unitPrice = Integer.parseInt(price);
+
+                if (units <= 0) {
+                    JOptionPane.showMessageDialog(null, "La cantidad de unidades debe ser mayor a 0.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    txtNoOfUnits.setText("");
+                    txtTotalPrice.setText("");
+                    return;
+                }
+
+                int totalPrice = units * unitPrice;
+                txtTotalPrice.setText(String.valueOf(totalPrice));
+            } else {
+                txtTotalPrice.setText("");
             }
-
-            int totalPrice = Integer.parseInt(noOfUnits) * Integer.parseInt(price);
-            txtTotalPrice.setText(String.valueOf(totalPrice));
-        } else {
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error al calcular el precio total. Verifica los valores ingresados.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             txtTotalPrice.setText("");
         }
-
     }//GEN-LAST:event_txtNoOfUnitsKeyReleased
 
     private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
@@ -774,6 +720,15 @@ public class UpdateService extends javax.swing.JFrame {
 
     private void btnAddToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToCartActionPerformed
         // Añadir al carrito
+        // Sincronizar finalTotalPrice con lblFinalTotalPrice
+        try {
+            finalTotalPrice = Integer.parseInt(lblFinalTotalPrice.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error al sincronizar el precio total. Verifica los valores existentes.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         txtPricePerUnit.setEditable(false);
         DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
 
@@ -789,7 +744,7 @@ public class UpdateService extends javax.swing.JFrame {
                 return;
             }
 
-            int nUnits = Integer.parseInt(noOfUnits); //se convierte el string #units a entero para la comparación
+            int nUnits = Integer.parseInt(noOfUnits);
             if (nUnits <= 0) {
                 JOptionPane.showMessageDialog(null, "El número de unidades a vender debe ser mayor a cero", "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -811,21 +766,20 @@ public class UpdateService extends javax.swing.JFrame {
                 String query = "SELECT * FROM products WHERE uniqueId = ?";
                 try (
                         Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
-                    pst.setString(1, uniqueId); // Sustituir el parámetro único ID
+                    pst.setString(1, uniqueId);
                     try (ResultSet rs = pst.executeQuery()) {
                         if (rs.next()) {
                             int availableQuantity = rs.getInt("quantity");
 
-                            if (availableQuantity >= Integer.parseInt(noOfUnits)) {
+                            if (availableQuantity >= nUnits) {
                                 String description = txtDescription.getText();
                                 String productBrand = txtProductBrand.getText();
-                                //String pricePerUnit = txtPricePerUnit.getText();
                                 String totalPrice = txtTotalPrice.getText();
 
                                 dtm.addRow(new Object[]{uniqueId, description, productBrand, pricePerUnit, noOfUnits, totalPrice});
 
-                                int totalPriceInt = Integer.parseInt(totalPrice);
-                                finalTotalPrice += totalPriceInt;
+                                Long totalPriceInt = Long.parseLong(totalPrice);
+                                finalTotalPrice += totalPriceInt; // Sumar al total sincronizado
                                 lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
                                 JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
                                 clearProductFields();
@@ -856,14 +810,59 @@ public class UpdateService extends javax.swing.JFrame {
     private void cartTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartTableMouseClicked
         // eliminar producto del carrito
         int index = cartTable.getSelectedRow();
-        int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
-        if (a == 0) {
-            TableModel model = cartTable.getModel();
-            String total = model.getValueAt(index, 5).toString();
-            finalTotalPrice = finalTotalPrice - Integer.parseInt(total);
-            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
-            ((DefaultTableModel) cartTable.getModel()).removeRow(index);
+        if (index >= 0) {
+            int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+            if (a == 0) {
+                TableModel model = cartTable.getModel();
+
+                // Sincronizar finalTotalPrice con lblFinalTotalPrice
+                try {
+                    finalTotalPrice = Integer.parseInt(lblFinalTotalPrice.getText().trim());
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Error al sincronizar el precio total. Verifica los valores existentes.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try (Connection con = ConnectionProvider.getCon()) {
+                    // Obtener la cantidad a devolver y el uniqueId del producto seleccionado
+                    int quantityToReturn = Integer.parseInt(model.getValueAt(index, 4).toString());
+                    String uniqueId = model.getValueAt(index, 0).toString();
+
+                    // Actualizar la cantidad en inventario (tabla "products")
+                    String updateQuery = "UPDATE products SET quantity = quantity + ? WHERE uniqueId = ?";
+                    try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
+                        ps.setInt(1, quantityToReturn);
+                        ps.setString(2, uniqueId);
+                        ps.executeUpdate();
+                    }
+
+                    // Actualizar el precio total
+                    String total = model.getValueAt(index, 5).toString();
+                    int totalPriceToRemove = Integer.parseInt(total);
+
+                    if (finalTotalPrice >= totalPriceToRemove) {
+                        finalTotalPrice -= totalPriceToRemove;
+                        lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+
+                        // Eliminar el producto del carrito
+                        ((DefaultTableModel) cartTable.getModel()).removeRow(index);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error: El precio total no puede ser negativo.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Error al procesar el precio del producto.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar la cantidad del producto en inventario: " + e.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, selecciona un producto para eliminar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cartTableMouseClicked
 
@@ -874,7 +873,14 @@ public class UpdateService extends javax.swing.JFrame {
         String paymentTerm = comboPayment.getSelectedItem().toString();
         String cashPaid = txtCashPaid.getText();
         String transferPaid = txtTransferPaid.getText();
+        String servicePK = txtServiceID.getText().trim();
         serviceState = "Terminado";
+
+        if (Validations.isNullOrBlank(servicePK)) {
+            JOptionPane.showMessageDialog(null, "Debes ingresar el ID del servicio que quieres actualizar",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         if (cartTable.getRowCount() == 0) {
             JOptionPane.showMessageDialog(null, "El carrito está vacío. Agrega productos antes de continuar.",
@@ -895,144 +901,115 @@ public class UpdateService extends javax.swing.JFrame {
         }
 
         try {
-            cashPaidInt = Integer.parseInt(cashPaid);
-            transferPaidInt = Integer.parseInt(transferPaid);
+            // Obtener el total final de lblFinalTotalPrice
+            long lblTotalPrice;
+            try {
+                lblTotalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El precio total debe ser un número válido.",
+                        "Error de formato", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-            if (cashPaidInt + transferPaidInt != finalTotalPrice) {
+            try {
+                servicePKLong = Long.parseLong(servicePK);
+            } catch (NumberFormatException e) {
+                // Manejo de la excepción en caso de que el texto no sea un número válido
+                JOptionPane.showMessageDialog(null, "El ID del servicio debe ser un número válido.",
+                        "Error de conversión", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Validar medios de pago
+            long cashPaidInt = Long.parseLong(cashPaid);
+            long transferPaidInt = Long.parseLong(transferPaid);
+
+            if (cashPaidInt + transferPaidInt != lblTotalPrice) {
                 JOptionPane.showMessageDialog(null, "La suma de efectivo y transferencia debe ser igual al total pagado.");
                 return;
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor ingrese un número válido.");
-            return;
-        }
 
-        if (finalTotalPrice != 0) {
-            billId = getUniqueId("FACT-"); // Genera el código de la factura            
+            String clientID = "";
+            long appuserPk = -1;
 
             try (Connection con = ConnectionProvider.getCon()) {
-                // Obtener appuser_pk
-                String userQuery = "SELECT appuser_pk FROM appusers WHERE username = ?";
-                int appuserPk = -1;
-                try (PreparedStatement psUser = con.prepareStatement(userQuery)) {
-                    psUser.setString(1, username);
-                    try (ResultSet rs = psUser.executeQuery()) {
-                        if (rs.next()) {
-                            appuserPk = rs.getInt("appuser_pk");
-                        } else {
-                            throw new Exception("No se encontró el usuario: " + username);
-                        }
-                    }
-                }
-
-                // Obtener client_pk relacionado con motorbike_pk
-                String clientQuery = "SELECT client_pk FROM motorbikes WHERE motorbike_pk = ?";
-                String clientID = null;
-                try (PreparedStatement psClient = con.prepareStatement(clientQuery)) {
-                    psClient.setString(1, selectedVehicle);
-                    try (ResultSet rs = psClient.executeQuery()) {
+                // Obtener client_pk basado en la placa del vehículo
+                String getClientIdQuery = "SELECT client_pk FROM motorbikes WHERE motorbike_pk = ?";
+                try (PreparedStatement ps = con.prepareStatement(getClientIdQuery)) {
+                    ps.setString(1, selectedVehicle);
+                    try (ResultSet rs = ps.executeQuery()) {
                         if (rs.next()) {
                             clientID = rs.getString("client_pk");
                         } else {
-                            throw new Exception("No se encontró un cliente asociado al vehículo seleccionado.");
+                            JOptionPane.showMessageDialog(null, "No se encontró un cliente relacionado con el vehículo seleccionado.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
                         }
                     }
                 }
+
+                // Obtener appuser_pk basado en el usuario activo
+                String getAppUserIdQuery = "SELECT appuser_pk FROM appusers WHERE username = ?";
+                try (PreparedStatement ps = con.prepareStatement(getAppUserIdQuery)) {
+                    ps.setString(1, username);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            appuserPk = rs.getLong("appuser_pk");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No se encontró un usuario activo.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+                }
+
+                billId = getUniqueId("FACT-");
 
                 // Insertar en la tabla bills
-                String insertBillQuery = "INSERT INTO bills (billId, billDate, totalPaid, paymentTerm, cashPaid, transferPaid, client_pk, appuser_pk) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                long billPk;
-                try (PreparedStatement psBill = con.prepareStatement(insertBillQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                    psBill.setString(1, billId);
-                    psBill.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-                    psBill.setLong(3, finalTotalPrice);
-                    psBill.setString(4, paymentTerm);
-                    psBill.setLong(5, cashPaidInt);
-                    psBill.setLong(6, transferPaidInt);
-                    psBill.setString(7, clientID);
-                    psBill.setInt(8, appuserPk);
-                    psBill.executeUpdate();
+                long billPk = insertBill(con, billId, lblTotalPrice, paymentTerm, cashPaidInt, transferPaidInt, clientID, appuserPk);
 
-                    try (ResultSet generatedKeys = psBill.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            billPk = generatedKeys.getLong(1);
-                        } else {
-                            throw new Exception("Error al obtener el ID de la factura.");
-                        }
-                    }
-                }
+                // Actualizar la tabla services
+                updateService(con, selectedVehicle, serviceState, lblTotalPrice);
 
-                // Insertar en la tabla services
-                String insertServiceQuery = "INSERT INTO services (motorbike_pk, state, totalPrice) VALUES (?, ?, ?)";
-                try (PreparedStatement psService = con.prepareStatement(insertServiceQuery)) {
-                    psService.setString(1, selectedVehicle);
-                    psService.setString(2, serviceState);
-                    psService.setLong(3, finalTotalPrice);
-                    psService.executeUpdate();
-                }
-
-                // Insertar productos en SoldProducts y asociarlos con la factura
-                String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
-                String insertProductsBillsQuery = "INSERT INTO products_bills (bill_pk, soldProduct_pk) VALUES (?, ?)";
-
+                // Procesar productos en el carrito
+                Map<Long, Integer> productsToUpdateQuantity = new HashMap<>();
                 DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+
                 for (int i = 0; i < dtm.getRowCount(); i++) {
-                    String uniqueId = dtm.getValueAt(i, 0).toString(); // uniqueId del producto
+                    String uniqueId = dtm.getValueAt(i, 0).toString();
                     int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
-                    // Obtener product_pk a partir del uniqueId
-                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
-                    long productPk = -1;
-                    try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
-                        psProduct.setString(1, uniqueId);
-                        try (ResultSet rs = psProduct.executeQuery()) {
-                            if (rs.next()) {
-                                productPk = rs.getLong("product_pk");
-                            } else {
-                                throw new Exception("No se encontró el producto con ID único: " + uniqueId);
-                            }
-                        }
+                    long productPk = getProductPk(con, uniqueId);
+
+                    // Verificar si el producto ya está asociado al servicio
+                    if (isProductAlreadyInService(con, servicePKLong, productPk)) {
+                        continue; // No realizar acciones adicionales si ya está asociado
                     }
 
-                    // Insertar en SoldProducts
-                    long soldProductPk;
-                    try (PreparedStatement psSoldProduct = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        psSoldProduct.setInt(1, quantity);
-                        psSoldProduct.setLong(2, salePrice);
-                        psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psSoldProduct.setLong(4, productPk);
-                        psSoldProduct.executeUpdate();
+                    long soldProductPk = insertSoldProduct(con, quantity, salePrice, productPk);
 
-                        try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
-                            if (generatedKeys.next()) {
-                                soldProductPk = generatedKeys.getLong(1);
-                            } else {
-                                throw new Exception("Error al obtener el ID del producto vendido.");
-                            }
-                        }
-                    }
+                    associateProductWithBill(con, billPk, soldProductPk);
 
-                    // Asociar el producto vendido con la factura en products_bills
-                    try (PreparedStatement psProductsBills = con.prepareStatement(insertProductsBillsQuery)) {
-                        psProductsBills.setLong(1, billPk);
-                        psProductsBills.setLong(2, soldProductPk);
-                        psProductsBills.executeUpdate();
-                    }
+                    productsToUpdateQuantity.put(productPk, quantity);
                 }
 
-                updateProductQuantity(); // Actualizar la cantidad del producto en inventario
-                generatePDF(clientID); // Crear PDF de la venta
+                // Actualizar inventario solo para los productos nuevos
+                updateProductQuantity(productsToUpdateQuantity);
+
+                // Generar PDF de la venta
+                generatePDF(clientID, lblTotalPrice, cashPaidInt, cashPaidInt);
+
                 JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+
             dispose();
             new UpdateService(username).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados",
-                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor ingrese un número válido.");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -1077,186 +1054,244 @@ public class UpdateService extends javax.swing.JFrame {
         // BOTÓN DE GUARDAR PROCESO
 
         String selectedVehicle = txtPlate.getText().trim();
+        String serviceId = txtServiceID.getText().trim();
         serviceState = "En proceso";
 
-        if ("Seleccione un vehículo".equals(selectedVehicle)) {
-            JOptionPane.showMessageDialog(null, "¡Debes relacionar un vehículo al servicio!.",
-                    "No hay vehículo relacionado", JOptionPane.WARNING_MESSAGE);
+        if (serviceId.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El ID del servicio no puede estar vacío.",
+                    "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         if (cartTable.getRowCount() == 0) {
             JOptionPane.showMessageDialog(null, "El carrito está vacío. Agrega productos antes de continuar.",
                     "Carrito vacío", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         try {
-            String totalPrice = lblFinalTotalPrice.getText();
-            totalPriceLong = Long.parseLong(totalPrice);
+            totalPriceLong = Long.parseLong(lblFinalTotalPrice.getText().trim());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El precio total debe ser un número válido.", "Error de formato",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El precio total debe ser un número válido.",
+                    "Error de formato", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (finalTotalPrice != 0) {
-            try (Connection con = ConnectionProvider.getCon()) {
-                // Verificar si existe un servicio con el mismo vehículo y estado "En proceso"
-                String checkQuery = "SELECT COUNT(*) AS count FROM services WHERE motorbike_pk = ? AND state = ?";
-                try (PreparedStatement psCheck = con.prepareStatement(checkQuery)) {
-                    psCheck.setString(1, selectedVehicle); // motorbike_pk
-                    psCheck.setString(2, serviceState); // Estado "En proceso"
-                    try (ResultSet rs = psCheck.executeQuery()) {
-                        if (rs.next() && rs.getInt("count") > 0) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Ya existe un servicio en proceso para este vehículo.",
-                                    "Servicio duplicado",
-                                    JOptionPane.WARNING_MESSAGE);
-                            return;
-                        }
-                    }
-                }
-
-                // Insertar en services
-                String insertServiceQuery = "INSERT INTO services (motorbike_pk, state, totalPrice) VALUES (?, ?, ?)";
-                long servicePk;
-                try (PreparedStatement psService = con.prepareStatement(insertServiceQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                    psService.setString(1, selectedVehicle); // motorbike_pk
-                    psService.setString(2, serviceState); // Estado del servicio
-                    psService.setLong(3, totalPriceLong); // Precio actual del servicio
-                    psService.executeUpdate();
-
-                    try (ResultSet generatedKeys = psService.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            servicePk = generatedKeys.getLong(1);
-                        } else {
-                            throw new Exception("Error al obtener el ID del servicio.");
-                        }
-                    }
-                }
-
-                // Insertar productos en SoldProducts y asociarlos con el servicio en soldProducts_services
-                String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
-                String insertSoldProductsServicesQuery = "INSERT INTO soldProducts_services (service_pk, soldProduct_pk) VALUES (?, ?)";
-
-                DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
-                for (int i = 0; i < dtm.getRowCount(); i++) {
-                    String uniqueId = dtm.getValueAt(i, 0).toString(); // uniqueId del producto
-                    int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
-                    long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
-
-                    // Obtener product_pk a partir del uniqueId
-                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
-                    long productPk = -1;
-                    try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
-                        psProduct.setString(1, uniqueId);
-                        try (ResultSet rs = psProduct.executeQuery()) {
-                            if (rs.next()) {
-                                productPk = rs.getLong("product_pk");
-                            } else {
-                                throw new Exception("No se encontró el producto con ID único: " + uniqueId);
-                            }
-                        }
-                    }
-
-                    // Insertar en SoldProducts
-                    long soldProductPk;
-                    try (PreparedStatement psSoldProduct = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        psSoldProduct.setInt(1, quantity);
-                        psSoldProduct.setLong(2, salePrice);
-                        psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psSoldProduct.setLong(4, productPk);
-                        psSoldProduct.executeUpdate();
-
-                        try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
-                            if (generatedKeys.next()) {
-                                soldProductPk = generatedKeys.getLong(1);
-                            } else {
-                                throw new Exception("Error al obtener el ID del producto vendido.");
-                            }
-                        }
-                    }
-
-                    // Asociar service_pk con soldProduct_pk en soldProducts_services
-                    try (PreparedStatement psSoldProductsServices = con.prepareStatement(insertSoldProductsServicesQuery)) {
-                        psSoldProductsServices.setLong(1, servicePk); // service_pk
-                        psSoldProductsServices.setLong(2, soldProductPk); // soldProduct_pk
-                        psSoldProductsServices.executeUpdate();
-                    }
-                }
-
-                updateProductQuantity(); // Actualizar la cantidad del producto en inventario
-                JOptionPane.showMessageDialog(null, "Servicio guardado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection con = ConnectionProvider.getCon()) {
+            // Actualizar datos del servicio en la tabla "services"
+            String updateServiceQuery = "UPDATE services SET motorbike_pk = ?, state = ?, totalPrice = ? WHERE service_pk = ?";
+            try (PreparedStatement psService = con.prepareStatement(updateServiceQuery)) {
+                psService.setString(1, selectedVehicle);
+                psService.setString(2, serviceState);
+                psService.setLong(3, totalPriceLong);
+                psService.setLong(4, Long.parseLong(serviceId));
+                psService.executeUpdate();
             }
-            dispose();
-            new UpdateService(username).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor agrega algún producto al carrito.", "No hay productos seleccionados",
-                    JOptionPane.INFORMATION_MESSAGE);
+
+            // Obtener productos actuales del servicio desde "soldProducts_services" con un JOIN a "SoldProducts"
+            String getCurrentProductsQuery = """
+            SELECT sps.soldProduct_pk, sp.product_pk
+            FROM soldProducts_services sps
+            JOIN SoldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk
+            WHERE sps.service_pk = ?
+        """;
+            Map<Long, Long> currentProducts = new HashMap<>();
+            try (PreparedStatement psGetProducts = con.prepareStatement(getCurrentProductsQuery)) {
+                psGetProducts.setLong(1, Long.parseLong(serviceId));
+                try (ResultSet rs = psGetProducts.executeQuery()) {
+                    while (rs.next()) {
+                        currentProducts.put(rs.getLong("soldProduct_pk"), rs.getLong("product_pk"));
+                    }
+                }
+            }
+
+            // Preparar consultas para actualizar/incluir/eliminar productos
+            String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
+            String updateSoldProductQuery = "UPDATE SoldProducts SET quantity = ?, salePrice = ? WHERE soldProduct_pk = ?";
+            String deleteSoldProductQuery = "DELETE FROM SoldProducts WHERE soldProduct_pk = ?";
+            String insertSoldProductsServicesQuery = "INSERT INTO soldProducts_services (service_pk, soldProduct_pk) VALUES (?, ?)";
+            String deleteSoldProductsServicesQuery = "DELETE FROM soldProducts_services WHERE soldProduct_pk = ?";
+
+            // Verificar productos en el carrito
+            DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+            Set<Long> processedSoldProducts = new HashSet<>();
+            Map<Long, Integer> productsToUpdateQuantity = new HashMap<>();
+
+            for (int i = 0; i < dtm.getRowCount(); i++) {
+                String uniqueId = dtm.getValueAt(i, 0).toString();
+                int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
+                long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
+
+                // Obtener product_pk a partir del uniqueId
+                String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
+                long productPk = -1;
+                try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
+                    psProduct.setString(1, uniqueId);
+                    try (ResultSet rs = psProduct.executeQuery()) {
+                        if (rs.next()) {
+                            productPk = rs.getLong("product_pk");
+                        }
+                    }
+                }
+
+                // Verificar si el producto ya está en "soldProducts_services"
+                Long existingSoldProductPk = null;
+                for (Map.Entry<Long, Long> entry : currentProducts.entrySet()) {
+                    if (entry.getValue().equals(productPk)) {
+                        existingSoldProductPk = entry.getKey();
+                        break;
+                    }
+                }
+
+                if (existingSoldProductPk != null) {
+                    // Actualizar producto en "SoldProducts"
+                    try (PreparedStatement psUpdate = con.prepareStatement(updateSoldProductQuery)) {
+                        psUpdate.setInt(1, quantity);
+                        psUpdate.setLong(2, salePrice);
+                        psUpdate.setLong(3, existingSoldProductPk);
+                        psUpdate.executeUpdate();
+                    }
+                    processedSoldProducts.add(existingSoldProductPk);
+                } else {
+                    // Insertar producto nuevo en "SoldProducts" y asociarlo
+                    long newSoldProductPk;
+                    try (PreparedStatement psInsert = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        psInsert.setInt(1, quantity);
+                        psInsert.setLong(2, salePrice);
+                        psInsert.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+                        psInsert.setLong(4, productPk);
+                        psInsert.executeUpdate();
+                        try (ResultSet generatedKeys = psInsert.getGeneratedKeys()) {
+                            if (generatedKeys.next()) {
+                                newSoldProductPk = generatedKeys.getLong(1);
+                            } else {
+                                throw new SQLException("No se pudo obtener el ID del producto vendido.");
+                            }
+                        }
+                    }
+
+                    try (PreparedStatement psAssociate = con.prepareStatement(insertSoldProductsServicesQuery)) {
+                        psAssociate.setLong(1, Long.parseLong(serviceId));
+                        psAssociate.setLong(2, newSoldProductPk);
+                        psAssociate.executeUpdate();
+                    }
+
+                    // Agregar producto al mapa de actualización de inventario
+                    productsToUpdateQuantity.put(productPk, quantity);
+                }
+            }
+
+            // Eliminar productos que ya no están en el carrito
+            for (Long soldProductPk : currentProducts.keySet()) {
+                if (!processedSoldProducts.contains(soldProductPk)) {
+                    try (PreparedStatement psDelete = con.prepareStatement(deleteSoldProductsServicesQuery)) {
+                        psDelete.setLong(1, soldProductPk);
+                        psDelete.executeUpdate();
+                    }
+                    try (PreparedStatement psDeleteProduct = con.prepareStatement(deleteSoldProductQuery)) {
+                        psDeleteProduct.setLong(1, soldProductPk);
+                        psDeleteProduct.executeUpdate();
+                    }
+                }
+            }
+
+            // Actualizar el inventario solo para los productos nuevos
+            updateProductQuantity(productsToUpdateQuantity);
+
+            JOptionPane.showMessageDialog(null, "Servicio actualizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+        dispose();
+        new UpdateService(username).setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnSearchServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchServiceActionPerformed
-        //botón para cargar los datos del servicio ingresado
+        // botón para cargar los datos del servicio ingresado
         String serviceId = txtServiceID.getText().trim();
+        btnSearchService.setEnabled(false);
+        txtServiceID.setEditable(false);
 
         if (serviceId.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor ingrese un ID de servicio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID de servicio.", "Error", JOptionPane.ERROR_MESSAGE);
+            btnSearchService.setEnabled(true);
+            txtServiceID.setEditable(true);
             return;
         }
 
-        String queryService = "SELECT motorbike_pk, totalPrice FROM services WHERE service_pk = ?";
-        String querySoldProducts = "SELECT p.product_pk, p.description, p.productBrand, sp.salePrice, sp.quantity "
+        String checkServiceStateQuery = "SELECT state FROM services WHERE service_pk = ?";
+        String getServiceQuery = "SELECT motorbike_pk, totalPrice FROM services WHERE service_pk = ?";
+        String getProductsQuery = "SELECT sp.quantity, sp.salePrice, p.uniqueId, p.description, p.productBrand "
                 + "FROM soldProducts_services sps "
-                + "JOIN soldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk "
-                + "JOIN products p ON sp.product_pk = p.product_pk "
+                + "INNER JOIN soldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk "
+                + "INNER JOIN products p ON sp.product_pk = p.product_pk "
                 + "WHERE sps.service_pk = ?";
 
         try (Connection con = ConnectionProvider.getCon()) {
-            // Consultar datos del servicio
-            try (PreparedStatement psService = con.prepareStatement(queryService)) {
-                psService.setString(1, serviceId);
-
-                try (ResultSet rsService = psService.executeQuery()) {
-                    if (rsService.next()) {
-                        String motorbikePk = rsService.getString("motorbike_pk");
-                        long totalPrice = rsService.getLong("totalPrice");
-
-                        // Cargar datos en los campos
-                        txtPlate.setText(motorbikePk);
-                        lblFinalTotalPrice.setText(String.valueOf(totalPrice));
+            // Verificar el estado del servicio
+            try (PreparedStatement psCheckState = con.prepareStatement(checkServiceStateQuery)) {
+                psCheckState.setString(1, serviceId);
+                try (ResultSet rsState = psCheckState.executeQuery()) {
+                    if (rsState.next()) {
+                        String state = rsState.getString("state");
+                        if ("Terminado".equalsIgnoreCase(state)) {
+                            JOptionPane.showMessageDialog(this, "El servicio ya está terminado y no puede ser editado.", "Servicio terminado", JOptionPane.WARNING_MESSAGE);
+                            btnSearchService.setEnabled(true);
+                            txtServiceID.setEditable(true);
+                            return;
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró el servicio con el ID ingresado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "No se encontró el servicio con el ID proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        btnSearchService.setEnabled(true);
+                        txtServiceID.setEditable(true);
                         return;
                     }
                 }
             }
 
-            // Consultar productos asociados al servicio
-            try (PreparedStatement psProducts = con.prepareStatement(querySoldProducts)) {
+            // Obtener información del servicio
+            try (PreparedStatement psService = con.prepareStatement(getServiceQuery)) {
+                psService.setString(1, serviceId);
+                try (ResultSet rsService = psService.executeQuery()) {
+                    if (rsService.next()) {
+                        String motorbikePk = rsService.getString("motorbike_pk");
+                        long totalPrice = rsService.getLong("totalPrice");
+
+                        txtPlate.setText(motorbikePk);
+                        lblFinalTotalPrice.setText(String.valueOf(totalPrice));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se encontró el servicio con el ID proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        btnSearchService.setEnabled(true);
+                        txtServiceID.setEditable(true);
+                        return;
+                    }
+                }
+            }
+
+            // Limpiar la tabla
+            DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
+            model.setRowCount(0);
+
+            // Obtener productos asociados al servicio
+            try (PreparedStatement psProducts = con.prepareStatement(getProductsQuery)) {
                 psProducts.setString(1, serviceId);
-
                 try (ResultSet rsProducts = psProducts.executeQuery()) {
-                    DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
-                    model.setRowCount(0); // Limpiar la tabla antes de cargar los datos
-
                     while (rsProducts.next()) {
-                        long productPk = rsProducts.getLong("product_pk");
+                        String uniqueId = rsProducts.getString("uniqueId");
                         String description = rsProducts.getString("description");
                         String productBrand = rsProducts.getString("productBrand");
-                        long salePrice = rsProducts.getLong("salePrice");
                         int quantity = rsProducts.getInt("quantity");
-                        long totalPrice = salePrice * quantity; // Calcular precio total por producto
+                        long salePrice = rsProducts.getLong("salePrice");
+                        long totalProductPrice = quantity * salePrice;
 
-                        // Agregar filas a la tabla
-                        model.addRow(new Object[]{productPk, description, productBrand, salePrice, quantity, totalPrice});
+                        model.addRow(new Object[]{uniqueId, description, productBrand, salePrice, quantity, totalProductPrice});
                     }
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar el servicio: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al buscar el servicio: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchServiceActionPerformed
 
@@ -1308,6 +1343,7 @@ public class UpdateService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;

@@ -1,6 +1,5 @@
 package ui;
 
-
 import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import java.sql.*;
@@ -14,6 +13,7 @@ public class UpdateProduct extends javax.swing.JFrame {
     public UpdateProduct() {
         initComponents();
         loadCategories();
+        setSize(850,500);
         setLocationRelativeTo(null);
     }
 
@@ -238,7 +238,7 @@ public class UpdateProduct extends javax.swing.JFrame {
 
                 ps.setString(1, uniqueId);
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) { 
+                    if (rs.next()) {
                         txtProductId.setEditable(false);
                         txtDescription.setText(rs.getString("description"));
                         txtProductBrand.setText(rs.getString("productBrand"));
@@ -253,7 +253,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                         comboCategory.setSelectedItem(categoryName); // Selecciona el nombre en el JComboBox
 
                     } else {
-                        JOptionPane.showMessageDialog(null, "¡El ID de producto ingresado no existe!", "Error", 
+                        JOptionPane.showMessageDialog(null, "¡El ID de producto ingresado no existe!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -284,55 +284,55 @@ public class UpdateProduct extends javax.swing.JFrame {
 
                 if (rs.next() && rs.getInt(1) == 0) {
                     // Si no existe, mostrar mensaje y salir
-                    JOptionPane.showMessageDialog(null, "El código de producto no existe. Verifica el ID ingresado.", "Error", 
-                    JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El código de producto no existe. Verifica el ID ingresado.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
 
             if (Validations.isNullOrBlank(uniqueId)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (Validations.isNullOrBlank(description)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar la descripción del producto!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar la descripción del producto!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (!addQuantity.matches(Validations.numberPattern)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad del producto en números!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad del producto en números!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (Validations.isNullOrBlank(acquiredPrice)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (!acquiredPrice.matches(Validations.numberPattern)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto en números!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de adquisición del producto en números!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (Validations.isNullOrBlank(sellingPrice)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (!sellingPrice.matches(Validations.numberPattern)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto en números!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio de venta del producto en números!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (Validations.isNullOrBlank(productLocation)) {
-                JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes ingresar la ubicación del producto en el almacén!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (Validations.isNullOrBlank(selectedCategory) || selectedCategory.equals("Seleccionar")) {
-                JOptionPane.showMessageDialog(null, "¡Debes elegir una categoría para el producto!", "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡Debes elegir una categoría para el producto!", "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -375,13 +375,13 @@ public class UpdateProduct extends javax.swing.JFrame {
                         ps.setString(8, uniqueId);
 
                         ps.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "¡Producto actualizado exitosamente!", 
+                        JOptionPane.showMessageDialog(null, "¡Producto actualizado exitosamente!",
                                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                         new UpdateProduct().setVisible(true);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "¡Categoría no encontrada en la base de datos!", 
+                    JOptionPane.showMessageDialog(null, "¡Categoría no encontrada en la base de datos!",
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -399,8 +399,7 @@ public class UpdateProduct extends javax.swing.JFrame {
             String checkQuery = "SELECT COUNT(*) FROM productCategories WHERE categoryName = ?";
             String insertQuery = "INSERT INTO productCategories(categoryName) VALUES (?)";
 
-            try (Connection con = ConnectionProvider.getCon(); PreparedStatement checkStmt = con.prepareStatement(checkQuery); 
-                    PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement checkStmt = con.prepareStatement(checkQuery); PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
 
                 // Verificar si la categoría ya existe
                 checkStmt.setString(1, newCategory);
@@ -415,7 +414,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                 insertStmt.setString(1, newCategory);
                 insertStmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Nueva categoría añadida!",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                 // Actualizar la lista de categorías y limpiar el campo de texto
                 loadCategories();

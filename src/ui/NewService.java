@@ -528,6 +528,7 @@ public class NewService extends javax.swing.JFrame {
         jLabel17.setText("Transferencia ($)");
         getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 411, -1, -1));
 
+        txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCashPaidKeyReleased(evt);
@@ -535,6 +536,7 @@ public class NewService extends javax.swing.JFrame {
         });
         getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 376, 200, -1));
 
+        txtTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTransferPaidKeyReleased(evt);
