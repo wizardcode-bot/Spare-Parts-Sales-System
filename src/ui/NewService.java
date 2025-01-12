@@ -63,6 +63,12 @@ public class NewService extends javax.swing.JFrame {
         }
     }
 
+    // Verifica si hay productos en el carrito
+    private boolean isCartEmpty() {
+        DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+        return dtm.getRowCount() == 0; // Devuelve true si está vacío, false si contiene filas
+    }
+
     private void clearProductFields() {
         txtUniqueId.setText("");
         txtDescription.setText("");
@@ -256,7 +262,6 @@ public class NewService extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         txtUniqueId = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
@@ -268,7 +273,8 @@ public class NewService extends javax.swing.JFrame {
         txtTransferPaid = new javax.swing.JTextField();
         txtDescription = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
-        jLabel19 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -284,12 +290,12 @@ public class NewService extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nuevo Servicio");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(532, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 62, 1366, 10));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 1366, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Buscar producto por ID o descripción");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 107, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 113, -1, -1));
 
         txtSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -302,7 +308,7 @@ public class NewService extends javax.swing.JFrame {
                 txtSearchKeyReleased(evt);
             }
         });
-        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 131, 370, -1));
+        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 137, 370, -1));
 
         productsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         productsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -332,30 +338,30 @@ public class NewService extends javax.swing.JFrame {
             productsTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 172, 370, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 178, 370, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ID del Producto");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 107, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 113, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Descripción");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 166, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 172, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marca");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 225, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 231, -1, -1));
 
         txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 246, 300, -1));
+        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 252, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Precio por Unidad");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 107, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 113, -1, -1));
 
         txtPricePerUnit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPricePerUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -363,12 +369,12 @@ public class NewService extends javax.swing.JFrame {
                 txtPricePerUnitKeyReleased(evt);
             }
         });
-        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 128, 300, -1));
+        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 134, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Número de Unidades *");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 169, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 175, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNoOfUnits.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -376,15 +382,15 @@ public class NewService extends javax.swing.JFrame {
                 txtNoOfUnitsKeyReleased(evt);
             }
         });
-        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 190, 300, -1));
+        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 196, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Precio Total");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 225, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 231, -1, -1));
 
         txtTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 246, 300, -1));
+        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
@@ -396,7 +402,7 @@ public class NewService extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 440, -1, -1));
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 446, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -422,17 +428,17 @@ public class NewService extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 487, 802, 233));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 493, 802, 233));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio total:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 441, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 447, -1, -1));
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblFinalTotalPrice.setText("---");
-        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 441, -1, -1));
+        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 447, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -444,19 +450,19 @@ public class NewService extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(137, 669, -1, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(137, 675, -1, -1));
 
         comboRelateVehicle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboRelateVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un vehículo" }));
-        getContentPane().add(comboRelateVehicle, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 307, 300, -1));
+        getContentPane().add(comboRelateVehicle, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 313, 300, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Filtrar por placa");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 343, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 349, -1, -1));
 
         txtFilterPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 367, 200, -1));
+        getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 373, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -468,29 +474,20 @@ public class NewService extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 364, 100, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 370, 100, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Relacionar vehículo *");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 287, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 293, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 726, -1, -1));
-
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
-        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jLabel14MouseReleased(evt);
-            }
-        });
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 732, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 128, 300, -1));
+        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 300, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(0, 0, 0));
@@ -502,31 +499,31 @@ public class NewService extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 398, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 404, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Forma de pago *");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 287, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 293, -1, -1));
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Crédito" }));
-        getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 307, 300, -1));
+        getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 313, 300, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Medio de pago *");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 343, -1, -1));
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 349, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Efectivo ($)");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 381, -1, -1));
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 387, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Transferencia ($)");
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 411, -1, -1));
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 417, -1, -1));
 
         txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -534,7 +531,7 @@ public class NewService extends javax.swing.JFrame {
                 txtCashPaidKeyReleased(evt);
             }
         });
-        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 376, 200, -1));
+        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 382, 200, -1));
 
         txtTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -542,10 +539,10 @@ public class NewService extends javax.swing.JFrame {
                 txtTransferPaidKeyReleased(evt);
             }
         });
-        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 406, 190, -1));
+        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 412, 190, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 190, 300, -1));
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 196, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -557,10 +554,19 @@ public class NewService extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 605, -1, -1));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 611, -1, -1));
 
-        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
-        getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel18MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
+
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -653,7 +659,7 @@ public class NewService extends javax.swing.JFrame {
                 return;
             }
 
-            int nUnits = Integer.parseInt(noOfUnits); //se convierte el string #units a entero para la comparación
+            int nUnits = Integer.parseInt(noOfUnits);
             if (nUnits <= 0) {
                 JOptionPane.showMessageDialog(null, "El número de unidades a vender debe ser mayor a cero", "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -670,46 +676,62 @@ public class NewService extends javax.swing.JFrame {
                 }
             }
 
-            if (rowIndex == -1) {
-                // Si el producto no está en el carrito, buscar en la base de datos
-                String query = "SELECT * FROM products WHERE uniqueId = ?";
-                try (
-                        Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
-                    pst.setString(1, uniqueId); // Sustituir el parámetro único ID
-                    try (ResultSet rs = pst.executeQuery()) {
-                        if (rs.next()) {
-                            int availableQuantity = rs.getInt("quantity");
+            String query = "SELECT * FROM products WHERE uniqueId = ?";
+            try (
+                    Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+                pst.setString(1, uniqueId); // Sustituir el parámetro único ID
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        int availableQuantity = rs.getInt("quantity");
 
-                            if (availableQuantity >= Integer.parseInt(noOfUnits)) {
-                                String description = txtDescription.getText();
-                                String productBrand = txtProductBrand.getText();
-                                //String pricePerUnit = txtPricePerUnit.getText();
-                                String totalPrice = txtTotalPrice.getText();
+                        if (availableQuantity >= nUnits) {
+                            String description = txtDescription.getText();
+                            String productBrand = txtProductBrand.getText();
+                            int unitPrice = Integer.parseInt(pricePerUnit);
 
+                            if (rowIndex == -1) {
+                                // Si el producto no está en el carrito, añadirlo como nuevo
+                                int totalPrice = unitPrice * nUnits;
                                 dtm.addRow(new Object[]{uniqueId, description, productBrand, pricePerUnit, noOfUnits, totalPrice});
-
-                                int totalPriceInt = Integer.parseInt(totalPrice);
-                                finalTotalPrice += totalPriceInt;
-                                lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
-                                JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
-                                clearProductFields();
                             } else {
-                                JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
-                                        + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
+                                // Si el producto ya está en el carrito, actualizar su cantidad y total
+                                int currentUnits = Integer.parseInt(dtm.getValueAt(rowIndex, 4).toString());
+                                int newUnits = currentUnits + nUnits;
+
+                                // Actualizar cantidad y precio total en el carrito
+                                dtm.setValueAt(newUnits, rowIndex, 4);
+                                int newTotalPrice = unitPrice * newUnits;
+                                dtm.setValueAt(newTotalPrice, rowIndex, 5);
                             }
+
+                            // Actualizar inventario en la base de datos
+                            int updatedQuantity = availableQuantity - nUnits;
+                            try (PreparedStatement updatePst = con.prepareStatement(
+                                    "UPDATE products SET quantity = ? WHERE uniqueId = ?"
+                            )) {
+                                updatePst.setInt(1, updatedQuantity);
+                                updatePst.setString(2, uniqueId);
+                                updatePst.executeUpdate();
+                            }
+
+                            // Actualizar precio final total
+                            finalTotalPrice += unitPrice * nUnits;
+                            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+
+                            JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
+                            clearProductFields();
                         } else {
-                            JOptionPane.showMessageDialog(null, "Producto no encontrado en la base de datos.", "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
+                                    + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Producto no encontrado en la base de datos.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Error al añadir el producto: " + e.getMessage(), "Error",
-                            JOptionPane.ERROR_MESSAGE);
                 }
-            } else {
-                // Si el producto ya está en el carrito, mostrar un mensaje de error
-                JOptionPane.showMessageDialog(null, "El producto ya está en el carrito. No puedes modificar la cantidad.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error al añadir el producto: " + e.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto y el número de unidades!",
@@ -720,14 +742,36 @@ public class NewService extends javax.swing.JFrame {
     private void cartTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartTableMouseClicked
         // eliminar producto del carrito
         int index = cartTable.getSelectedRow();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún producto para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
         if (a == 0) {
-            TableModel model = cartTable.getModel();
-            String total = model.getValueAt(index, 5).toString();
-            finalTotalPrice = finalTotalPrice - Integer.parseInt(total);
+            DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
+            String uniqueId = model.getValueAt(index, 0).toString();
+            int quantity = Integer.parseInt(model.getValueAt(index, 4).toString());
+            int totalPrice = Integer.parseInt(model.getValueAt(index, 5).toString());
+
+            // Restar el precio del producto eliminado al precio final total
+            finalTotalPrice -= totalPrice;
             lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
-            ((DefaultTableModel) cartTable.getModel()).removeRow(index);
+
+            // Actualizar el stock en la base de datos
+            String updateStockQuery = "UPDATE products SET quantity = quantity + ? WHERE uniqueId = ?";
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(updateStockQuery)) {
+                pst.setInt(1, quantity);
+                pst.setString(2, uniqueId);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar el stock: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Eliminar la fila seleccionada del carrito
+            model.removeRow(index);
+            JOptionPane.showMessageDialog(null, "Producto eliminado del carrito y stock actualizado.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_cartTableMouseClicked
 
@@ -885,8 +929,6 @@ public class NewService extends javax.swing.JFrame {
                         psProductsBills.executeUpdate();
                     }
                 }
-
-                updateProductQuantity(); // Actualizar la cantidad del producto en inventario
                 generatePDF(clientID); // Crear PDF de la venta
                 JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -929,10 +971,6 @@ public class NewService extends javax.swing.JFrame {
         }
         txtFilterPlate.setText("");
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jLabel14MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseReleased
-        dispose();
-    }//GEN-LAST:event_jLabel14MouseReleased
 
     private void txtPricePerUnitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPricePerUnitKeyReleased
         String pricePerUnit = txtPricePerUnit.getText();
@@ -1091,8 +1129,6 @@ public class NewService extends javax.swing.JFrame {
                         psSoldProductsServices.executeUpdate();
                     }
                 }
-
-                updateProductQuantity(); // Actualizar la cantidad del producto en inventario
                 JOptionPane.showMessageDialog(null, "Servicio guardado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (Exception e) {
@@ -1105,6 +1141,16 @@ public class NewService extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+        //botón para cerrar ventana
+        if (!isCartEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debes guardar el proceso del servicio antes de salir.",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            dispose();
+        }
+    }//GEN-LAST:event_jLabel18MouseClicked
 
     /* Método para cargar las placas en el jComboBox */
     private void loadVehicles() {
@@ -1179,7 +1225,7 @@ public class NewService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -88,7 +88,8 @@ public class ViewBill extends javax.swing.JFrame {
         String query = "SELECT b.billId, b.billDate, b.totalPaid, a.name AS generatedBy, c.name AS relatedClient "
                  + "FROM bills b "
                  + "JOIN appusers a ON b.appuser_pk = a.appuser_pk "
-                 + "JOIN clients c ON b.client_pk = c.client_pk";
+                 + "JOIN clients c ON b.client_pk = c.client_pk "
+                 + "ORDER BY b.billDate DESC"; // Ordenar por fecha descendente
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 

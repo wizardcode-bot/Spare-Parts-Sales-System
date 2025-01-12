@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="7">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="8">
         <file>
             <url>src/ui/NewService.java</url>
             <bookmark id="2">
                 <name/>
-                <line>734</line>
+                <line>929</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>984</line>
+                <line>1181</line>
                 <key/>
             </bookmark>
         </file>
@@ -18,17 +18,22 @@
             <url>src/ui/UpdateService.java</url>
             <bookmark id="7">
                 <name/>
-                <line>628</line>
+                <line>772</line>
+                <key/>
+            </bookmark>
+            <bookmark id="8">
+                <name/>
+                <line>965</line>
                 <key/>
             </bookmark>
             <bookmark id="5">
                 <name/>
-                <line>868</line>
+                <line>1100</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>1052</line>
+                <line>1105</line>
                 <key/>
             </bookmark>
         </file>

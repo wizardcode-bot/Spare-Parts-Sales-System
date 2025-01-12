@@ -31,6 +31,7 @@ public class UpdateService extends javax.swing.JFrame {
     private long transferPaidInt = 0;
     private long totalPriceLong = 0;
     private long servicePKLong = 0;
+    private boolean selectedService = false;
 
     /**
      * Creates new form SellProduct
@@ -61,16 +62,70 @@ public class UpdateService extends javax.swing.JFrame {
         }
     }
 
-    private boolean isProductAlreadyInService(Connection con, long servicePk, long productPk) throws SQLException {
-        //método para consultar si han sido agregados nuevos productos al carrito
-        String query = "SELECT 1 FROM soldProducts_services sps "
-                + "INNER JOIN soldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk "
-                + "WHERE sps.service_pk = ? AND sp.product_pk = ?";
+    // Verifica si hay productos en el carrito
+    private boolean isCartEmpty() {
+        DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
+        return dtm.getRowCount() == 0; // Devuelve true si está vacío, false si contiene filas
+    }
+
+    //Obtiene los productos actuales de un servicio desde la base de datos.
+    private Map<Long, Integer> getCurrentProducts(Connection con, long servicePK) throws SQLException {
+        Map<Long, Integer> currentProducts = new HashMap<>();
+        String query = "SELECT sp.product_pk, sp.quantity "
+                + "FROM soldProducts sp "
+                + "JOIN soldProducts_services sps ON sp.soldProduct_pk = sps.soldProduct_pk "
+                + "WHERE sps.service_pk = ?";
         try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setLong(1, servicePk);
-            ps.setLong(2, productPk);
+            ps.setLong(1, servicePK);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // Retorna true si el producto ya está asociado
+                while (rs.next()) {
+                    long productPk = rs.getLong("product_pk");
+                    int quantity = rs.getInt("quantity");
+                    currentProducts.put(productPk, quantity);
+                }
+            }
+        }
+        return currentProducts;
+    }
+
+    private void updateSoldProduct(Connection con, long servicePK, long productPk, int newQuantity, long salePrice) throws SQLException {
+        String updateQuery = "UPDATE soldProducts sp "
+                + "JOIN soldProducts_services sps ON sp.soldProduct_pk = sps.soldProduct_pk "
+                + "SET sp.quantity = ?, sp.salePrice = ? "
+                + "WHERE sps.service_pk = ? AND sp.product_pk = ?";
+        try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
+            ps.setInt(1, newQuantity);
+            ps.setLong(2, salePrice);
+            ps.setLong(3, servicePK);
+            ps.setLong(4, productPk);
+            ps.executeUpdate();
+        }
+    }
+
+    private String getClientPk(Connection con, String vehiclePlate) throws SQLException {
+        String query = "SELECT client_pk FROM motorbikes WHERE motorbike_pk = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, vehiclePlate);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("client_pk");
+                } else {
+                    throw new SQLException("No se encontró un cliente asociado con el vehículo.");
+                }
+            }
+        }
+    }
+
+    private long getAppUserPk(Connection con, String username) throws SQLException {
+        String query = "SELECT appuser_pk FROM appusers WHERE username = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("appuser_pk");
+                } else {
+                    throw new SQLException("Usuario no encontrado.");
+                }
             }
         }
     }
@@ -88,9 +143,17 @@ public class UpdateService extends javax.swing.JFrame {
                 if (rs.next()) {
                     return rs.getLong(1); // Devuelve la clave primaria generada.
                 } else {
-                    throw new SQLException("No se pudo obtener la clave primaria del producto vendido.");
+                    throw new SQLException("No se pudo obtener el ID del producto vendido.");
                 }
             }
+        }
+    }
+
+    private void removeProductFromService(Connection con, long soldProductPk) throws SQLException {
+        String query = "DELETE FROM soldProducts WHERE soldProduct_pk = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setLong(1, soldProductPk);
+            ps.executeUpdate();
         }
     }
 
@@ -104,21 +167,8 @@ public class UpdateService extends javax.swing.JFrame {
         }
     }
 
-    private void updateProductQuantity(Map<Long, Integer> productsToUpdateQuantity) throws SQLException {
-        //modifica el inventario según lo ingresado o descontado del carrito
-        String query = "UPDATE products SET quantity = quantity - ? WHERE product_pk = ?";
-        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
-            for (Map.Entry<Long, Integer> entry : productsToUpdateQuantity.entrySet()) {
-                ps.setInt(1, entry.getValue()); // Cantidad a descontar
-                ps.setLong(2, entry.getKey());  // product_pk
-                ps.addBatch();
-            }
-            ps.executeBatch(); // Ejecuta todas las actualizaciones en una sola operación
-        }
-    }
-
-    private long insertBill(Connection con, String billId, long totalPrice, String paymentTerm,
-            long cashPaid, long transferPaid, String clientPk, long appuserPk) throws SQLException {
+    private long insertBill(Connection con, String billId, long totalPrice, String paymentTerm, long cashPaid, long transferPaid,
+            String clientPk, long appuserPk) throws SQLException {
         //insertar en tabla bills
         String query = "INSERT INTO bills (billId, totalPaid, paymentTerm, cashPaid, transferPaid, client_pk, appuser_pk) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -142,7 +192,7 @@ public class UpdateService extends javax.swing.JFrame {
         }
     }
 
-    private void updateService(Connection con, String vehiclePlate, String serviceState, long totalPrice) throws SQLException {
+    private void updateService(Connection con, String vehiclePlate, String serviceState, long totalPrice, long servicePKLong) throws SQLException {
         //actualizar tabla services
 
         String query = "UPDATE services SET motorbike_pk = ?, state = ?, totalPrice = ? WHERE service_pk = ?";
@@ -187,7 +237,7 @@ public class UpdateService extends javax.swing.JFrame {
         txtTotalPrice.setText("");
     }
 
-    private void generatePDF(String clientID, Long lblTotalPrice, Long cashPaidInt, Long transferPaidInt) {
+    private void generatePDF(String clientID, Long lblTotalPrice, Long cashPaidInt, Long transferPaidInt, String billId) {
         // Crear factura
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
         String client_pk = clientID;
@@ -278,6 +328,7 @@ public class UpdateService extends javax.swing.JFrame {
             Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
             doc.add(thanksMsg);
 
+            JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             // Abrir PDF
             OpenPdf.openById(String.valueOf(billId));
 
@@ -324,7 +375,6 @@ public class UpdateService extends javax.swing.JFrame {
         lblFinalTotalPrice = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         txtUniqueId = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         comboPayment = new javax.swing.JComboBox<>();
@@ -340,6 +390,7 @@ public class UpdateService extends javax.swing.JFrame {
         btnSearchService = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         txtPlate = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -524,15 +575,6 @@ public class UpdateService extends javax.swing.JFrame {
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 733, -1, -1));
 
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
-        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jLabel14MouseReleased(evt);
-            }
-        });
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
-
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 252, 300, -1));
 
@@ -593,7 +635,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Ingrese el ID del servicio a actualizar");
+        jLabel18.setText("Ingrese el ID del servicio a actualizar *");
         getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 106, -1, -1));
 
         txtServiceID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -620,6 +662,15 @@ public class UpdateService extends javax.swing.JFrame {
 
         txtPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 196, 222, -1));
+
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel19.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel19MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -719,10 +770,15 @@ public class UpdateService extends javax.swing.JFrame {
     }//GEN-LAST:event_productsTableMouseClicked
 
     private void btnAddToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToCartActionPerformed
-        // Añadir al carrito
-        // Sincronizar finalTotalPrice con lblFinalTotalPrice
+        // Añadir al carrito, actualizar el stock del producto ingresado y actualizar el precio total 
+        if (!selectedService) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar el servicio que quieres actualizar",
+                    "No hay servicios seleccionados", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
-            finalTotalPrice = Integer.parseInt(lblFinalTotalPrice.getText().trim());
+            finalTotalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Error al sincronizar el precio total. Verifica los valores existentes.",
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -737,7 +793,6 @@ public class UpdateService extends javax.swing.JFrame {
         String pricePerUnit = txtPricePerUnit.getText().trim();
 
         if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(uniqueId) && !Validations.isNullOrBlank(pricePerUnit)) {
-
             if (!pricePerUnit.matches(Validations.numberPattern) || !noOfUnits.matches(Validations.numberPattern)) {
                 JOptionPane.showMessageDialog(null, "El número de unidades y precio del producto deben ser ingresados en números", "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -751,9 +806,7 @@ public class UpdateService extends javax.swing.JFrame {
                 return;
             }
 
-            // Verificar si el producto ya está en el carrito
             int rowIndex = -1;
-
             for (int i = 0; i < dtm.getRowCount(); i++) {
                 if (dtm.getValueAt(i, 0).toString().equals(uniqueId)) {
                     rowIndex = i;
@@ -761,44 +814,86 @@ public class UpdateService extends javax.swing.JFrame {
                 }
             }
 
-            if (rowIndex == -1) {
-                // Si el producto no está en el carrito, buscar en la base de datos
-                String query = "SELECT * FROM products WHERE uniqueId = ?";
-                try (
-                        Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
-                    pst.setString(1, uniqueId);
-                    try (ResultSet rs = pst.executeQuery()) {
-                        if (rs.next()) {
-                            int availableQuantity = rs.getInt("quantity");
+            try (Connection con = ConnectionProvider.getCon()) {
+                if (rowIndex == -1) {
+                    // Producto nuevo en el carrito
+                    try (PreparedStatement pst = con.prepareStatement("SELECT * FROM products WHERE uniqueId = ?")) {
+                        pst.setString(1, uniqueId);
+                        try (ResultSet rs = pst.executeQuery()) {
+                            if (rs.next()) {
+                                int availableQuantity = rs.getInt("quantity");
+                                if (availableQuantity >= nUnits) {
+                                    String description = txtDescription.getText();
+                                    String productBrand = txtProductBrand.getText();
+                                    long totalPrice = nUnits * Long.parseLong(pricePerUnit);
 
-                            if (availableQuantity >= nUnits) {
-                                String description = txtDescription.getText();
-                                String productBrand = txtProductBrand.getText();
-                                String totalPrice = txtTotalPrice.getText();
+                                    // Añadir al carrito
+                                    dtm.addRow(new Object[]{uniqueId, description, productBrand, pricePerUnit, nUnits, totalPrice});
+                                    finalTotalPrice += totalPrice;
+                                    lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
 
-                                dtm.addRow(new Object[]{uniqueId, description, productBrand, pricePerUnit, noOfUnits, totalPrice});
+                                    // Actualizar el inventario
+                                    try (PreparedStatement updatePst = con.prepareStatement(
+                                            "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?")) {
+                                        updatePst.setInt(1, nUnits);
+                                        updatePst.setString(2, uniqueId);
+                                        updatePst.executeUpdate();
+                                    }
 
-                                Long totalPriceInt = Long.parseLong(totalPrice);
-                                finalTotalPrice += totalPriceInt; // Sumar al total sincronizado
-                                lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
-                                JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
-                                clearProductFields();
+                                    JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
+                                    clearProductFields();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
+                                            + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
                             } else {
-                                JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
-                                        + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Producto no encontrado en la base de datos.", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Producto no encontrado en la base de datos.", "Error",
-                                    JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Error al añadir el producto: " + e.getMessage(), "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Actualizar producto existente en el carrito
+                    try (PreparedStatement ps = con.prepareStatement("SELECT quantity FROM products WHERE uniqueId = ?")) {
+                        ps.setString(1, uniqueId);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                int availableStock = rs.getInt("quantity");
+                                int currentQuantity = Integer.parseInt(dtm.getValueAt(rowIndex, 4).toString());
+                                int updatedQuantity = currentQuantity + nUnits;
+
+                                if (availableStock + currentQuantity >= updatedQuantity) {
+                                    dtm.setValueAt(updatedQuantity, rowIndex, 4);
+
+                                    long currentTotalPrice = Long.parseLong(dtm.getValueAt(rowIndex, 5).toString());
+                                    long additionalPrice = nUnits * Long.parseLong(pricePerUnit);
+                                    long newTotalPrice = currentTotalPrice + additionalPrice;
+
+                                    finalTotalPrice = (finalTotalPrice - currentTotalPrice) + newTotalPrice;
+
+                                    dtm.setValueAt(newTotalPrice, rowIndex, 5);
+                                    lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+
+                                    // Actualizar el inventario
+                                    try (PreparedStatement updatePst = con.prepareStatement(
+                                            "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?")) {
+                                        updatePst.setInt(1, nUnits);
+                                        updatePst.setString(2, uniqueId);
+                                        updatePst.executeUpdate();
+                                    }
+
+                                    JOptionPane.showMessageDialog(null, "Cantidad actualizada exitosamente.");
+                                    clearProductFields();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No hay suficiente stock para completar esta operación.",
+                                            "Error de stock", JOptionPane.ERROR_MESSAGE);
+                                }
+                            }
+                        }
+                    }
                 }
-            } else {
-                // Si el producto ya está en el carrito, mostrar un mensaje de error
-                JOptionPane.showMessageDialog(null, "El producto ya está en el carrito. No puedes modificar la cantidad.",
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al procesar la operación: " + e.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
@@ -808,7 +903,7 @@ public class UpdateService extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddToCartActionPerformed
 
     private void cartTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartTableMouseClicked
-        // eliminar producto del carrito
+        // Eliminar producto del carrito, actualizar la cantidad en stock y el precio total
         int index = cartTable.getSelectedRow();
         if (index >= 0) {
             int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar este producto?", "Selecciona una opción",
@@ -816,7 +911,6 @@ public class UpdateService extends javax.swing.JFrame {
             if (a == 0) {
                 TableModel model = cartTable.getModel();
 
-                // Sincronizar finalTotalPrice con lblFinalTotalPrice
                 try {
                     finalTotalPrice = Integer.parseInt(lblFinalTotalPrice.getText().trim());
                 } catch (NumberFormatException e) {
@@ -825,38 +919,41 @@ public class UpdateService extends javax.swing.JFrame {
                     return;
                 }
 
-                try (Connection con = ConnectionProvider.getCon()) {
-                    // Obtener la cantidad a devolver y el uniqueId del producto seleccionado
-                    int quantityToReturn = Integer.parseInt(model.getValueAt(index, 4).toString());
-                    String uniqueId = model.getValueAt(index, 0).toString();
+                String uniqueId = model.getValueAt(index, 0).toString(); // ID único del producto
+                int currentCartQuantity = Integer.parseInt(model.getValueAt(index, 4).toString()); // Cantidad en el carrito
 
-                    // Actualizar la cantidad en inventario (tabla "products")
-                    String updateQuery = "UPDATE products SET quantity = quantity + ? WHERE uniqueId = ?";
+                try (Connection con = ConnectionProvider.getCon()) {
+                    // Recuperar el inventario actual del producto
+                    String query = "SELECT quantity FROM products WHERE uniqueId = ?";
+                    int availableStock = 0;
+                    try (PreparedStatement ps = con.prepareStatement(query)) {
+                        ps.setString(1, uniqueId);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                availableStock = rs.getInt("quantity");
+                            }
+                        }
+                    }
+
+                    // Actualizar el inventario añadiendo la cantidad eliminada del carrito
+                    String updateQuery = "UPDATE products SET quantity = ? WHERE uniqueId = ?";
                     try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
-                        ps.setInt(1, quantityToReturn);
+                        ps.setInt(1, availableStock + currentCartQuantity);
                         ps.setString(2, uniqueId);
                         ps.executeUpdate();
                     }
 
-                    // Actualizar el precio total
-                    String total = model.getValueAt(index, 5).toString();
-                    int totalPriceToRemove = Integer.parseInt(total);
+                    // Actualizar el precio total y eliminar el producto del carrito
+                    String total = model.getValueAt(index, 5).toString(); // Precio total del producto
+                    finalTotalPrice -= Integer.parseInt(total);
+                    lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
 
-                    if (finalTotalPrice >= totalPriceToRemove) {
-                        finalTotalPrice -= totalPriceToRemove;
-                        lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+                    // Eliminar la fila correspondiente del carrito
+                    ((DefaultTableModel) cartTable.getModel()).removeRow(index);
 
-                        // Eliminar el producto del carrito
-                        ((DefaultTableModel) cartTable.getModel()).removeRow(index);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error: El precio total no puede ser negativo.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Error al procesar el precio del producto.",
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Stock actualizado correctamente.");
                 } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Error al actualizar la cantidad del producto en inventario: " + e.getMessage(),
+                    JOptionPane.showMessageDialog(null, "Error al actualizar el inventario: " + e.getMessage(),
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -867,12 +964,12 @@ public class UpdateService extends javax.swing.JFrame {
     }//GEN-LAST:event_cartTableMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // BOTÓN GENERAR VENTA E IMPRIMIR
+        // BOTÓN FINALIZAR PROCESO Y GENERAR FACTURA DE VENTA
 
         String selectedVehicle = txtPlate.getText().trim();
         String paymentTerm = comboPayment.getSelectedItem().toString();
-        String cashPaid = txtCashPaid.getText();
-        String transferPaid = txtTransferPaid.getText();
+        String cashPaid = txtCashPaid.getText().trim();
+        String transferPaid = txtTransferPaid.getText().trim();
         String servicePK = txtServiceID.getText().trim();
         serviceState = "Terminado";
 
@@ -895,113 +992,72 @@ public class UpdateService extends javax.swing.JFrame {
         }
 
         if ("Seleccione un vehículo".equals(selectedVehicle)) {
-            JOptionPane.showMessageDialog(null, "¡Debes relacionar un vehículo al servicio!.",
+            JOptionPane.showMessageDialog(null, "¡Debes relacionar un vehículo al servicio!",
                     "No hay vehículo relacionado", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            // Obtener el total final de lblFinalTotalPrice
-            long lblTotalPrice;
-            try {
-                lblTotalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "El precio total debe ser un número válido.",
-                        "Error de formato", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            long totalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
+            long cashPaidLong = Long.parseLong(cashPaid);
+            long transferPaidLong = Long.parseLong(transferPaid);
 
-            try {
-                servicePKLong = Long.parseLong(servicePK);
-            } catch (NumberFormatException e) {
-                // Manejo de la excepción en caso de que el texto no sea un número válido
-                JOptionPane.showMessageDialog(null, "El ID del servicio debe ser un número válido.",
-                        "Error de conversión", JOptionPane.ERROR_MESSAGE);
-            }
-
-            // Validar medios de pago
-            long cashPaidInt = Long.parseLong(cashPaid);
-            long transferPaidInt = Long.parseLong(transferPaid);
-
-            if (cashPaidInt + transferPaidInt != lblTotalPrice) {
+            if (cashPaidLong + transferPaidLong != totalPrice) {
                 JOptionPane.showMessageDialog(null, "La suma de efectivo y transferencia debe ser igual al total pagado.");
                 return;
             }
 
-            String clientID = "";
-            long appuserPk = -1;
+            long servicePKLong = Long.parseLong(servicePK);
 
             try (Connection con = ConnectionProvider.getCon()) {
                 // Obtener client_pk basado en la placa del vehículo
-                String getClientIdQuery = "SELECT client_pk FROM motorbikes WHERE motorbike_pk = ?";
-                try (PreparedStatement ps = con.prepareStatement(getClientIdQuery)) {
-                    ps.setString(1, selectedVehicle);
-                    try (ResultSet rs = ps.executeQuery()) {
-                        if (rs.next()) {
-                            clientID = rs.getString("client_pk");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "No se encontró un cliente relacionado con el vehículo seleccionado.",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                    }
-                }
+                String clientID = getClientPk(con, selectedVehicle);
 
                 // Obtener appuser_pk basado en el usuario activo
-                String getAppUserIdQuery = "SELECT appuser_pk FROM appusers WHERE username = ?";
-                try (PreparedStatement ps = con.prepareStatement(getAppUserIdQuery)) {
-                    ps.setString(1, username);
-                    try (ResultSet rs = ps.executeQuery()) {
-                        if (rs.next()) {
-                            appuserPk = rs.getLong("appuser_pk");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "No se encontró un usuario activo.",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                    }
-                }
+                long appuserPk = getAppUserPk(con, username);
 
-                billId = getUniqueId("FACT-");
+                // Generar un ID único para la factura
+                String billId = getUniqueId("FACT-");
 
-                // Insertar en la tabla bills
-                long billPk = insertBill(con, billId, lblTotalPrice, paymentTerm, cashPaidInt, transferPaidInt, clientID, appuserPk);
+                long billPk = insertBill(con, billId, totalPrice, paymentTerm, cashPaidLong, transferPaidLong, clientID, appuserPk);
 
                 // Actualizar la tabla services
-                updateService(con, selectedVehicle, serviceState, lblTotalPrice);
+                updateService(con, selectedVehicle, serviceState, totalPrice, servicePKLong);
+
+                // Obtener productos actuales del servicio desde la base de datos
+                Map<Long, Integer> currentProducts = getCurrentProducts(con, servicePKLong);
 
                 // Procesar productos en el carrito
-                Map<Long, Integer> productsToUpdateQuantity = new HashMap<>();
                 DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
-
                 for (int i = 0; i < dtm.getRowCount(); i++) {
                     String uniqueId = dtm.getValueAt(i, 0).toString();
-                    int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
+                    int newQuantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
                     long productPk = getProductPk(con, uniqueId);
 
-                    // Verificar si el producto ya está asociado al servicio
-                    if (isProductAlreadyInService(con, servicePKLong, productPk)) {
-                        continue; // No realizar acciones adicionales si ya está asociado
+                    if (currentProducts.containsKey(productPk)) {
+                        // Actualizar producto existente
+                        updateSoldProduct(con, servicePKLong, productPk, newQuantity, salePrice);
+                        currentProducts.remove(productPk);
+                    } else {
+                        // Insertar nuevo producto vendido
+                        long soldProductPk = insertSoldProduct(con, newQuantity, salePrice, productPk);
+                        associateProductWithBill(con, billPk, soldProductPk);
                     }
-
-                    long soldProductPk = insertSoldProduct(con, quantity, salePrice, productPk);
-
-                    associateProductWithBill(con, billPk, soldProductPk);
-
-                    productsToUpdateQuantity.put(productPk, quantity);
                 }
 
-                // Actualizar inventario solo para los productos nuevos
-                updateProductQuantity(productsToUpdateQuantity);
-
+                // Eliminar productos que ya no están en el carrito
+                for (Map.Entry<Long, Integer> entry : currentProducts.entrySet()) {
+                    long soldProductPk = entry.getKey();
+                    removeProductFromService(con, soldProductPk);
+                }
+                
                 // Generar PDF de la venta
-                generatePDF(clientID, lblTotalPrice, cashPaidInt, cashPaidInt);
+                generatePDF(clientID, totalPrice, cashPaidLong, transferPaidLong, billId);
 
-                JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
 
@@ -1012,10 +1068,6 @@ public class UpdateService extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor ingrese un número válido.");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jLabel14MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseReleased
-        dispose();
-    }//GEN-LAST:event_jLabel14MouseReleased
 
     private void txtPricePerUnitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPricePerUnitKeyReleased
         String pricePerUnit = txtPricePerUnit.getText();
@@ -1052,10 +1104,9 @@ public class UpdateService extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // BOTÓN DE GUARDAR PROCESO
-
         String selectedVehicle = txtPlate.getText().trim();
         String serviceId = txtServiceID.getText().trim();
-        serviceState = "En proceso";
+        String serviceState = "En proceso";
 
         if (serviceId.isEmpty()) {
             JOptionPane.showMessageDialog(null, "El ID del servicio no puede estar vacío.",
@@ -1069,6 +1120,7 @@ public class UpdateService extends javax.swing.JFrame {
             return;
         }
 
+        long totalPriceLong;
         try {
             totalPriceLong = Long.parseLong(lblFinalTotalPrice.getText().trim());
         } catch (NumberFormatException e) {
@@ -1088,34 +1140,33 @@ public class UpdateService extends javax.swing.JFrame {
                 psService.executeUpdate();
             }
 
-            // Obtener productos actuales del servicio desde "soldProducts_services" con un JOIN a "SoldProducts"
+            // Obtener productos actuales del servicio desde la base de datos
             String getCurrentProductsQuery = """
-            SELECT sps.soldProduct_pk, sp.product_pk
-            FROM soldProducts_services sps
-            JOIN SoldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk
-            WHERE sps.service_pk = ?
+        SELECT sps.soldProduct_pk, sp.product_pk, sp.quantity
+        FROM soldProducts_services sps
+        JOIN SoldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk
+        WHERE sps.service_pk = ?
         """;
-            Map<Long, Long> currentProducts = new HashMap<>();
+            Map<Long, Long> currentProducts = new HashMap<>(); // product_pk -> soldProduct_pk
             try (PreparedStatement psGetProducts = con.prepareStatement(getCurrentProductsQuery)) {
                 psGetProducts.setLong(1, Long.parseLong(serviceId));
                 try (ResultSet rs = psGetProducts.executeQuery()) {
                     while (rs.next()) {
-                        currentProducts.put(rs.getLong("soldProduct_pk"), rs.getLong("product_pk"));
+                        currentProducts.put(rs.getLong("product_pk"), rs.getLong("soldProduct_pk"));
                     }
                 }
             }
 
-            // Preparar consultas para actualizar/incluir/eliminar productos
+            // Preparar consultas
             String insertSoldProductQuery = "INSERT INTO SoldProducts (quantity, salePrice, saleDate, product_pk) VALUES (?, ?, ?, ?)";
-            String updateSoldProductQuery = "UPDATE SoldProducts SET quantity = ?, salePrice = ? WHERE soldProduct_pk = ?";
-            String deleteSoldProductQuery = "DELETE FROM SoldProducts WHERE soldProduct_pk = ?";
             String insertSoldProductsServicesQuery = "INSERT INTO soldProducts_services (service_pk, soldProduct_pk) VALUES (?, ?)";
+            String updateSoldProductQuery = "UPDATE SoldProducts SET quantity = ? WHERE soldProduct_pk = ?";
             String deleteSoldProductsServicesQuery = "DELETE FROM soldProducts_services WHERE soldProduct_pk = ?";
+            String deleteSoldProductQuery = "DELETE FROM SoldProducts WHERE soldProduct_pk = ?";
 
-            // Verificar productos en el carrito
+            // Procesar productos en el carrito
             DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
-            Set<Long> processedSoldProducts = new HashSet<>();
-            Map<Long, Integer> productsToUpdateQuantity = new HashMap<>();
+            Set<Long> productsInCart = new HashSet<>(); // Para identificar productos que permanecen en el carrito.
 
             for (int i = 0; i < dtm.getRowCount(); i++) {
                 String uniqueId = dtm.getValueAt(i, 0).toString();
@@ -1124,46 +1175,54 @@ public class UpdateService extends javax.swing.JFrame {
 
                 // Obtener product_pk a partir del uniqueId
                 String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
-                long productPk = -1;
+                long productPk;
                 try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
                     psProduct.setString(1, uniqueId);
                     try (ResultSet rs = psProduct.executeQuery()) {
                         if (rs.next()) {
                             productPk = rs.getLong("product_pk");
+                        } else {
+                            throw new SQLException("No se encontró el producto con uniqueId: " + uniqueId);
                         }
                     }
                 }
 
-                // Verificar si el producto ya está en "soldProducts_services"
-                Long existingSoldProductPk = null;
-                for (Map.Entry<Long, Long> entry : currentProducts.entrySet()) {
-                    if (entry.getValue().equals(productPk)) {
-                        existingSoldProductPk = entry.getKey();
-                        break;
-                    }
-                }
+                productsInCart.add(productPk);
 
-                if (existingSoldProductPk != null) {
-                    // Actualizar producto en "SoldProducts"
-                    try (PreparedStatement psUpdate = con.prepareStatement(updateSoldProductQuery)) {
-                        psUpdate.setInt(1, quantity);
-                        psUpdate.setLong(2, salePrice);
-                        psUpdate.setLong(3, existingSoldProductPk);
-                        psUpdate.executeUpdate();
+                if (currentProducts.containsKey(productPk)) {
+                    // El producto ya existe, actualizar la cantidad sin sumarla
+                    long soldProductPk = currentProducts.get(productPk);
+                    String getCurrentQuantityQuery = "SELECT quantity FROM SoldProducts WHERE soldProduct_pk = ?";
+                    int currentQuantity = 0;
+                    try (PreparedStatement psGetQuantity = con.prepareStatement(getCurrentQuantityQuery)) {
+                        psGetQuantity.setLong(1, soldProductPk);
+                        try (ResultSet rs = psGetQuantity.executeQuery()) {
+                            if (rs.next()) {
+                                currentQuantity = rs.getInt("quantity");
+                            }
+                        }
                     }
-                    processedSoldProducts.add(existingSoldProductPk);
+
+                    // Actualizar la cantidad directamente con el valor del carrito
+                    try (PreparedStatement psUpdateSoldProduct = con.prepareStatement(updateSoldProductQuery)) {
+                        psUpdateSoldProduct.setInt(1, quantity); // Actualizar con la nueva cantidad
+                        psUpdateSoldProduct.setLong(2, soldProductPk);
+                        psUpdateSoldProduct.executeUpdate();
+                    }
+                    currentProducts.remove(productPk); // Eliminar el producto de la lista de productos a eliminar
                 } else {
-                    // Insertar producto nuevo en "SoldProducts" y asociarlo
-                    long newSoldProductPk;
-                    try (PreparedStatement psInsert = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        psInsert.setInt(1, quantity);
-                        psInsert.setLong(2, salePrice);
-                        psInsert.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psInsert.setLong(4, productPk);
-                        psInsert.executeUpdate();
-                        try (ResultSet generatedKeys = psInsert.getGeneratedKeys()) {
+                    // Producto nuevo, insertar en SoldProducts y asociar con el servicio
+                    long soldProductPk;
+                    try (PreparedStatement psInsertSoldProduct = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        psInsertSoldProduct.setInt(1, quantity);
+                        psInsertSoldProduct.setLong(2, salePrice);
+                        psInsertSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+                        psInsertSoldProduct.setLong(4, productPk);
+                        psInsertSoldProduct.executeUpdate();
+
+                        try (ResultSet generatedKeys = psInsertSoldProduct.getGeneratedKeys()) {
                             if (generatedKeys.next()) {
-                                newSoldProductPk = generatedKeys.getLong(1);
+                                soldProductPk = generatedKeys.getLong(1);
                             } else {
                                 throw new SQLException("No se pudo obtener el ID del producto vendido.");
                             }
@@ -1172,36 +1231,30 @@ public class UpdateService extends javax.swing.JFrame {
 
                     try (PreparedStatement psAssociate = con.prepareStatement(insertSoldProductsServicesQuery)) {
                         psAssociate.setLong(1, Long.parseLong(serviceId));
-                        psAssociate.setLong(2, newSoldProductPk);
+                        psAssociate.setLong(2, soldProductPk);
                         psAssociate.executeUpdate();
                     }
-
-                    // Agregar producto al mapa de actualización de inventario
-                    productsToUpdateQuantity.put(productPk, quantity);
                 }
             }
 
             // Eliminar productos que ya no están en el carrito
-            for (Long soldProductPk : currentProducts.keySet()) {
-                if (!processedSoldProducts.contains(soldProductPk)) {
-                    try (PreparedStatement psDelete = con.prepareStatement(deleteSoldProductsServicesQuery)) {
-                        psDelete.setLong(1, soldProductPk);
-                        psDelete.executeUpdate();
-                    }
-                    try (PreparedStatement psDeleteProduct = con.prepareStatement(deleteSoldProductQuery)) {
-                        psDeleteProduct.setLong(1, soldProductPk);
-                        psDeleteProduct.executeUpdate();
-                    }
+            for (Map.Entry<Long, Long> entry : currentProducts.entrySet()) {
+                long soldProductPk = entry.getValue();
+                try (PreparedStatement psDeleteServiceAssociation = con.prepareStatement(deleteSoldProductsServicesQuery)) {
+                    psDeleteServiceAssociation.setLong(1, soldProductPk);
+                    psDeleteServiceAssociation.executeUpdate();
+                }
+                try (PreparedStatement psDeleteSoldProduct = con.prepareStatement(deleteSoldProductQuery)) {
+                    psDeleteSoldProduct.setLong(1, soldProductPk);
+                    psDeleteSoldProduct.executeUpdate();
                 }
             }
 
-            // Actualizar el inventario solo para los productos nuevos
-            updateProductQuantity(productsToUpdateQuantity);
-
             JOptionPane.showMessageDialog(null, "Servicio actualizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar el servicio: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         dispose();
@@ -1219,6 +1272,11 @@ public class UpdateService extends javax.swing.JFrame {
             btnSearchService.setEnabled(true);
             txtServiceID.setEditable(true);
             return;
+        }
+
+        if (!serviceId.matches(Validations.numberPattern)) {
+            JOptionPane.showMessageDialog(this, "El ID del servicio debe ser ingresado en números", "Advertencia",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
         String checkServiceStateQuery = "SELECT state FROM services WHERE service_pk = ?";
@@ -1287,6 +1345,7 @@ public class UpdateService extends javax.swing.JFrame {
                         long totalProductPrice = quantity * salePrice;
 
                         model.addRow(new Object[]{uniqueId, description, productBrand, salePrice, quantity, totalProductPrice});
+                        selectedService = true;
                     }
                 }
             }
@@ -1294,6 +1353,16 @@ public class UpdateService extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al buscar el servicio: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchServiceActionPerformed
+
+    private void jLabel19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel19MouseClicked
+        //botón para cerrar ventana
+        if (!isCartEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debes guardar el proceso del servicio antes de salir.",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            dispose();
+        }
+    }//GEN-LAST:event_jLabel19MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1345,11 +1414,11 @@ public class UpdateService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
