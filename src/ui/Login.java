@@ -22,7 +22,7 @@ public class Login extends javax.swing.JFrame {
             @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                    btnLogin.doClick(); // Simula un clic en el botón de inicio de sesión
+                    btnLogin.doClick(); // Simula un click en el botón de inicio de sesión
                 }
             }
         });
