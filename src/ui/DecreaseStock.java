@@ -1,5 +1,6 @@
 package ui;
 
+import common.Validations;
 import dao.ConnectionProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +30,7 @@ public class DecreaseStock extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT * FROM products WHERE description LIKE ? OR uniqueId LIKE ?";
+        String query = "SELECT * FROM products WHERE description LIKE ? OR product_pk LIKE ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -38,7 +39,7 @@ public class DecreaseStock extends javax.swing.JFrame {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    model.addRow(new Object[]{rs.getString("uniqueId") + "   -   " + rs.getString("description")});
+                    model.addRow(new Object[]{rs.getString("product_pk") + "   -   " + rs.getString("description")});
                 }
             }
         } catch (SQLException e) {
@@ -76,7 +77,7 @@ public class DecreaseStock extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txtStockToIncrease = new javax.swing.JTextField();
+        txtStockToDecrease = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtMotive = new javax.swing.JTextArea();
@@ -118,6 +119,7 @@ public class DecreaseStock extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        productsTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         productsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productsTableMouseClicked(evt);
@@ -193,7 +195,7 @@ public class DecreaseStock extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Cantidad de unidades a disminuir *");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 145, -1, -1));
-        getContentPane().add(txtStockToIncrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 166, 233, -1));
+        getContentPane().add(txtStockToDecrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 166, 233, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -218,6 +220,11 @@ public class DecreaseStock extends javax.swing.JFrame {
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton1.setIconTextGap(10);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 110, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -262,7 +269,7 @@ public class DecreaseStock extends javax.swing.JFrame {
 
         String uniqueId[] = nameOrUniqueId.split("-", 0);
 
-        String query = "SELECT * FROM products WHERE uniqueId = ?";
+        String query = "SELECT * FROM products WHERE product_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, uniqueId[0]);
@@ -272,8 +279,8 @@ public class DecreaseStock extends javax.swing.JFrame {
                     txtProductID.setText(uniqueId[0]);
                     txtDescription.setText(rs.getString("description"));
                     txtProductBrand.setText(rs.getString("productBrand"));
-                    txtProductLocation.setText("productLocation");
-                    txtCurrentStock.setText("quantity");
+                    txtProductLocation.setText(rs.getString("productLocation"));
+                    txtCurrentStock.setText(rs.getString("quantity"));
                     txtSellingPrice.setText(rs.getString("sellingPrice"));
                 }
             }
@@ -282,6 +289,72 @@ public class DecreaseStock extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_productsTableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // botón para guardar 
+        String stockToDecrease = txtStockToDecrease.getText().trim();
+        String motive = txtMotive.getText().trim();
+        String productID = txtProductID.getText().trim();
+        String currentStock = txtCurrentStock.getText().trim();
+
+        if (Validations.isNullOrBlank(productID)) {
+            JOptionPane.showMessageDialog(null, "No has seleccionado ningún producto a modificar", "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (Validations.isNullOrBlank(stockToDecrease) || Validations.isNullOrBlank(motive)) {
+            JOptionPane.showMessageDialog(null, "Debes de completar todos los campos obligatorios (*)", "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            long currentStockValue = Long.parseLong(currentStock);
+            long stockToDecreaseValue = Long.parseLong(stockToDecrease);
+            long newStockValue = currentStockValue - stockToDecreaseValue;
+
+            String insertAdjustmentQuery = "INSERT INTO inventory_adjustments "
+                    + "(previousQuantity, newQuantity, adjustmentMotive, product_pk) "
+                    + "VALUES (?, ?, ?, ?)";
+
+            String updateProductQuery = "UPDATE products SET quantity = ? WHERE product_pk = ?";
+
+            try (Connection con = ConnectionProvider.getCon(); PreparedStatement pstInsert = con.prepareStatement(insertAdjustmentQuery); PreparedStatement pstUpdate = con.prepareStatement(updateProductQuery)) {
+
+                // Insertar en inventory_adjustments
+                pstInsert.setLong(1, currentStockValue); // previousQuantity
+                pstInsert.setLong(2, newStockValue);    // newQuantity
+                pstInsert.setString(3, motive);         // adjustmentMotive
+                pstInsert.setString(4, productID);      // product_pk
+
+                int rowsAffectedInsert = pstInsert.executeUpdate();
+
+                if (rowsAffectedInsert > 0) {
+                    // Actualizar el stock en la tabla products
+                    pstUpdate.setLong(1, newStockValue); // nueva cantidad
+                    pstUpdate.setString(2, productID);   // producto a actualizar
+
+                    int rowsAffectedUpdate = pstUpdate.executeUpdate();
+
+                    if (rowsAffectedUpdate > 0) {
+                        JOptionPane.showMessageDialog(null, "Ajuste de inventario registrado y stock actualizado con éxito.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo actualizar el stock del producto.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo registrar el ajuste de inventario.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error al procesar los valores numéricos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar en la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        new DecreaseStock().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -350,6 +423,6 @@ public class DecreaseStock extends javax.swing.JFrame {
     private javax.swing.JTextField txtProductLocation;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSellingPrice;
-    private javax.swing.JTextField txtStockToIncrease;
+    private javax.swing.JTextField txtStockToDecrease;
     // End of variables declaration//GEN-END:variables
 }

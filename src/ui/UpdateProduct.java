@@ -233,7 +233,7 @@ public class UpdateProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el ID del producto!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             String query = "SELECT p.*, c.categoryName FROM products p "
-                    + "INNER JOIN productCategories c ON p.category_pk = c.category_pk WHERE p.uniqueId = ?";
+                    + "INNER JOIN productCategories c ON p.category_pk = c.category_pk WHERE p.product_pk = ?";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
                 ps.setString(1, uniqueId);
@@ -277,7 +277,7 @@ public class UpdateProduct extends javax.swing.JFrame {
 
         try (Connection con = ConnectionProvider.getCon()) {
             // Verificar si el uniqueId existe en la tabla products
-            String checkUniqueIdQuery = "SELECT COUNT(*) FROM products WHERE uniqueId = ?";
+            String checkUniqueIdQuery = "SELECT COUNT(*) FROM products WHERE product_pk = ?";
             try (PreparedStatement checkStmt = con.prepareStatement(checkUniqueIdQuery)) {
                 checkStmt.setString(1, uniqueId);
                 ResultSet rs = checkStmt.executeQuery();
@@ -363,7 +363,7 @@ public class UpdateProduct extends javax.swing.JFrame {
 
                     // Actualizar los datos del producto en la tabla products
                     String updateQuery = "UPDATE products SET category_pk = ?, description = ?, productBrand = ?, quantity = ?, acquiredPrice = ?, "
-                            + "sellingPrice = ?, productLocation = ? WHERE uniqueId = ?";
+                            + "sellingPrice = ?, productLocation = ? WHERE product_pk = ?";
                     try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
                         ps.setInt(1, categoryPK); // Usar la llave primaria de la categoría
                         ps.setString(2, description);

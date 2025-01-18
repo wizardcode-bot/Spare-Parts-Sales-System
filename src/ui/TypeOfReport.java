@@ -1,16 +1,20 @@
 
 package ui;
 
+import dao.ConnectionProvider;
+import javax.swing.JOptionPane;
+import java.sql.*;
+
 /**
  *
  * @author HOME
  */
-public class TypeOfAdjustment extends javax.swing.JFrame {
+public class TypeOfReport extends javax.swing.JFrame {
 
     /**
-     * Creates new form TypeOfAdjustment
+     * Creates new form TypeOfReport
      */
-    public TypeOfAdjustment() {
+    public TypeOfReport() {
         initComponents();
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -26,11 +30,11 @@ public class TypeOfAdjustment extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        btnTotalStockValue = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -39,46 +43,41 @@ public class TypeOfAdjustment extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Tipo de ajuste");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 6, -1, -1));
+        jLabel1.setText("Tipo de reporte");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 44, 600, 10));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Incrementar Stock");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnTotalStockValue.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnTotalStockValue.setForeground(new java.awt.Color(0, 0, 0));
+        btnTotalStockValue.setText("Valor total del inventario");
+        btnTotalStockValue.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTotalStockValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnTotalStockValueActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 95, 300, 50));
+        getContentPane().add(btnTotalStockValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 92, 300, 50));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jButton2.setText("Disminuir Stock");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 163, 300, 50));
+        jButton2.setText("Flujo de dinero");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 160, 300, 50));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
-        jButton3.setText("Intercambio de producto");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 231, 300, 50));
+        jButton3.setText("Registrar nuevo gasto");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 228, 300, 50));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
-        jButton4.setText("Modificar categorías de productos");
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 299, 300, 50));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 44, 600, 10));
+        jButton4.setText("Historial de gastos");
+        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(153, 296, 300, 50));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/smallClose.png"))); // NOI18N
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
@@ -89,24 +88,32 @@ public class TypeOfAdjustment extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new IncreaseStock().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         dispose();
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new DecreaseStock().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnTotalStockValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalStockValueActionPerformed
+        //botón para ver valor total del inventario
+         String query = "SELECT SUM(quantity * sellingPrice) AS totalPrice FROM products";
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new StockExchange().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+        try (Connection con = ConnectionProvider.getCon();
+             PreparedStatement pst = con.prepareStatement(query);
+             ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                long totalPrice = rs.getLong("totalPrice");
+                JOptionPane.showMessageDialog(this, "El valor total del inventario es: $" + totalPrice, "Valor Total", 
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo calcular el valor total del inventario.", "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + ex.getMessage(), "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTotalStockValueActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,26 +132,26 @@ public class TypeOfAdjustment extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TypeOfAdjustment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TypeOfReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TypeOfAdjustment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TypeOfReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TypeOfAdjustment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TypeOfReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TypeOfAdjustment.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TypeOfReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TypeOfAdjustment().setVisible(true);
+                new TypeOfReport().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnTotalStockValue;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

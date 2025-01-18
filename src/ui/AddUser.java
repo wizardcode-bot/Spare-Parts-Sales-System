@@ -320,7 +320,7 @@ public class AddUser extends javax.swing.JFrame {
             return;
         }
 
-        String query = "INSERT INTO appusers (appuser_pk, userRole, name, dob, mobileNumber, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO appusers (appuser_pk, userRole, name, dateOfBirth, mobileNumber, username, password, address) VALUES (?,?,?,?,?,?,?,?)";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, IDcard);

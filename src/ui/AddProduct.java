@@ -308,7 +308,7 @@ public class AddProduct extends javax.swing.JFrame {
                 int categoryPK = rs.getInt("category_pk");
 
                 // Insertar el producto en la base de datos
-                String insertQuery = "INSERT INTO products(uniqueId, category_pk, description, productBrand, quantity, acquiredPrice, sellingPrice, productLocation) "
+                String insertQuery = "INSERT INTO products(product_pk, category_pk, description, productBrand, quantity, acquiredPrice, sellingPrice, productLocation) "
                         + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement ps = con.prepareStatement(insertQuery)) {
                     ps.setString(1, uniqueId);
@@ -387,7 +387,7 @@ public class AddProduct extends javax.swing.JFrame {
             iconLabel.setText("");
             checkProductID = false;
 
-            String query = "SELECT uniqueId FROM products WHERE uniqueId = ?";
+            String query = "SELECT product_pk FROM products WHERE product_pk = ?";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
                 pst.setString(1, productID);

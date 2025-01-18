@@ -44,7 +44,7 @@ public class SellProduct extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT * FROM products WHERE description LIKE ? OR uniqueId LIKE ?";
+        String query = "SELECT * FROM products WHERE description LIKE ? OR product_pk LIKE ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -53,7 +53,7 @@ public class SellProduct extends javax.swing.JFrame {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    model.addRow(new Object[]{rs.getString("uniqueId") + "   -   " + rs.getString("description")});
+                    model.addRow(new Object[]{rs.getString("product_pk") + "   -   " + rs.getString("description")});
                 }
             }
         } catch (SQLException e) {
@@ -79,7 +79,7 @@ public class SellProduct extends javax.swing.JFrame {
                     String productIdString = dtm.getValueAt(i, 0).toString().trim();
                     int quantityToReduce = Integer.parseInt(dtm.getValueAt(i, 4).toString());
 
-                    String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?";
+                    String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE product_pk = ?";
                     try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
                         ps.setInt(1, quantityToReduce);
                         ps.setString(2, productIdString);
@@ -563,7 +563,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         String uniqueId[] = nameOrUniqueId.split("-", 0);
 
-        String query = "SELECT * FROM products WHERE uniqueId = ?";
+        String query = "SELECT * FROM products WHERE product_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, uniqueId[0]);
@@ -620,7 +620,7 @@ public class SellProduct extends javax.swing.JFrame {
 
             if (rowIndex == -1) {
                 // Si el producto no está en el carrito, buscar en la base de datos
-                String query = "SELECT * FROM products WHERE uniqueId = ?";
+                String query = "SELECT * FROM products WHERE product_pk = ?";
                 try (
                         Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
                     pst.setString(1, uniqueId); // Sustituir el parámetro único ID
@@ -767,7 +767,7 @@ public class SellProduct extends javax.swing.JFrame {
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
                     // Obtener product_pk a partir del uniqueId
-                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
+                    String productQuery = "SELECT product_pk FROM products WHERE product_pk = ?";
                     long productPk = -1;
                     try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
                         psProduct.setString(1, uniqueId);

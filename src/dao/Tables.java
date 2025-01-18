@@ -13,9 +13,9 @@ public class Tables {
                     + "appuser_pk BIGINT PRIMARY KEY, " //cédula
                     + "userRole VARCHAR(50) NOT NULL, "
                     + "name VARCHAR(200) NOT NULL, "
-                    + "dob VARCHAR(50) NOT NULL, "
+                    + "dateOfBirth VARCHAR(50) NOT NULL, "
                     + "mobileNumber VARCHAR(15) NOT NULL, "
-                    + "username VARCHAR(50) NOT NULL, "
+                    + "username VARCHAR(50) NOT NULL UNIQUE, "
                     + "password VARCHAR(255) NOT NULL, "
                     + "address VARCHAR(100) NOT NULL)";
 
@@ -23,8 +23,7 @@ public class Tables {
                     + "VALUES ('Admin', 'Admin', '16-12-1992', '0000111122', '1006465848', 'admin', 'admin', 'Colombia')";
 
             String createProductsTable = "CREATE TABLE IF NOT EXISTS products ("
-                    + "product_pk BIGINT AUTO_INCREMENT PRIMARY KEY, "
-                    + "uniqueId VARCHAR(255) NOT NULL, "
+                    + "product_pk VARCHAR(255) PRIMARY KEY, "
                     + "category_pk INT NOT NULL, "
                     + "description VARCHAR(200) NOT NULL, "
                     + "productBrand VARCHAR(200), "
@@ -45,8 +44,8 @@ public class Tables {
                     + "transferPaid BIGINT DEFAULT 0," //pago por transferencia
                     + "client_pk VARCHAR(20)," //llave primaria de el cliente que hizo la compra
                     + "appuser_pk BIGINT, " //llave primaria de el usuario(vendedor) que hizo la venta
-                    + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk),"
-                    + "FOREIGN KEY (appuser_pk) REFERENCES appusers(appuser_pk))";
+                    + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk) ON DELETE CASCADE ON UPDATE RESTRICT,"
+                    + "FOREIGN KEY (appuser_pk) REFERENCES appusers(appuser_pk) ON DELETE CASCADE ON UPDATE RESTRICT)";
 
             String createClientsTable = "CREATE TABLE IF NOT EXISTS clients ("
                     + "client_pk VARCHAR(20) PRIMARY KEY, " //Cédula o NIT
@@ -74,15 +73,15 @@ public class Tables {
                     + "quantity int NOT NULL,"
                     + "salePrice BIGINT NOT NULL,"
                     + "saleDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
-                    + "product_pk BIGINT,"
-                    + "FOREIGN KEY (product_pk) REFERENCES products(product_pk) ON DELETE CASCADE)";
+                    + "product_pk VARCHAR(255),"
+                    + "FOREIGN KEY (product_pk) REFERENCES products(product_pk) ON DELETE CASCADE ON UPDATE RESTRICT)";
 
             String createProductsBills = "CREATE TABLE IF NOT EXISTS products_bills("
                     + "productsBills_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
                     + "bill_pk BIGINT,"
                     + "soldProduct_pk BIGINT,"
-                    + "FOREIGN KEY (bill_pk) REFERENCES bills(bill_pk),"
-                    + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk))";
+                    + "FOREIGN KEY (bill_pk) REFERENCES bills(bill_pk) ON DELETE CASCADE ON UPDATE RESTRICT,"
+                    + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk) ON DELETE CASCADE ON UPDATE RESTRICT)";
             
             String createServices = "CREATE TABLE IF NOT EXISTS services("
                     + "service_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
@@ -90,7 +89,7 @@ public class Tables {
                     + "state VARCHAR(50) NOT NULL,"
                     + "totalPrice BIGINT NOT NULL,"
                     + "lastModified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
-                    + "FOREIGN KEY (motorbike_pk) REFERENCES motorbikes(motorbike_pk))";
+                    + "FOREIGN KEY (motorbike_pk) REFERENCES motorbikes(motorbike_pk) ON DELETE CASCADE ON UPDATE RESTRICT)";
             
             String createSoldProductsServices = "CREATE TABLE IF NOT EXISTS soldProducts_services("
                     + "soldProductsServices_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
@@ -98,6 +97,23 @@ public class Tables {
                     + "soldProduct_pk BIGINT,"
                     + "FOREIGN KEY (service_pk) REFERENCES services(service_pk) ON DELETE CASCADE,"
                     + "FOREIGN KEY (soldProduct_pk) REFERENCES SoldProducts(soldProduct_pk) ON DELETE CASCADE)";
+            
+            String createInventoryAdjustments = "CREATE TABLE IF NOT EXISTS inventory_adjustments("
+                    + "inventory_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "previousQuantity BIGINT NOT NULL,"
+                    + "newQuantity BIGINT NOT NULL,"
+                    + "adjustmentMotive VARCHAR(255),"
+                    + "moneyReceived BIGINT DEFAULT 0,"
+                    + "moneyPaid BIGINT DEFAULT 0,"
+                    + "lastModified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+                    + "product_pk VARCHAR(255),"
+                    + "FOREIGN KEY (product_pk) REFERENCES products(product_pk) ON DELETE CASCADE)";
+            
+            String createExpenses = "CREATE TABLE IF NOT EXISTS expenses("
+                    + "expense_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "description VARCHAR(255) NOT NULL,"
+                    + "expenseValue BIGINT NOT NULL,"
+                    + "expenseDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
             // EJECUTAR LAS CONSULTAS
             
@@ -112,6 +128,8 @@ public class Tables {
             //st.executeUpdate(createProductsBills);
             //st.executeUpdate(createServices);
             //st.executeUpdate(createSoldProductsServices);
+            //st.executeUpdate(createInventoryAdjustments);
+            //st.executeUpdate(createExpenses);
             
             JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {

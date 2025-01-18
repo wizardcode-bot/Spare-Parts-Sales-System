@@ -138,7 +138,7 @@ public class ViewUser extends javax.swing.JFrame {
                     rs.getString("appuser_pk"),
                     rs.getString("name"),
                     rs.getString("userRole"),
-                    rs.getString("dob"),
+                    rs.getString("dateOfBirth"),
                     rs.getString("mobileNumber"),
                     rs.getString("username"),
                     rs.getString("address")
@@ -175,7 +175,8 @@ public class ViewUser extends javax.swing.JFrame {
                     if (rowsAffected > 0) {
                         JOptionPane.showMessageDialog(null, "¡Usuario eliminado exitosamente!");
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró al usuario con el ID proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "No se encontró al usuario con el ID proporcionado.", "Error", 
+                                JOptionPane.ERROR_MESSAGE);
                     }
                     dispose();
                     new ViewUser(username).setVisible(true);
