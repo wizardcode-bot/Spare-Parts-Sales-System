@@ -113,7 +113,8 @@ public class Tables {
                     + "expense_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
                     + "description VARCHAR(255) NOT NULL,"
                     + "expenseValue BIGINT NOT NULL,"
-                    + "expenseDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                    + "expenseDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                    + "expenseResponsible VARCHAR(200) NOT NULL)";
 
             // EJECUTAR LAS CONSULTAS
             
