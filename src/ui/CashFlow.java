@@ -1,8 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui;
+
+import dao.ConnectionProvider;
+import java.sql.*;
 
 /**
  *
@@ -15,6 +14,92 @@ public class CashFlow extends javax.swing.JFrame {
      */
     public CashFlow() {
         initComponents();
+        setSize(850, 500);
+        setLocationRelativeTo(null);
+        updateCashFlowData();
+    }
+
+    private void updateCashFlowData() {
+        Timestamp start = startDate.getDate() != null ? new Timestamp(startDate.getDate().getTime()) : null;
+        Timestamp end = endDate.getDate() != null ? new Timestamp(endDate.getDate().getTime() + 86400000L - 1) : null; // Sumar 1 día y restar 1 ms para incluir el último día.
+
+        String whereClause = "";
+        if (start != null && end != null) {
+            whereClause = "WHERE ? <= date_column AND date_column <= ?";
+        } else {
+            whereClause = "WHERE DATE(date_column) = CURRENT_DATE";
+        }
+
+        try (Connection con = ConnectionProvider.getCon()) {
+            // 1. Sumar cashPaid en bills
+            String sqlCashPaid = "SELECT SUM(cashPaid) FROM bills " + whereClause.replace("date_column", "billDate");
+            try (PreparedStatement ps = con.prepareStatement(sqlCashPaid)) {
+                if (start != null && end != null) {
+                    ps.setTimestamp(1, start);
+                    ps.setTimestamp(2, end);
+                }
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    lblCashPaid.setText("$ " + String.valueOf(rs.getLong(1)));
+                }
+            }
+
+            // 2. Sumar transferPaid en bills
+            String sqlTransferPaid = "SELECT SUM(transferPaid) FROM bills " + whereClause.replace("date_column", "billDate");
+            try (PreparedStatement ps = con.prepareStatement(sqlTransferPaid)) {
+                if (start != null && end != null) {
+                    ps.setTimestamp(1, start);
+                    ps.setTimestamp(2, end);
+                }
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    lblTransferPaid.setText("$ " + String.valueOf(rs.getLong(1)));
+                }
+            }
+
+            // 3. Sumar moneyReceived en inventory_adjustments
+            String sqlInventoryIncome = "SELECT SUM(moneyReceived) FROM inventory_adjustments " + whereClause.replace("date_column", "lastModified");
+            try (PreparedStatement ps = con.prepareStatement(sqlInventoryIncome)) {
+                if (start != null && end != null) {
+                    ps.setTimestamp(1, start);
+                    ps.setTimestamp(2, end);
+                }
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    lblInventoryIncome.setText("$ " + String.valueOf(rs.getLong(1)));
+                }
+            }
+
+            // 4. Sumar expenseValue en expenses
+            String sqlExpenses = "SELECT SUM(expenseValue) FROM expenses " + whereClause.replace("date_column", "expenseDate");
+            try (PreparedStatement ps = con.prepareStatement(sqlExpenses)) {
+                if (start != null && end != null) {
+                    ps.setTimestamp(1, start);
+                    ps.setTimestamp(2, end);
+                }
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    lblExpenses.setText("$ " + String.valueOf(rs.getLong(1)));
+                }
+            }
+
+            // 5. Sumar moneyPaid en inventory_adjustments
+            String sqlInventoryExpenses = "SELECT SUM(moneyPaid) FROM inventory_adjustments " + whereClause.replace("date_column", "lastModified");
+            try (PreparedStatement ps = con.prepareStatement(sqlInventoryExpenses)) {
+                if (start != null && end != null) {
+                    ps.setTimestamp(1, start);
+                    ps.setTimestamp(2, end);
+                }
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    lblInventoryExpenses.setText("$ " + String.valueOf(rs.getLong(1)));
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + ex.getMessage());
+        }
     }
 
     /**
@@ -29,113 +114,135 @@ public class CashFlow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblCashPaid = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblTransferPaid = new javax.swing.JLabel();
+        lblInventoryIncome = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblExpenses = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        startDate = new com.toedter.calendar.JDateChooser();
+        jLabel13 = new javax.swing.JLabel();
+        endDate = new com.toedter.calendar.JDateChooser();
+        jButton1 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        lblInventoryExpenses = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Flujo de dinero");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Ingresos por ventas");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 170, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel3.setText("--:--");
+        lblCashPaid.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblCashPaid.setForeground(new java.awt.Color(0, 0, 0));
+        lblCashPaid.setText("--:--");
+        getContentPane().add(lblCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(172, 231, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel4.setText("Otros ingresos");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Intercambio de inventario");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 358, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Efectivo");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 231, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Transferencia");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 283, -1, -1));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel7.setText("--:--");
+        lblTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblTransferPaid.setForeground(new java.awt.Color(0, 0, 0));
+        lblTransferPaid.setText("--:--");
+        getContentPane().add(lblTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 283, -1, -1));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel8.setText("--:--");
+        lblInventoryIncome.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblInventoryIncome.setForeground(new java.awt.Color(0, 0, 0));
+        lblInventoryIncome.setText("--:--");
+        getContentPane().add(lblInventoryIncome, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 398, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Gastos");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(522, 170, -1, -1));
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel10.setText("--:--");
+        lblExpenses.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblExpenses.setForeground(new java.awt.Color(0, 0, 0));
+        lblExpenses.setText("--:--");
+        getContentPane().add(lblExpenses, new org.netbeans.lib.awtextra.AbsoluteConstraints(533, 231, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(281, 281, 281)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel8))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel3)))
-                                .addGap(202, 202, 202)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel10)
-                                        .addGap(31, 31, 31)))))))
-                .addContainerGap(247, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(97, 97, 97)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel9))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel10))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addGap(53, 53, 53)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addContainerGap(80, Short.MAX_VALUE))
-        );
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Desde");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 93, -1, -1));
+        getContentPane().add(startDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 84, 160, 32));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("Hasta");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(311, 92, -1, -1));
+        getContentPane().add(endDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(352, 84, 160, 32));
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/filter.png"))); // NOI18N
+        jButton1.setText("Filtrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(524, 88, 110, -1));
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel14.setText("Intercambio de inventario");
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(522, 358, -1, -1));
+
+        lblInventoryExpenses.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblInventoryExpenses.setForeground(new java.awt.Color(0, 0, 0));
+        lblInventoryExpenses.setText("--:--");
+        getContentPane().add(lblInventoryExpenses, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 398, -1, -1));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        dispose();
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        updateCashFlowData();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,16 +280,25 @@ public class CashFlow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser endDate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblCashPaid;
+    private javax.swing.JLabel lblExpenses;
+    private javax.swing.JLabel lblInventoryExpenses;
+    private javax.swing.JLabel lblInventoryIncome;
+    private javax.swing.JLabel lblTransferPaid;
+    private com.toedter.calendar.JDateChooser startDate;
     // End of variables declaration//GEN-END:variables
 }

@@ -490,6 +490,7 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel17.setText("Transferencia ($)");
         getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 411, -1, -1));
 
+        txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCashPaidKeyReleased(evt);
@@ -497,6 +498,7 @@ public class SellProduct extends javax.swing.JFrame {
         });
         getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 376, 200, -1));
 
+        txtTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTransferPaidKeyReleased(evt);
@@ -762,23 +764,9 @@ public class SellProduct extends javax.swing.JFrame {
 
                 DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
                 for (int i = 0; i < dtm.getRowCount(); i++) {
-                    String uniqueId = dtm.getValueAt(i, 0).toString(); // uniqueId del producto
+                    String productPK = dtm.getValueAt(i, 0).toString(); // product_pk del producto
                     int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
-
-                    // Obtener product_pk a partir del uniqueId
-                    String productQuery = "SELECT product_pk FROM products WHERE product_pk = ?";
-                    long productPk = -1;
-                    try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
-                        psProduct.setString(1, uniqueId);
-                        try (ResultSet rs = psProduct.executeQuery()) {
-                            if (rs.next()) {
-                                productPk = rs.getLong("product_pk");
-                            } else {
-                                throw new Exception("No se encontró el producto con ID único: " + uniqueId);
-                            }
-                        }
-                    }
 
                     // Insertar en SoldProducts
                     long soldProductPk;
@@ -786,7 +774,7 @@ public class SellProduct extends javax.swing.JFrame {
                         psSoldProduct.setInt(1, quantity);
                         psSoldProduct.setLong(2, salePrice);
                         psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psSoldProduct.setLong(4, productPk);
+                        psSoldProduct.setString(4, productPK);
                         psSoldProduct.executeUpdate();
 
                         try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
