@@ -1,19 +1,14 @@
 package ui.help;
 
 
-
-/**
- *
- * @author HOME
- */
-public class AddUserHelp extends javax.swing.JFrame {
+public class ProfileHelp extends javax.swing.JFrame {
 
     /**
-     * Creates new form AddUserHelp
+     * Creates new form ProfileHelp
      */
-    public AddUserHelp() {
+    public ProfileHelp() {
         initComponents();
-        setSize(850, 500);
+        setSize(850,500);
         setLocationRelativeTo(null);
     }
 
@@ -26,11 +21,21 @@ public class AddUserHelp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel7 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel7.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
+            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'</p></html>");
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel4.setText("Mi Perfil");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -40,21 +45,6 @@ public class AddUserHelp extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Cómo usar esta función");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 58, 850, 10));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel6.setText("Añadir Usuarios");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 98, -1, -1));
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel5.setText("<html><p>En la función de 'Añadir Usuarios' puedes registrar a nuevos usuarios del sistema, estos tendrán su propia cuenta, por lo cual deberás ingresar algunos de sus datos personales."
-            + "<br>Primero asigna un rol al nuevo usuario del sistema, ten en cuenta las funciones a las que tiene acceso cada rol:"
-            + "<br>Administrador: Añadir, Ver, Actualizar y Eliminar usuarios, Gestionar clientes, Ver y Actualizar su propia cuenta."
-            + "<br>Vendedor: Añadir, Consultar, Actualizar, Eliminar y Vender productos, Ver facturas, Ver y Actualizar su propia cuenta."
-            + "<br>Luego de haber asignado un rol al usuario, ahora debes de ingresar los datos que se solicitan en el formulario de registro y dar click en 'Guardar'"
-            + "<br>Al dar click en 'Guardar' el nuevo usuario quedará registrado en la base de datos de usuarios del sistema y podrá iniciar sesión con sus credenciales."
-            + "<br>Recuerda que el nombre de usuario y la contraseña asignados son las credenciales que usará el usuario para ingresar al sistema.</p></html>");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 750, 300));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -63,6 +53,18 @@ public class AddUserHelp extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
+            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
+            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema.</p></html>");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel5.setText("Mi Perfil");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -89,20 +91,20 @@ public class AddUserHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddUserHelp().setVisible(true);
+                new ProfileHelp().setVisible(true);
             }
         });
     }
@@ -110,8 +112,10 @@ public class AddUserHelp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
