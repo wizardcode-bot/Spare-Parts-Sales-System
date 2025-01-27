@@ -53,6 +53,7 @@ public class AddVehicle extends javax.swing.JFrame {
         txtRelateClient = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
 
         setIconImages(null);
@@ -68,13 +69,13 @@ public class AddVehicle extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Registrar vehículo");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 8, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 58, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de placa *");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 131, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 133, -1, -1));
 
         txtPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPlate.setForeground(new java.awt.Color(0, 0, 0));
@@ -83,57 +84,57 @@ public class AddVehicle extends javax.swing.JFrame {
                 txtPlateKeyReleased(evt);
             }
         });
-        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 152, 300, -1));
+        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 154, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Marca *");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 206, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 208, -1, -1));
 
         txtBrandName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtBrandName.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtBrandName, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 226, 300, -1));
+        getContentPane().add(txtBrandName, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 228, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Modelo");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 281, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 283, -1, -1));
 
         txtModel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtModel.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 299, 300, -1));
+        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 301, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cilindraje");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 357, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 359, -1, -1));
 
         txtCylinder.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCylinder.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtCylinder, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 378, 300, -1));
+        getContentPane().add(txtCylinder, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 380, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Color *");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 131, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 133, -1, -1));
 
         txtColor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtColor.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 146, 300, -1));
+        getContentPane().add(txtColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 148, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Relacionar propietario *");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 206, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 208, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Filtrar por número de cédula");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 281, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 283, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFilterClient.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 302, 200, -1));
+        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 304, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -147,7 +148,7 @@ public class AddVehicle extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 331, 110, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 371, 110, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -159,21 +160,21 @@ public class AddVehicle extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(677, 299, 94, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(677, 301, 94, -1));
 
         plateIcon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         plateIcon.setForeground(new java.awt.Color(0, 0, 0));
         plateIcon.setText("---");
-        getContentPane().add(plateIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, -1, -1));
+        getContentPane().add(plateIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 152, -1, -1));
 
         txtRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtRelateClient.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 226, 300, -1));
+        getContentPane().add(txtRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 228, 300, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("(*) Indica campo obligatorio");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 441, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 443, -1, -1));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -182,7 +183,18 @@ public class AddVehicle extends javax.swing.JFrame {
                 jLabel12MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 8, -1, -1));
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addIcon.png"))); // NOI18N
+        jButton1.setText("Agregar cliente");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 337, -1, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -346,6 +358,11 @@ public class AddVehicle extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel12MouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // botón añadir cliente
+        new AddClient().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -390,6 +407,7 @@ public class AddVehicle extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
