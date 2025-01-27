@@ -4,10 +4,19 @@ import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import common.Validations;
+import static common.Validations.getIDByUsername;
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 public class Profile extends javax.swing.JFrame {
 
     private String username = "";
+    private ImageIcon image;
+    private Icon icon;
+    private String ruta;
+    private String ID;
 
     /**
      * Creates new form Profile
@@ -18,8 +27,24 @@ public class Profile extends javax.swing.JFrame {
 
     public Profile(String tempUsername) {
         initComponents();
+        setSize(850, 500);
         username = tempUsername;
         setLocationRelativeTo(null);
+    }
+
+    private void setImage(JLabel lbl, String ruta) {
+        //método para establecer icono en el label
+
+        this.image = new ImageIcon(ruta);
+        this.icon = new ImageIcon(
+                this.image.getImage().getScaledInstance(
+                        lbl.getWidth(),
+                        lbl.getHeight(),
+                        Image.SCALE_DEFAULT
+                )
+        );
+        lbl.setIcon(this.icon);
+        this.repaint();
     }
 
     /**
@@ -33,7 +58,7 @@ public class Profile extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
+        lblProfile = new javax.swing.JLabel();
         lblUsername = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -55,34 +80,46 @@ public class Profile extends javax.swing.JFrame {
                 formComponentShown(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Mi Perfil");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(358, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 65, 850, 10));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Viewprofile.png"))); // NOI18N
+        lblProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Viewprofile.png"))); // NOI18N
+        lblProfile.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        getContentPane().add(lblProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 126, 264, 219));
 
         lblUsername.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblUsername.setForeground(new java.awt.Color(0, 0, 0));
         lblUsername.setText("Nombre de Usuario");
+        getContentPane().add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 357, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Nombre");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 120, -1, -1));
 
         txtName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 141, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Número de teléfono");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 244, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 265, 300, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Dirección");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 306, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 327, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -94,6 +131,7 @@ public class Profile extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 362, 120, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -105,13 +143,16 @@ public class Profile extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 406, 190, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Fecha de nacimiento");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 182, -1, -1));
 
         txtDoB.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDoB.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtDoB, new org.netbeans.lib.awtextra.AbsoluteConstraints(467, 203, 300, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -120,6 +161,7 @@ public class Profile extends javax.swing.JFrame {
                 jLabel9MouseClicked(evt);
             }
         });
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(0, 0, 0));
@@ -131,92 +173,15 @@ public class Profile extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(lblUsername))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtDoB, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(83, 83, 83))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(358, 358, 358)
-                        .addComponent(jLabel1)
-                        .addGap(295, 295, 295)
-                        .addComponent(jLabel9))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel9))
-                .addGap(15, 15, 15)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblUsername))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(6, 6, 6)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addGap(6, 6, 6)
-                        .addComponent(txtDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5)
-                        .addGap(6, 6, 6)
-                        .addComponent(txtMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addGap(6, 6, 6)
-                        .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
-                            .addComponent(jButton1))))
-                .addGap(24, 24, 24))
-        );
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 406, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-
+        //mostrar datos en las casillas
         txtDoB.setEditable(false);
-        
+
         String query = "SELECT name, dateOfBirth, mobileNumber, address FROM appusers WHERE username = ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
@@ -235,11 +200,24 @@ public class Profile extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
+        // Mostrar imagen de perfil
+        this.ID = getIDByUsername(username);
+        ruta = "C:\\Users\\HOME\\Documents\\NetBeansProjects\\Inventory Management System\\src\\images\\profile\\" + this.ID + ".jpg";
+
+        java.io.File file = new java.io.File(ruta);
+        if (file.exists() && !file.isDirectory()) {
+            this.setImage(this.lblProfile, ruta);
+        } else {
+            // Imagen por defecto
+            String defaultRuta = "C:\\Users\\HOME\\Documents\\NetBeansProjects\\Inventory Management System\\src\\images\\Viewprofile.png";
+            this.setImage(this.lblProfile, defaultRuta);
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //botón actualizar
-        
+
         String name = txtName.getText().trim();
         String mobileNumber = txtMobileNumber.getText().trim();
         String address = txtAddress.getText().trim();
@@ -247,26 +225,24 @@ public class Profile extends javax.swing.JFrame {
         if (Validations.isNullOrBlank(name)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (!name.matches(Validations.justLetters)){
-            JOptionPane.showMessageDialog(null, "¡El nombre debe contener solamente letras!", "Advertencia", 
+        } else if (!name.matches(Validations.justLetters)) {
+            JOptionPane.showMessageDialog(null, "¡El nombre debe contener solamente letras!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
-        }
-        else if (Validations.isNullOrBlank(mobileNumber)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!", "Advertencia", 
+        } else if (Validations.isNullOrBlank(mobileNumber)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         } else if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
-            JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia", 
+            JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         } else if (Validations.isNullOrBlank(address)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!", "Advertencia", 
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la dirección!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         } else {
             String updateQuery = "UPDATE appusers SET name = ?, mobileNumber = ?, address = ? WHERE username = ?";
-            
 
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(updateQuery)) {
 
@@ -277,7 +253,7 @@ public class Profile extends javax.swing.JFrame {
 
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "¡Perfil actualizado exitosamente!",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
                 new Profile(username).setVisible(true);
             } catch (SQLException e) {
@@ -339,13 +315,13 @@ public class Profile extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblProfile;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtDoB;
