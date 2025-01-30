@@ -459,7 +459,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
         btnAddToCart.setText("Añadir al carrito");
         btnAddToCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -508,7 +507,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 448, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
         jButton3.setText("Finalizar servicio e Imprimir");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -580,7 +578,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 316, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveProgress.png"))); // NOI18N
         jButton4.setText("Guardar proceso");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -600,7 +597,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(txtServiceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 217, -1));
 
         btnSearchService.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnSearchService.setForeground(new java.awt.Color(0, 0, 0));
         btnSearchService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
         btnSearchService.setText("Buscar");
         btnSearchService.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

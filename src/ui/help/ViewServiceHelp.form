@@ -55,7 +55,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="24" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="C&#xf3;mo usar esta funci&#xf3;n"/>
+        <Property name="text" type="java.lang.String" value="&#xbf;C&#xf3;mo usar esta funci&#xf3;n?"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -91,7 +91,7 @@
           <Font name="Tahoma" size="16" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n &apos;Mi Perfil&apos; podr&#xe1;s ver los datos personales registrados en tu cuenta y modificarlos si es necesario.&quot;&#xa;    + &quot;&lt;br&gt;Para modificar alg&#xfa;n dato debes editarlo en la misma casilla que este se presenta y luego dar click en el bot&#xf3;n &apos;Actualizar&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Luego de confirmar el proceso, tus datos ser&#xe1;n actualizados en la base de datos del sistema.&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Ver Servicio&apos; el Administrador y Vendedor podr&#xe1;n ver los servicios registrados en el sistema y que est&#xe9;n en proceso.&quot;&#xa;    + &quot;&lt;br&gt; Se va a desplegar una opci&#xf3;n donde dice &apos;Filtrar por Estado&apos; o &apos;Filtrar por Placa del Veh&#xed;culo&apos; donde el Administrador o Vendedor pueden usar estados 2 funciones&quot;&#xa;    + &quot;&lt;br&gt;Se podr&#xe1;n visualizar los siguientes campos del Servicio ya existente que son: &quot;&#xa;    + &quot;&lt;br&gt;ID del Servicio, Veh&#xed;culo, Precio Total, Estado y Ultima Modificaci&#xf3;n.&quot;&#xa;    + &quot;&lt;br&gt;Si se desea eliminar un servicio solo el Administrador podr&#xe1; hacerlo, el Vendedor no cuenta con esta funci&#xf3;n. &quot;&#xa;    + &quot;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n se consulta con el manual de usuario&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Default Cursor"/>
@@ -108,7 +108,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Mi Perfil"/>
+        <Property name="text" type="java.lang.String" value="Ver Servicio"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

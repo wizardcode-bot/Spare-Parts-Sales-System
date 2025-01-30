@@ -1,15 +1,15 @@
 package ui.help;
 
 
-public class ProfileHelp extends javax.swing.JFrame {
+public class NewServiceHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public ProfileHelp() {
+    public NewServiceHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); //copear ;)
     }
 
     /**
@@ -43,7 +43,7 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Cómo usar esta función");
+        jLabel1.setText("¿Cómo usar esta función?");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -56,14 +56,23 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
-            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema.</p></html>");
+        jLabel8.setText("<html><p>En la función de 'Nuevo Servio' puedes registrar el servicio y los productos que se han utilizaron en este."
+            + "<br>Primero se le pedirá información requerida que estará marcada con un * y esto significa que es obligatorio llenar ese campo, los campos requeridos serán: "
+            + "<br>Número de Unidades, Relacionar Vehículo y Método de Pago"
+            + "<br>Los campos que no están marcados con * no será requeridos tale como:"
+            + "<br>Id del Producto, Precio por Unidad, Descripción y Marca. "
+            + "<br>Se encuentra una opción de “Relacionar Vehículo” esta función permite al Administrador o Vendedor pueda buscar el vehículo por medio de la placa en la opción 'Filtrar Vehículo'. "
+            + "<br>Asi mismo todo lo que se vaya añadiendo se verá reflejado en la pantalla. "
+            + "<br>Luego de haber llenado los datos del Cliente se debe dar click en 'Guardar Proceso' o Si desea finalizarlo se debe dar click en 'Finalizar Servicio'. "
+            + "<br>Al dar click en 'Guardar Proceso' el nuevo Servicio quedará registrado en la base de datos de Servicios del sistema."
+            + "<br>Al dar click en 'Finalizar Servicio' el Servicio quedará registrado en la base de datos de Servicios del sistema."
+            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+        );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("Mi Perfil");
+        jLabel5.setText("Nuevo Servicio");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         pack();
@@ -71,7 +80,7 @@ public class ProfileHelp extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -91,20 +100,51 @@ public class ProfileHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProfileHelp().setVisible(true);
+                new NewServiceHelp().setVisible(true);
             }
         });
     }

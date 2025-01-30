@@ -9,7 +9,7 @@ public class ProfileHelp extends javax.swing.JFrame {
     public ProfileHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); //copear ;)
     }
 
     /**
@@ -43,7 +43,7 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Cómo usar esta función");
+        jLabel1.setText("¿Cómo usar esta función?");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -58,7 +58,9 @@ public class ProfileHelp extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
             + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema.</p></html>");
+            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema. "
+            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+        );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
 
@@ -71,7 +73,7 @@ public class ProfileHelp extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

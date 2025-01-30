@@ -1,15 +1,15 @@
 package ui.help;
 
 
-public class ProfileHelp extends javax.swing.JFrame {
+public class RestartPasswordHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public ProfileHelp() {
+    public RestartPasswordHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); //copear ;)
     }
 
     /**
@@ -43,7 +43,7 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Cómo usar esta función");
+        jLabel1.setText("¿Cómo usar esta función?");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -56,14 +56,20 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
-            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema.</p></html>");
+        jLabel8.setText("<html><p>En la función 'Restablecer Contraseña' reestablecer la contraseña del usuario que desees."
+            + "<br>Para Restablecer la contraseña deberás ingresar el número de cedula del usuario (El usuario debe existir en la base datos)."
+            + "<br>Luego automáticamente se llenarán los campos para que están en blanco que son:"
+            + "<br>Nombre, Rol y Nombre de Usuario (Se debe fijar bien que sea el usuario al que corresponda al número de cedula)."
+            + "<br>Para restablecer la contraseña se debe dar click en 'Generar una Contraseña', esta función generara una contraseña al azar donde el administrador puede dar click las veces que desee y así obtener la más adecuada que le parezca."
+            + "<br>Se da click en 'Copiar' esta función te dice que la contraseña que se generó automáticamente se guardara en el portapapeles."
+            + "<br>Para finalizar este proceso se da click en 'Guardar Cambios' asi guardando la nueva contraseña en la base de datos de usuarios y asi el usuario pueda iniciar sesión con su nueva contraseña."
+            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+        );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("Mi Perfil");
+        jLabel5.setText("Restablecer Contraseña");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         pack();
@@ -71,7 +77,7 @@ public class ProfileHelp extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -91,20 +97,21 @@ public class ProfileHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestartPasswordHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestartPasswordHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestartPasswordHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestartPasswordHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProfileHelp().setVisible(true);
+                new RestartPasswordHelp().setVisible(true);
             }
         });
     }

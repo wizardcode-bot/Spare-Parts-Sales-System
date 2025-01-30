@@ -50,7 +50,7 @@ public class UpdateUserHelp extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Cómo usar esta función");
+        jLabel1.setText("¿Cómo usar esta función?");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
@@ -59,10 +59,12 @@ public class UpdateUserHelp extends javax.swing.JFrame {
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel11.setText("<html><p>En la función 'Actualizar usuario' debes de ingresar en la barra de búsqueda el nombre de usuario de la cuenta que se va a modificar y luego dar click en el botón 'Buscar'."
+        jLabel11.setText("<html><p>En la función de 'Actualizar Usuario' debes de ingresar en la barra de búsqueda el nombre de usuario de la cuenta que se va a modificar y luego dar click en el botón 'Buscar'."
             + "<br>Si el usuario está registrado en el sistema sus datos serán cargados automáticamente en las respectivas casillas."
             + "<br>Para modificar algún dato de la cuenta debes editarlo en la misma casilla que este se presenta y luego dar click en 'Actualizar'."
-            + "<br>Al dar click en el botón 'Actualizar' se modificarán los datos del usuario en la base de datos.</p></html>");
+            + "<br>Al dar click en el botón 'Actualizar' se modificarán los datos del usuario en la base de datos. "
+            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+        );
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 770, 180));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
