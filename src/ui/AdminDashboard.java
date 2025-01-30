@@ -153,6 +153,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton3.setIconTextGap(20);
         jButton3.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 285, 360, 108));
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -215,6 +220,10 @@ public class AdminDashboard extends javax.swing.JFrame {
         new SellerDashboard(username).setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new TypeOfReport().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

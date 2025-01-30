@@ -47,21 +47,6 @@ public class UpdateService extends javax.swing.JFrame {
         setSize(1366, 778);
     }
 
-    private long getProductPk(Connection con, String uniqueId) throws SQLException {
-        //método para obtener la llave primaria de cada producto
-        String query = "SELECT product_pk FROM products WHERE uniqueId = ?";
-        try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setString(1, uniqueId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getLong("product_pk");
-                } else {
-                    throw new SQLException("No se encontró el producto con unique_id: " + uniqueId);
-                }
-            }
-        }
-    }
-
     // Verifica si hay productos en el carrito
     private boolean isCartEmpty() {
         DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
@@ -88,7 +73,7 @@ public class UpdateService extends javax.swing.JFrame {
         return currentProducts;
     }
 
-    private void updateSoldProduct(Connection con, long servicePK, long productPk, int newQuantity, long salePrice) throws SQLException {
+    private void updateSoldProduct(Connection con, long servicePK, String productPk, int newQuantity, long salePrice) throws SQLException {
         String updateQuery = "UPDATE soldProducts sp "
                 + "JOIN soldProducts_services sps ON sp.soldProduct_pk = sps.soldProduct_pk "
                 + "SET sp.quantity = ?, sp.salePrice = ? "
@@ -97,7 +82,7 @@ public class UpdateService extends javax.swing.JFrame {
             ps.setInt(1, newQuantity);
             ps.setLong(2, salePrice);
             ps.setLong(3, servicePK);
-            ps.setLong(4, productPk);
+            ps.setString(4, productPk);
             ps.executeUpdate();
         }
     }
@@ -130,13 +115,13 @@ public class UpdateService extends javax.swing.JFrame {
         }
     }
 
-    private long insertSoldProduct(Connection con, int quantity, long salePrice, long productPk) throws SQLException {
+    private long insertSoldProduct(Connection con, int quantity, long salePrice, String productPk) throws SQLException {
         //método para insertar productos en la tabla soldProducts
         String query = "INSERT INTO soldProducts (quantity, salePrice, product_pk) VALUES (?, ?, ?)";
         try (PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, quantity);
             ps.setLong(2, salePrice);
-            ps.setLong(3, productPk);
+            ps.setString(3, productPk);
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -1034,15 +1019,13 @@ public class UpdateService extends javax.swing.JFrame {
                     int newQuantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
-                    long productPk = getProductPk(con, uniqueId);
-
-                    if (currentProducts.containsKey(productPk)) {
+                    if (currentProducts.containsKey(uniqueId)) {
                         // Actualizar producto existente
-                        updateSoldProduct(con, servicePKLong, productPk, newQuantity, salePrice);
-                        currentProducts.remove(productPk);
+                        updateSoldProduct(con, servicePKLong, uniqueId, newQuantity, salePrice);
+                        currentProducts.remove(uniqueId);
                     } else {
                         // Insertar nuevo producto vendido
-                        long soldProductPk = insertSoldProduct(con, newQuantity, salePrice, productPk);
+                        long soldProductPk = insertSoldProduct(con, newQuantity, salePrice, uniqueId);
                         associateProductWithBill(con, billPk, soldProductPk);
                     }
                 }
@@ -1166,39 +1149,25 @@ public class UpdateService extends javax.swing.JFrame {
 
             // Procesar productos en el carrito
             DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
-            Set<Long> productsInCart = new HashSet<>(); // Para identificar productos que permanecen en el carrito.
+            Set<String> productsInCart = new HashSet<>(); // Para identificar productos que permanecen en el carrito.
 
             for (int i = 0; i < dtm.getRowCount(); i++) {
                 String uniqueId = dtm.getValueAt(i, 0).toString();
                 int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                 long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
-                // Obtener product_pk a partir del uniqueId
-                String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
-                long productPk;
-                try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
-                    psProduct.setString(1, uniqueId);
-                    try (ResultSet rs = psProduct.executeQuery()) {
-                        if (rs.next()) {
-                            productPk = rs.getLong("product_pk");
-                        } else {
-                            throw new SQLException("No se encontró el producto con uniqueId: " + uniqueId);
-                        }
-                    }
-                }
+                productsInCart.add(uniqueId);
 
-                productsInCart.add(productPk);
-
-                if (currentProducts.containsKey(productPk)) {
+                if (currentProducts.containsKey(uniqueId)) {
                     // El producto ya existe, actualizar la cantidad sin sumarla
-                    long soldProductPk = currentProducts.get(productPk);
+                    long soldProductPk = currentProducts.get(uniqueId);
                     String getCurrentQuantityQuery = "SELECT quantity FROM SoldProducts WHERE soldProduct_pk = ?";
-                    int currentQuantity = 0;
+                    long currentQuantity = 0;
                     try (PreparedStatement psGetQuantity = con.prepareStatement(getCurrentQuantityQuery)) {
                         psGetQuantity.setLong(1, soldProductPk);
                         try (ResultSet rs = psGetQuantity.executeQuery()) {
                             if (rs.next()) {
-                                currentQuantity = rs.getInt("quantity");
+                                currentQuantity = rs.getLong("quantity");
                             }
                         }
                     }
@@ -1209,7 +1178,7 @@ public class UpdateService extends javax.swing.JFrame {
                         psUpdateSoldProduct.setLong(2, soldProductPk);
                         psUpdateSoldProduct.executeUpdate();
                     }
-                    currentProducts.remove(productPk); // Eliminar el producto de la lista de productos a eliminar
+                    currentProducts.remove(uniqueId); // Eliminar el producto de la lista de productos a eliminar
                 } else {
                     // Producto nuevo, insertar en SoldProducts y asociar con el servicio
                     long soldProductPk;
@@ -1217,7 +1186,7 @@ public class UpdateService extends javax.swing.JFrame {
                         psInsertSoldProduct.setInt(1, quantity);
                         psInsertSoldProduct.setLong(2, salePrice);
                         psInsertSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psInsertSoldProduct.setLong(4, productPk);
+                        psInsertSoldProduct.setString(4, uniqueId);
                         psInsertSoldProduct.executeUpdate();
 
                         try (ResultSet generatedKeys = psInsertSoldProduct.getGeneratedKeys()) {
@@ -1281,7 +1250,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         String checkServiceStateQuery = "SELECT state FROM services WHERE service_pk = ?";
         String getServiceQuery = "SELECT motorbike_pk, totalPrice FROM services WHERE service_pk = ?";
-        String getProductsQuery = "SELECT sp.quantity, sp.salePrice, p.uniqueId, p.description, p.productBrand "
+        String getProductsQuery = "SELECT sp.quantity, sp.salePrice, p.product_pk, p.description, p.productBrand "
                 + "FROM soldProducts_services sps "
                 + "INNER JOIN soldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk "
                 + "INNER JOIN products p ON sp.product_pk = p.product_pk "
@@ -1295,13 +1264,15 @@ public class UpdateService extends javax.swing.JFrame {
                     if (rsState.next()) {
                         String state = rsState.getString("state");
                         if ("Terminado".equalsIgnoreCase(state)) {
-                            JOptionPane.showMessageDialog(this, "El servicio ya está terminado y no puede ser editado.", "Servicio terminado", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "El servicio ya está terminado y no puede ser editado.", 
+                                    "Servicio terminado", JOptionPane.WARNING_MESSAGE);
                             btnSearchService.setEnabled(true);
                             txtServiceID.setEditable(true);
                             return;
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, "No se encontró el servicio con el ID proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "No se encontró el servicio con el ID proporcionado.", 
+                                "Error", JOptionPane.ERROR_MESSAGE);
                         btnSearchService.setEnabled(true);
                         txtServiceID.setEditable(true);
                         return;
@@ -1337,7 +1308,7 @@ public class UpdateService extends javax.swing.JFrame {
                 psProducts.setString(1, serviceId);
                 try (ResultSet rsProducts = psProducts.executeQuery()) {
                     while (rsProducts.next()) {
-                        String uniqueId = rsProducts.getString("uniqueId");
+                        String uniqueId = rsProducts.getString("product_pk");
                         String description = rsProducts.getString("description");
                         String productBrand = rsProducts.getString("productBrand");
                         int quantity = rsProducts.getInt("quantity");
@@ -1350,7 +1321,8 @@ public class UpdateService extends javax.swing.JFrame {
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar el servicio: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al buscar el servicio: " + e.getMessage(), "Error", 
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchServiceActionPerformed
 

@@ -40,7 +40,7 @@ public class ViewProduct extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Limpia la tabla antes de cargar los datos
 
-        String query = "SELECT p.uniqueId, c.categoryName, p.description, p.productBrand, "
+        String query = "SELECT p.product_pk, c.categoryName, p.description, p.productBrand, "
                 + "p.quantity, p.acquiredPrice, p.sellingPrice, p.productLocation, p.lastModified "
                 + "FROM products p "
                 + "JOIN productCategories c ON p.category_pk = c.category_pk";
@@ -59,7 +59,7 @@ public class ViewProduct extends javax.swing.JFrame {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     model.addRow(new Object[]{
-                        rs.getString("uniqueId"),
+                        rs.getString("product_pk"),
                         rs.getString("categoryName"),
                         rs.getString("description"),
                         rs.getString("productBrand"),

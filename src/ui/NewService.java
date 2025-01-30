@@ -46,7 +46,7 @@ public class NewService extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT * FROM products WHERE description LIKE ? OR uniqueId LIKE ?";
+        String query = "SELECT * FROM products WHERE description LIKE ? OR product_pk LIKE ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -55,7 +55,7 @@ public class NewService extends javax.swing.JFrame {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    model.addRow(new Object[]{rs.getString("uniqueId") + "   -   " + rs.getString("description")});
+                    model.addRow(new Object[]{rs.getString("product_pk") + "   -   " + rs.getString("description")});
                 }
             }
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class NewService extends javax.swing.JFrame {
                     String productIdString = dtm.getValueAt(i, 0).toString().trim();
                     int quantityToReduce = Integer.parseInt(dtm.getValueAt(i, 4).toString());
 
-                    String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?";
+                    String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE product_pk = ?";
                     try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
                         ps.setInt(1, quantityToReduce);
                         ps.setString(2, productIdString);
@@ -621,7 +621,7 @@ public class NewService extends javax.swing.JFrame {
 
         String uniqueId[] = nameOrUniqueId.split("-", 0);
 
-        String query = "SELECT * FROM products WHERE uniqueId = ?";
+        String query = "SELECT * FROM products WHERE product_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, uniqueId[0]);
@@ -676,7 +676,7 @@ public class NewService extends javax.swing.JFrame {
                 }
             }
 
-            String query = "SELECT * FROM products WHERE uniqueId = ?";
+            String query = "SELECT * FROM products WHERE product_pk = ?";
             try (
                     Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
                 pst.setString(1, uniqueId); // Sustituir el parámetro único ID
@@ -707,7 +707,7 @@ public class NewService extends javax.swing.JFrame {
                             // Actualizar inventario en la base de datos
                             int updatedQuantity = availableQuantity - nUnits;
                             try (PreparedStatement updatePst = con.prepareStatement(
-                                    "UPDATE products SET quantity = ? WHERE uniqueId = ?"
+                                    "UPDATE products SET quantity = ? WHERE product_pk = ?"
                             )) {
                                 updatePst.setInt(1, updatedQuantity);
                                 updatePst.setString(2, uniqueId);
@@ -760,7 +760,7 @@ public class NewService extends javax.swing.JFrame {
             lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
 
             // Actualizar el stock en la base de datos
-            String updateStockQuery = "UPDATE products SET quantity = quantity + ? WHERE uniqueId = ?";
+            String updateStockQuery = "UPDATE products SET quantity = quantity + ? WHERE product_pk = ?";
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(updateStockQuery)) {
                 pst.setInt(1, quantity);
                 pst.setString(2, uniqueId);
@@ -891,7 +891,7 @@ public class NewService extends javax.swing.JFrame {
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
                     // Obtener product_pk a partir del uniqueId
-                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
+                    String productQuery = "SELECT product_pk FROM products WHERE product_pk = ?";
                     long productPk = -1;
                     try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
                         psProduct.setString(1, uniqueId);
@@ -1090,27 +1090,13 @@ public class NewService extends javax.swing.JFrame {
                     int quantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
-                    // Obtener product_pk a partir del uniqueId
-                    String productQuery = "SELECT product_pk FROM products WHERE uniqueId = ?";
-                    long productPk = -1;
-                    try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
-                        psProduct.setString(1, uniqueId);
-                        try (ResultSet rs = psProduct.executeQuery()) {
-                            if (rs.next()) {
-                                productPk = rs.getLong("product_pk");
-                            } else {
-                                throw new Exception("No se encontró el producto con ID único: " + uniqueId);
-                            }
-                        }
-                    }
-
                     // Insertar en SoldProducts
                     long soldProductPk;
                     try (PreparedStatement psSoldProduct = con.prepareStatement(insertSoldProductQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
                         psSoldProduct.setInt(1, quantity);
                         psSoldProduct.setLong(2, salePrice);
                         psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psSoldProduct.setLong(4, productPk);
+                        psSoldProduct.setString(4, uniqueId);
                         psSoldProduct.executeUpdate();
 
                         try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
