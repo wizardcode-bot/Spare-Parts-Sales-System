@@ -1,12 +1,12 @@
 package ui.help;
 
 
-public class ProfileHelp extends javax.swing.JFrame {
+public class SellProductoHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public ProfileHelp() {
+    public SellProductoHelp() {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); //copear ;)
@@ -56,16 +56,23 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
-            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema. "
+        jLabel8.setText("<html><p>En la función de 'Vender Producto' puedes realizar ventas, esta función la puede usar Administrador y Vendedor."
+            + "<br>Primero se le pedirá información requerida que estará marcada con un * y esto significa que es obligatorio llenar ese campo, los campos requeridos serán: "
+            + "<br>Número de Unidades, Relacionar Cliente y Método de Pago"
+            + "<br>Los campos que no están marcados con * no será requeridos tale como:"
+            + "<br>Id del Producto, Precio por Unidad, Descripción y Marca. "
+            + "<br>Se encuentra una opción de “Relacionar Cliente” esta función permite al Administrador o Vendedor pueda buscar el cliente por medio de la placa en la opción 'Filtrar Cliente'. "
+            + "<br>Asi mismo todo lo que se vaya añadiendo al carrito de Compras se verá reflejado en la pantalla. "
+            + "<br>Luego de haber llenado los datos de la venta se debe dar click en 'Guardar Proceso' o Si desea finalizarlo se debe dar click en 'Finalizar Servicio'. "
+            + "<br>Al dar click en 'Guardar Proceso' el nuevo Servicio quedará registrado en la base de datos de Ventas del sistema."
+            + "<br>Al dar click en 'Generar Venta' la venta quedará registrado en la base de datos de Ventas del sistema."
             + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("Mi Perfil");
+        jLabel5.setText("Vender Producto");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         pack();
@@ -93,20 +100,23 @@ public class ProfileHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductoHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductoHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductoHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductoHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProfileHelp().setVisible(true);
+                new SellProductoHelp().setVisible(true);
             }
         });
     }

@@ -5,12 +5,12 @@ package ui.help;
  *
  * @author Usuario
  */
-public class AddUserHelp extends javax.swing.JFrame {
+public class LoginHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form AddClient
      */
-    public AddUserHelp() {
+    public LoginHelp() {
         initComponents();
         setSize(850, 500);
         setLocationRelativeTo(null);
@@ -45,17 +45,12 @@ public class AddUserHelp extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel3.setText("Añadir Usuario");
+        jLabel3.setText("Inicio de Sesión");
 
-        jLabel4.setText("<html><p>En la función de 'Añadir Usuario' puedes registrar a nuevos Usuarios en el sistema estos tendrán sus propios datos."
-            + "<br>En este formulario todos los campos son obligatorios. "
-            + "<br>Se debe asignar un rol de usuario al nuevo usuario y completar los demás campos. "
-            + "<br>El número de cedula no debe tener caracteres diferentes a números y no pueden existir 2 usuarios en el sistema con el número de cedula, se marcará con un logo afirmativo color verde si el número de cedula está disponible y puede ser utilizado. (El número de cedula solo puede tener entre 6 a 10 caracteres)"
-            + "<br>El nombre de usuario tampoco debe estar repetido, se marcará con un logo de afirmativo color verde si el nombre está disponible y puede ser utilizado (El nombre no debe tener más de 40 caracteres)"
-            + "<br>La dirección no puede tener más de 60 caracteres."
-            + "<br>Luego de haber llenado los datos del Usuario se debe dar click en 'Guardar'"
-            + "<br>Al dar click en 'Guardar' el nuevo Usuario quedará registrado en la base de datos de Usuarios del sistema."
-            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+        jLabel4.setText("<html><p>En el 'Inicio de Sesión' puedes ingresar con tu debido Rol ya sea Administrador o Vendedor"
+            + "<br>Debes llenar los siguientes Campos:"
+            + "<br>Nombre de Usuario y Contraseña "
+            + "<br>Recuerda que para mejor información se consulta con el manual de usuario. </p></html>"
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -72,7 +67,7 @@ public class AddUserHelp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(79, 79, 79)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
                     .addComponent(jLabel3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -88,8 +83,8 @@ public class AddUserHelp extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addComponent(jLabel4)
+                .addContainerGap(364, Short.MAX_VALUE))
         );
 
         pack();
@@ -116,14 +111,70 @@ public class AddUserHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -136,7 +187,7 @@ public class AddUserHelp extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddUserHelp().setVisible(true);
+                new LoginHelp().setVisible(true);
             }
         });
     }

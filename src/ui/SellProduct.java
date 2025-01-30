@@ -168,8 +168,19 @@ public class SellProduct extends javax.swing.JFrame {
                     + "\nTransferencia: " + transferPaidInt);
             doc.add(paymentDetails);
             doc.add(hyphenLine);
-            Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
-            doc.add(thanksMsg);
+            Paragraph disclaimerMsg = new Paragraph(
+                    """
+                    NO SE HACE DEVOLUCIÓN DE DINERO
+                    Después de ocho (8) dias de retirados los productos
+                    NO se aceptan devoluciones. Es indispensable presentar
+                    esta factura. Con esta el comprador declara haber
+                    recibido real y materialmente los productos.
+                    El tiempo de garantía de los productos es de tres (3) meses
+                    a la fecha de factura, excepto en parte eléctricas.
+                    En partes eléctricas NO hay garantía ni devoluciones.
+                    Gracias por tu compra. Te esperamos de nuevo!""");
+            disclaimerMsg.setAlignment(Element.ALIGN_CENTER);
+            doc.add(disclaimerMsg);
             // Abrir PDF
             OpenPdf.openById(String.valueOf(billId));
         } catch (Exception e) {

@@ -2,22 +2,25 @@
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JLabel" name="jLabel8">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="18" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Actualizar Usuario"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel9">
+    <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="16" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n &apos;Actualizar usuario&apos; debes de ingresar el nombre de usuario de la cuenta que se va a modificar en la barra de b&#xfa;squeda y dar click en el bot&#xf3;n &apos;Buscar&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Los datos del usuario ser&#xe1;n cargados autom&#xe1;ticamente en las respectivas casillas, para modificar alg&#xfa;n dato debes editarlo en la misma casilla que se presenta y luego dar click en &apos;Actualizar&apos;.&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n &apos;Mi Perfil&apos; podr&#xe1;s ver los datos personales registrados en tu cuenta y modificarlos si es necesario.&quot;&#xa;    + &quot;&lt;br&gt;Para modificar alg&#xfa;n dato debes editarlo en la misma casilla que este se presenta y luego dar click en el bot&#xf3;n &apos;Actualizar&apos;&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
         </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Default Cursor"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel4">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Mi Perfil"/>
       </Properties>
     </Component>
   </NonVisualComponents>
@@ -40,7 +43,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,89,0,0,3,106"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-12,0,0,3,82"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
@@ -60,41 +63,6 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSeparator" name="jSeparator1">
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="0" y="60" width="850" height="10"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="18" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Actualizar Usuario"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="50" y="110" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel11">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="16" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Actualizar Usuario&apos; debes de ingresar en la barra de b&#xfa;squeda el nombre de usuario de la cuenta que se va a modificar y luego dar click en el bot&#xf3;n &apos;Buscar&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Si el usuario est&#xe1; registrado en el sistema sus datos ser&#xe1;n cargados autom&#xe1;ticamente en las respectivas casillas.&quot;&#xa;    + &quot;&lt;br&gt;Para modificar alg&#xfa;n dato de la cuenta debes editarlo en la misma casilla que este se presenta y luego dar click en &apos;Actualizar&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Al dar click en el bot&#xf3;n &apos;Actualizar&apos; se modificar&#xe1;n los datos del usuario en la base de datos. &quot;&#xa;    + &quot;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n se consulta con el manual de usuario&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
-        </Property>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="50" y="150" width="770" height="180"/>
-        </Constraint>
-      </Constraints>
-    </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -107,6 +75,44 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="804" y="6" width="40" height="40"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="0" y="60" width="850" height="10"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel8">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="16" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Actualizar Cliente&apos; puedes actualizar a los Clientes que se encuentran ya registrados en el sistema, por lo se deber&#xe1;n ingresar algunos de sus datos personales.&quot;&#xa;    + &quot;&lt;br&gt;Primero se buscar&#xe1; por n&#xfa;mero de cedula (Recordar que el cliente ya debe existir en la base de datos): &quot;&#xa;    + &quot;&lt;br&gt;Luego se llenar&#xe1;n los campos en blanca se&#xf1;alando si es el cliente al que vas a actualizar su informaci&#xf3;n personal, si es podr&#xe1;s modificar los siguientes campos: &quot;&#xa;    + &quot;&lt;br&gt;Nombre, Correo, Tel&#xe9;fono y Direcci&#xf3;n.&quot;&#xa;    + &quot;&lt;br&gt;Luego de haber actualizado los datos del Cliente se debe dar click en &apos;Actualizar&apos;&quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Actualizar&apos; la nueva informaci&#xf3;n del Cliente quedar&#xe1; registrada en la base de datos de Clientes del sistema.&quot;&#xa;    + &quot;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n se consulta con el manual de usuario&lt;/p&gt;&lt;/html&gt;&quot;&#xa;" type="code"/>
+        </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Default Cursor"/>
+        </Property>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="40" y="150" width="740" height="120"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Actualizar Cliente"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="40" y="110" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

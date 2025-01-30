@@ -1,12 +1,12 @@
 package ui.help;
 
 
-public class ProfileHelp extends javax.swing.JFrame {
+public class UpdateClienteHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public ProfileHelp() {
+    public UpdateClienteHelp() {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); //copear ;)
@@ -56,16 +56,19 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
-            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema. "
+        jLabel8.setText("<html><p>En la función de 'Actualizar Cliente' puedes actualizar a los Clientes que se encuentran ya registrados en el sistema, por lo se deberán ingresar algunos de sus datos personales."
+            + "<br>Primero se buscará por número de cedula (Recordar que el cliente ya debe existir en la base de datos): "
+            + "<br>Luego se llenarán los campos en blanca señalando si es el cliente al que vas a actualizar su información personal, si es podrás modificar los siguientes campos: "
+            + "<br>Nombre, Correo, Teléfono y Dirección."
+            + "<br>Luego de haber actualizado los datos del Cliente se debe dar click en 'Actualizar'"
+            + "<br>Al dar click en 'Actualizar' la nueva información del Cliente quedará registrada en la base de datos de Clientes del sistema."
             + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("Mi Perfil");
+        jLabel5.setText("Actualizar Cliente");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         pack();
@@ -93,20 +96,35 @@ public class ProfileHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProfileHelp().setVisible(true);
+                new UpdateClienteHelp().setVisible(true);
             }
         });
     }

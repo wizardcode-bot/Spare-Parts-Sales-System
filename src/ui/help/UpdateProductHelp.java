@@ -1,12 +1,12 @@
 package ui.help;
 
 
-public class ProfileHelp extends javax.swing.JFrame {
+public class UpdateProductHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public ProfileHelp() {
+    public UpdateProductHelp() {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); //copear ;)
@@ -56,16 +56,20 @@ public class ProfileHelp extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
-            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema. "
+        jLabel8.setText("<html><p>En la función de 'Actualizar Producto' puedes actualizar a Productos que estén ya registrados en el sistema, a estos se le modificara su información."
+            + "<br>Primero se le pedirá ingresar su ID del producto o Nombre del producto en se le dará click en 'Buscar'."
+            + "<br>Los campos en blancos se llenarán automáticamente luego de haber ingresado el nombre del producto o su ID, si es el producto que vas a actualizar, podrás modificarle los siguientes campos:  "
+            + "<br>Seleccionar una categoría ya existente, Añadir Cantidad, Precio Adquirido, Descripción, Precio de Venta, Marca y Ubicación en el almacén. "
+            + "<br>Se encuentra una opción de “Añadir nueva Categoría” esta función permite al Administrador o Vendedor crear una nueva categoría"
+            + "<br>Luego de haber actualizado los datos del Producto se debe dar click en 'Actualizar'"
+            + "<br>Al dar click en 'Actualizar' el  Producto quedará Actualizado en la base de datos de Productos del sistema."
             + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("Mi Perfil");
+        jLabel5.setText("Actualizar Producto");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         pack();
@@ -93,20 +97,51 @@ public class ProfileHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProfileHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProfileHelp().setVisible(true);
+                new UpdateProductHelp().setVisible(true);
             }
         });
     }

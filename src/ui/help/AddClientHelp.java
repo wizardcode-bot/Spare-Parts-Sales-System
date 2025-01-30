@@ -5,12 +5,12 @@ package ui.help;
  *
  * @author Usuario
  */
-public class AddUserHelp extends javax.swing.JFrame {
+public class AddClientHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form AddClient
      */
-    public AddUserHelp() {
+    public AddClientHelp() {
         initComponents();
         setSize(850, 500);
         setLocationRelativeTo(null);
@@ -32,6 +32,8 @@ public class AddUserHelp extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("¿Cómo Funciona este Módulo?");
@@ -45,17 +47,15 @@ public class AddUserHelp extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel3.setText("Añadir Usuario");
+        jLabel3.setText("Añadir Cliente");
 
-        jLabel4.setText("<html><p>En la función de 'Añadir Usuario' puedes registrar a nuevos Usuarios en el sistema estos tendrán sus propios datos."
-            + "<br>En este formulario todos los campos son obligatorios. "
-            + "<br>Se debe asignar un rol de usuario al nuevo usuario y completar los demás campos. "
-            + "<br>El número de cedula no debe tener caracteres diferentes a números y no pueden existir 2 usuarios en el sistema con el número de cedula, se marcará con un logo afirmativo color verde si el número de cedula está disponible y puede ser utilizado. (El número de cedula solo puede tener entre 6 a 10 caracteres)"
-            + "<br>El nombre de usuario tampoco debe estar repetido, se marcará con un logo de afirmativo color verde si el nombre está disponible y puede ser utilizado (El nombre no debe tener más de 40 caracteres)"
-            + "<br>La dirección no puede tener más de 60 caracteres."
-            + "<br>Luego de haber llenado los datos del Usuario se debe dar click en 'Guardar'"
-            + "<br>Al dar click en 'Guardar' el nuevo Usuario quedará registrado en la base de datos de Usuarios del sistema."
-            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+        jLabel4.setText("<html><p> El módulo de Registrar Cliente permite al administrador y vendedor registrar nuevos clientes en el sistema."
+            + "<br>Solo son requeridos los campos marcados con (*) "
+            + "<br>Los demás campos que no están marcados con este símbolo (*), no son obligatorios ya que por ley el cliente no está obligado a dar más información que su Numero de Cedula o NIT y Nombre completo o Razón Social. "
+            + "<br>Los campos que no son requeridos y no desean ser completados se deben dejar completamente en blanco para que asi en el sistema queden guardados como 'No Registrado'."
+            + "<br>Luego de haber completado los datos del Cliente se debe dar click en 'Guardar'."
+            + "<br>Al dar click en 'Guardar' el nuevo Cliente quedará registrado en la base de datos de Clientes del sistema."
+            + "<br>Recuerda que para mejor información se consulta con el manual de usuario.</p></html>"
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -72,7 +72,7 @@ public class AddUserHelp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(79, 79, 79)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -88,8 +88,8 @@ public class AddUserHelp extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         pack();
@@ -116,27 +116,21 @@ public class AddUserHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddUserHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddUserHelp().setVisible(true);
+                new AddClientHelp().setVisible(true);
             }
         });
     }

@@ -495,7 +495,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
         btnAddToCart.setText("Añadir al carrito");
         btnAddToCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -544,7 +543,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 448, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
         jButton3.setText("Finalizar servicio e Imprimir");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -607,7 +605,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 316, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveProgress.png"))); // NOI18N
         jButton4.setText("Guardar proceso");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -627,7 +624,6 @@ public class UpdateService extends javax.swing.JFrame {
         getContentPane().add(txtServiceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 217, -1));
 
         btnSearchService.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnSearchService.setForeground(new java.awt.Color(0, 0, 0));
         btnSearchService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
         btnSearchService.setText("Buscar");
         btnSearchService.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -819,7 +815,7 @@ public class UpdateService extends javax.swing.JFrame {
 
                                     // Actualizar el inventario
                                     try (PreparedStatement updatePst = con.prepareStatement(
-                                            "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?")) {
+                                            "UPDATE products SET quantity = quantity - ? WHERE product_pk = ?")) {
                                         updatePst.setInt(1, nUnits);
                                         updatePst.setString(2, uniqueId);
                                         updatePst.executeUpdate();
@@ -839,7 +835,7 @@ public class UpdateService extends javax.swing.JFrame {
                     }
                 } else {
                     // Actualizar producto existente en el carrito
-                    try (PreparedStatement ps = con.prepareStatement("SELECT quantity FROM products WHERE uniqueId = ?")) {
+                    try (PreparedStatement ps = con.prepareStatement("SELECT quantity FROM products WHERE product_pk = ?")) {
                         ps.setString(1, uniqueId);
                         try (ResultSet rs = ps.executeQuery()) {
                             if (rs.next()) {
@@ -861,7 +857,7 @@ public class UpdateService extends javax.swing.JFrame {
 
                                     // Actualizar el inventario
                                     try (PreparedStatement updatePst = con.prepareStatement(
-                                            "UPDATE products SET quantity = quantity - ? WHERE uniqueId = ?")) {
+                                            "UPDATE products SET quantity = quantity - ? WHERE product_pk = ?")) {
                                         updatePst.setInt(1, nUnits);
                                         updatePst.setString(2, uniqueId);
                                         updatePst.executeUpdate();
@@ -909,7 +905,7 @@ public class UpdateService extends javax.swing.JFrame {
 
                 try (Connection con = ConnectionProvider.getCon()) {
                     // Recuperar el inventario actual del producto
-                    String query = "SELECT quantity FROM products WHERE uniqueId = ?";
+                    String query = "SELECT quantity FROM products WHERE product_pk = ?";
                     int availableStock = 0;
                     try (PreparedStatement ps = con.prepareStatement(query)) {
                         ps.setString(1, uniqueId);
@@ -921,7 +917,7 @@ public class UpdateService extends javax.swing.JFrame {
                     }
 
                     // Actualizar el inventario añadiendo la cantidad eliminada del carrito
-                    String updateQuery = "UPDATE products SET quantity = ? WHERE uniqueId = ?";
+                    String updateQuery = "UPDATE products SET quantity = ? WHERE product_pk = ?";
                     try (PreparedStatement ps = con.prepareStatement(updateQuery)) {
                         ps.setInt(1, availableStock + currentCartQuantity);
                         ps.setString(2, uniqueId);
