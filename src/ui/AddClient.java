@@ -143,7 +143,7 @@ public class AddClient extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();

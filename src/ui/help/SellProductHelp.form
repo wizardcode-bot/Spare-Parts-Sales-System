@@ -43,49 +43,47 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-12,0,0,3,82"/>
   </AuxValues>
 
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="40" pref="40" max="-2" attributes="0"/>
-              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
+              <Component id="jSeparator1" min="-2" pref="850" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
-          <Component id="jSeparator1" alignment="1" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="jLabel8" min="-2" pref="765" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel8" alignment="0" min="-2" pref="740" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jSeparator1" min="-2" pref="11" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jLabel8" min="-2" pref="260" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel8" min="-2" pref="333" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -114,7 +112,7 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Nuevo Servio&apos; puedes registrar los productos que se han utilizado para el arreglo del veh&#xed;culo.&quot;&#xa;    + &quot;&lt;br&gt;Los campos marcados con el simbolo (*) son obligatorios para poder realizar el registro del servicio.&quot;&#xa;    + &quot;&lt;br&gt;En el campo &apos;Relacionar Veh&#xed;culo&apos; debes seleccionar la placa del veh&#xed;culo al cual se realizar&#xe1; el servicio &quot;&#xa;    + &quot;o puedes ingresar la placa en la opci&#xf3;n &apos;Filtrar Veh&#xed;culo&apos; y dar click en &apos;Filtrar&apos; para encontrarlo m&#xe1;s f&#xe1;cilmente. &quot;&#xa;    + &quot;&lt;br&gt;Todos los productos que se vayan a&#xf1;adiendo al servicio se ver&#xe1;n reflejados en el carrito de compras, puedes modificar la cantidad &quot;&#xa;    + &quot;o eliminar cualquier producto del carrito. &quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Para salir de esta interfaz se debe dar click en &apos;Guardar Proceso&apos; si a&#xfa;n no se han terminado los arreglos al veh&#xed;clo o &quot;&#xa;    + &quot;por el contrario, dar click en &apos;Finalizar Servicio&apos;. &quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Guardar Proceso&apos; el nuevo servicio quedar&#xe1; registrado con los productos agregados al carrito este podr&#xe1; &quot;&#xa;+ &quot;ser modificado posteriormente en el m&#xf3;dulo &apos;Actualizar Servicio&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Finalizar Servicio&apos; se genera la factura por el servicio y este no podr&#xe1; volver a ser modificado.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n puedes consultar el manual de usuario&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Vender Producto&apos; puedes registrar ventas, esta funci&#xf3;n la pueden usar Administradores y Vendedores.&quot;&#xa;    + &quot;&lt;br&gt;Los campos marcados con el simbolo (*) son obligatorios para poder realizar la venta.&quot;&#xa;    + &quot;&lt;br&gt;En la opci&#xf3;n de &apos;Relacionar Cliente&apos; el usuario debe seleccionar un cliente o buscarlo con el n&#xfa;mero de c&#xe9;dula en la opci&#xf3;n &apos;Filtrar Cliente&apos;. &quot;&#xa;    + &quot;El cliente seleccionado por defecto es &apos;Consumidor final&apos; este es un cliente gen&#xe9;rico que debe ser usado para registrar la venta cuando el cliente no desee ser registrado &quot;&#xa;    + &quot;en el sistema o proporcionar sus datos. &quot;&#xa;    + &quot;&lt;br&gt;Puedes modificar el precio unitario del producto seleccionado pero debes hacerlo antes de ingresar el n&#xfa;mero de unidades a vender ya que el precio &quot;&#xa;    + &quot;total ser&#xe1; calculado en base al precio unitario registrado al momento de ingresar el n&#xfa;mero de cantidades a vender, esto quiere decir que si se modifica el &quot;&#xa;    + &quot;precio unitario del producto una vez ya ingresada la cantidad de unidades a vender el precio final no ser&#xe1; correctamente calculado y deber&#xe1;s volver a completarlo.&quot;&#xa;    + &quot;&lt;br&gt;El precio de venta y la cantidad de unidades a vender solamente pueden ser ingresados en n&#xfa;meros.&quot;&#xa;    + &quot;&lt;br&gt;Debes completar el medio de pago, si el pago solamente ser&#xe1; en efectivo debes poner &apos;0&apos; en transferencia y viceversa, no pueden quedar espacios vac&#xed;os, la suma &quot;&#xa;    + &quot;del dinero pagado en efectivo y transferencia debe ser igual al precio total de la compra.&quot;&#xa;    + &quot;&lt;br&gt;Todos los productos a&#xf1;adidos al carrito de Compras se ver&#xe1;n reflejados en la factura. &quot;&#xa;    + &quot;&lt;br&gt;Luego de haber completado los datos de la venta se debe dar click en &apos;Generar venta e imprimir&apos; &quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Generar venta e imprimir&apos; la venta quedar&#xe1; registrada en la base de datos de Ventas del sistema y ser&#xe1; generada la factura en formato pdf, puedes &quot;&#xa;    + &quot;imprimirla de una vez o encontrarla luego en el m&#xf3;dulo &apos;Facturas&apos;.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mayor informaci&#xf3;n puedes consultar el manual de usuario.&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Default Cursor"/>
@@ -129,7 +127,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Nuevo Servicio"/>
+        <Property name="text" type="java.lang.String" value="Vender Producto"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

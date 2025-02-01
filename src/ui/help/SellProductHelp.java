@@ -1,12 +1,12 @@
 package ui.help;
 
 
-public class NewServiceHelp extends javax.swing.JFrame {
+public class SellProductHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public NewServiceHelp() {
+    public SellProductHelp() {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); //copear ;)
@@ -47,24 +47,28 @@ public class NewServiceHelp extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("<html><p>En la función de 'Nuevo Servio' puedes registrar los productos que se han utilizado para el arreglo del vehículo."
-            + "<br>Los campos marcados con el simbolo (*) son obligatorios para poder realizar el registro del servicio."
-            + "<br>En el campo 'Relacionar Vehículo' debes seleccionar la placa del vehículo al cual se realizará el servicio "
-            + "o puedes ingresar la placa en la opción 'Filtrar Vehículo' y dar click en 'Filtrar' para encontrarlo más fácilmente. "
-            + "<br>Todos los productos que se vayan añadiendo al servicio se verán reflejados en el carrito de compras, puedes modificar la cantidad "
-            + "o eliminar cualquier producto del carrito. "
-            + "<br><br>Para salir de esta interfaz se debe dar click en 'Guardar Proceso' si aún no se han terminado los arreglos al vehíclo o "
-            + "por el contrario, dar click en 'Finalizar Servicio'. "
-            + "<br>Al dar click en 'Guardar Proceso' el nuevo servicio quedará registrado con los productos agregados al carrito este podrá "
-            + "ser modificado posteriormente en el módulo 'Actualizar Servicio'."
-            + "<br>Al dar click en 'Finalizar Servicio' se genera la factura por el servicio y este no podrá volver a ser modificado."
-            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario</p></html>"
+        jLabel8.setText("<html><p>En la función de 'Vender Producto' puedes registrar ventas, esta función la pueden usar Administradores y Vendedores."
+            + "<br>Los campos marcados con el simbolo (*) son obligatorios para poder realizar la venta."
+            + "<br>En la opción de 'Relacionar Cliente' el usuario debe seleccionar un cliente o buscarlo con el número de cédula en la opción 'Filtrar Cliente'. "
+            + "El cliente seleccionado por defecto es 'Consumidor final' este es un cliente genérico que debe ser usado para registrar la venta cuando el cliente no desee ser registrado "
+            + "en el sistema o proporcionar sus datos. "
+            + "<br>Puedes modificar el precio unitario del producto seleccionado pero debes hacerlo antes de ingresar el número de unidades a vender ya que el precio "
+            + "total será calculado en base al precio unitario registrado al momento de ingresar el número de cantidades a vender, esto quiere decir que si se modifica el "
+            + "precio unitario del producto una vez ya ingresada la cantidad de unidades a vender el precio final no será correctamente calculado y deberás volver a completarlo."
+            + "<br>El precio de venta y la cantidad de unidades a vender solamente pueden ser ingresados en números."
+            + "<br>Debes completar el medio de pago, si el pago solamente será en efectivo debes poner '0' en transferencia y viceversa, no pueden quedar espacios vacíos, la suma "
+            + "del dinero pagado en efectivo y transferencia debe ser igual al precio total de la compra."
+            + "<br>Todos los productos añadidos al carrito de Compras se verán reflejados en la factura. "
+            + "<br>Luego de haber completado los datos de la venta se debe dar click en 'Generar venta e imprimir' "
+            + "<br>Al dar click en 'Generar venta e imprimir' la venta quedará registrada en la base de datos de Ventas del sistema y será generada la factura en formato pdf, puedes "
+            + "imprimirla de una vez o encontrarla luego en el módulo 'Facturas'."
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Nuevo Servicio");
+        jLabel5.setText("Vender Producto");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -79,36 +83,34 @@ public class NewServiceHelp extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel5)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(117, 117, 117)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 765, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 39, Short.MAX_VALUE)))
+                .addGap(150, 150, 150)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(10, 10, 10)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -136,38 +138,14 @@ public class NewServiceHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewServiceHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProductHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -180,7 +158,7 @@ public class NewServiceHelp extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewServiceHelp().setVisible(true);
+                new SellProductHelp().setVisible(true);
             }
         });
     }

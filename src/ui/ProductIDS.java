@@ -183,7 +183,7 @@ public class ProductIDS extends javax.swing.JFrame {
         jLabel5.setText("Selecciona el producto para copiar su código al portapapeles");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(228, 465, -1, -1));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();

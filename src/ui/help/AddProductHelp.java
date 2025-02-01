@@ -32,8 +32,11 @@ public class AddProductHelp extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("¿Cómo Funciona este Módulo?");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -45,16 +48,22 @@ public class AddProductHelp extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Añadir Producto");
 
-        jLabel4.setText("<html><p>En la función de 'Añadir Producto' puedes registrar a nuevos Productos en el sistema estos tendrán sus propios datos."
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("<html><p>En la función de 'Añadir Producto' puedes agregar nuevos Productos al inventario, estos tendrán sus propios datos."
             + "<br>Solo son requeridos los campos marcados con (*) "
-            + "<br>El ID del producto puede llevar letras y números, no pueden existir 2 ID iguales en la base de datos, por eso si se marca un logo de aceptación color verde significa que el ID está disponible y puede ser utilizado. "
-            + "<br>Para relacionar una categoría se puede seleccionar una del menú desplegable o agregar una nueva (Para modificar una categoría se debe dirigir al módulo ajustes de inventario y la función modificar categorías de productos) "
+            + "<br>El código del producto puede llevar letras y números, no pueden existir 2 códigos iguales en la base de datos, por eso si se marca un logo de "
+            + "aceptación color verde al lado de la casilla significa que el código está disponible y puede ser utilizado. Si por el contrario, se marca una equis de color rojo "
+            + "significa  que el código del producto ya está en uso "
+            + "<br>Para relacionar una categoría se puede seleccionar una del menú desplegable o agregar una nueva (Para modificar una categoría se debe dirigir al módulo"
+            + " ajustes de inventario y la función modificar categorías de productos) "
             + "<br>La Cantidad de Unidades y los Precios deben ser ingresados solamente en números, sin letras, puntos, asteriscos, comas y demás caracteres. "
-            + "<br>Luego de haber completado los datos del Producto se debe dar click en 'Guardar'."
+            + "<br><br>Luego de haber completado los datos del Producto se debe dar click en 'Guardar'."
             + "<br>Al dar click en 'Guardar' el nuevo Producto quedará registrado en la base de datos de Productos del sistema."
-            + "<br>Recuerda que para mejor información se consulta con el manual de usuario.</p></html>"
+            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario.</p></html>"
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -62,9 +71,9 @@ public class AddProductHelp extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(242, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(198, 198, 198)
+                .addGap(109, 109, 109)
                 .addComponent(jLabel2)
                 .addContainerGap())
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -73,7 +82,7 @@ public class AddProductHelp extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,11 +93,11 @@ public class AddProductHelp extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         pack();

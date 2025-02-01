@@ -3,6 +3,8 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="undecorated" type="boolean" value="true"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -23,21 +25,24 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="242" max="32767" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="198" max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
           <Component id="jSeparator1" alignment="1" max="32767" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="81" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel4" min="-2" pref="715" max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="603" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -51,11 +56,11 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jLabel4" min="-2" pref="242" max="-2" attributes="0"/>
-              <EmptySpace pref="138" max="32767" attributes="0"/>
+              <Component id="jLabel4" min="-2" pref="228" max="-2" attributes="0"/>
+              <EmptySpace pref="123" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,7 +69,10 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="24" style="1"/>
+          <Font name="Tahoma" size="36" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#xbf;C&#xf3;mo Funciona este M&#xf3;dulo?"/>
       </Properties>
@@ -89,13 +97,22 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="18" style="1"/>
         </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Registrar Vehiculo"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="14" style="0"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;A&#xf1;adir Veh&#xed;culo&apos; puedes registrar a nuevos Veh&#xed;culos en el sistema estos tendr&#xe1;s sus propios datos y pueden estar vinculados a un cliente ya existente.&quot;&#xa;    + &quot;&lt;br&gt;Primero se le pedir&#xe1; informaci&#xf3;n requerida que estar&#xe1; marcada con un * y esto significa que es obligatorio llenar ese campo, los campos requeridos ser&#xe1;n: &quot;&#xa;    + &quot;&lt;br&gt;Numero de placa, color, relacionar propietario y marca. &quot;&#xa;    + &quot;&lt;br&gt;Tambi&#xe9;n hay un campo llamado &apos;Relacionar Propietario&apos; en esta la funci&#xf3;n &apos;Filtrar por n&#xfa;mero de cedula&apos; hace que al colocar su n&#xfa;mero de cedula se coloque autom&#xe1;ticamente el campo de &apos;Relacionar Propietario&apos;(Se debe tener en cuenta que la persona que se filtra con su n&#xfa;mero de cedula ya debe estar registrado en el sistema como &apos;Cliente&apos;). &quot;&#xa;    + &quot;&lt;br&gt;Los campos no requeridos que son: &quot;&#xa;    + &quot;&lt;br&gt;Cilindraje y Modelo. &quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Guardar&apos; el nuevo Veh&#xed;culo quedar&#xe1; registrado en la base de datos de Veh&#xed;culos del sistema.&quot;&#xa;    + &quot;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n se consulta con el manual de usuario. &lt;/p&gt;&lt;/html&gt;&quot;&#xa;" type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;A&#xf1;adir Veh&#xed;culo&apos; puedes registrar nuevos Veh&#xed;culos en el sistema, estos tendr&#xe1;n sus propios datos y deben estar vinculados a un cliente ya existente.&quot;&#xa;    + &quot;&lt;br&gt;Primero se le pedir&#xe1; informaci&#xf3;n requerida que estar&#xe1; marcada con un * y esto significa que es obligatorio llenar ese campo, los campos requeridos ser&#xe1;n: &quot;&#xa;    + &quot;&lt;br&gt;Numero de placa, color, relacionar propietario y marca. &quot;&#xa;    + &quot;&lt;br&gt;Tambi&#xe9;n hay un campo llamado &apos;Relacionar Propietario&apos; en esta la funci&#xf3;n &apos;Filtrar por n&#xfa;mero de cedula&apos; hace que al colocar su n&#xfa;mero de cedula se coloque autom&#xe1;ticamente el campo de &apos;Relacionar Propietario&apos; (Se debe tener en cuenta que la persona que se filtra con su n&#xfa;mero de cedula ya debe estar registrado en el sistema como &apos;Cliente&apos;). &quot;&#xa;    + &quot;&lt;br&gt;Los campos no requeridos que son: &quot;&#xa;    + &quot;&lt;br&gt;Cilindraje y Modelo. &quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Guardar&apos; el nuevo Veh&#xed;culo quedar&#xe1; registrado en la base de datos de Veh&#xed;culos del sistema.&quot;&#xa;    + &quot;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n se consulta con el manual de usuario. &lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
         </Property>
       </Properties>
     </Component>

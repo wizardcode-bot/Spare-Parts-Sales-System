@@ -21,7 +21,7 @@ public class StockExchange extends javax.swing.JFrame {
      */
     public StockExchange() {
         initComponents();
-        setSize(1200, 620);
+        setSize(1200, 610);
         setLocationRelativeTo(null);
     }
 
@@ -103,7 +103,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Intercambiar producto");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 6, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 1200, 10));
@@ -139,7 +139,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 148, 370, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Buscar producto por ID o descripción");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 84, -1, -1));
 
@@ -152,7 +152,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 107, 370, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("ID del producto");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 148, -1, -1));
 
@@ -160,7 +160,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtProductID, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 171, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Descripción");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 214, -1, -1));
 
@@ -168,7 +168,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 234, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Marca");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 274, -1, -1));
 
@@ -176,7 +176,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 294, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Cantidad en stock");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 457, -1, -1));
 
@@ -184,7 +184,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtCurrentStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 478, 236, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Ubicación en almacén");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 334, -1, -1));
 
@@ -192,7 +192,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtProductLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 354, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Precio de venta");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 395, -1, -1));
 
@@ -200,17 +200,17 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtSellingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 416, 236, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Producto a intercambiar");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 105, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Producto entrante");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 105, -1, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("Motivo de ajuste (Opcional)");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 395, -1, -1));
 
@@ -221,7 +221,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 416, 300, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setText("(*) Indica campo obligatorio");
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 560, -1, -1));
 
@@ -249,7 +249,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1154, 6, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("Cantidad de unidades a intercambiar *");
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 519, -1, -1));
 
@@ -286,7 +286,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 214, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Dinero extra recibido *");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 274, -1, -1));
 
@@ -299,7 +299,7 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(txtMoneyReceived, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 294, 194, -1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Dinero extra pagado *");
         getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 334, -1, -1));
 
@@ -311,8 +311,8 @@ public class StockExchange extends javax.swing.JFrame {
         });
         getContentPane().add(txtMoneyPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 354, 194, -1));
 
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 630));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke1200x612.jpg"))); // NOI18N
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

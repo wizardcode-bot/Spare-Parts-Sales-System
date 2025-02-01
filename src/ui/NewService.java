@@ -393,6 +393,7 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
         btnAddToCart.setText("Añadir al carrito");
         btnAddToCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -440,6 +441,7 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 447, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
         jButton3.setText("Finalizar servicio e Imprimir");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -463,6 +465,7 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 373, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/filter.png"))); // NOI18N
         jButton2.setText("Filtrar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -487,6 +490,7 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 300, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addIcon.png"))); // NOI18N
         jButton1.setText("Añadir vehículo");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -541,6 +545,7 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 196, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveProgress.png"))); // NOI18N
         jButton4.setText("Guardar proceso");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

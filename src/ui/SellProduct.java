@@ -340,7 +340,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Número de Unidades *");
+        jLabel7.setText("Número de Unidades a vender *");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 169, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

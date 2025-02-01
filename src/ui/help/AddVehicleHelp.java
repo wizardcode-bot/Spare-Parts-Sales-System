@@ -32,8 +32,11 @@ public class AddVehicleHelp extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("¿Cómo Funciona este Módulo?");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -45,12 +48,15 @@ public class AddVehicleHelp extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Registrar Vehiculo");
 
-        jLabel4.setText("<html><p>En la función de 'Añadir Vehículo' puedes registrar a nuevos Vehículos en el sistema estos tendrás sus propios datos y pueden estar vinculados a un cliente ya existente."
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("<html><p>En la función de 'Añadir Vehículo' puedes registrar nuevos Vehículos en el sistema, estos tendrán sus propios datos y deben estar vinculados a un cliente ya existente."
             + "<br>Primero se le pedirá información requerida que estará marcada con un * y esto significa que es obligatorio llenar ese campo, los campos requeridos serán: "
             + "<br>Numero de placa, color, relacionar propietario y marca. "
-            + "<br>También hay un campo llamado 'Relacionar Propietario' en esta la función 'Filtrar por número de cedula' hace que al colocar su número de cedula se coloque automáticamente el campo de 'Relacionar Propietario'(Se debe tener en cuenta que la persona que se filtra con su número de cedula ya debe estar registrado en el sistema como 'Cliente'). "
+            + "<br>También hay un campo llamado 'Relacionar Propietario' en esta la función 'Filtrar por número de cedula' hace que al colocar su número de cedula se coloque automáticamente el campo de 'Relacionar Propietario' (Se debe tener en cuenta que la persona que se filtra con su número de cedula ya debe estar registrado en el sistema como 'Cliente'). "
             + "<br>Los campos no requeridos que son: "
             + "<br>Cilindraje y Modelo. "
             + "<br>Al dar click en 'Guardar' el nuevo Vehículo quedará registrado en la base de datos de Vehículos del sistema."
@@ -61,19 +67,20 @@ public class AddVehicleHelp extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(242, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(198, 198, 198)
-                .addComponent(jLabel2)
-                .addContainerGap())
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(79, 79, 79)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(81, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(114, 114, 114)
+                            .addComponent(jLabel2)
+                            .addContainerGap())
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGap(603, 603, 603)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,11 +91,11 @@ public class AddVehicleHelp extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(43, 43, 43)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         pack();

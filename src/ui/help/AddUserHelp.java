@@ -32,8 +32,11 @@ public class AddUserHelp extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("¿Cómo Funciona este Módulo?");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -45,36 +48,42 @@ public class AddUserHelp extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Añadir Usuario");
 
-        jLabel4.setText("<html><p>En la función de 'Añadir Usuario' puedes registrar a nuevos Usuarios en el sistema estos tendrán sus propios datos."
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("<html><p>En la función de 'Añadir Usuario' puedes registrar a nuevos Usuarios en el sistema, estos tendrán sus propios datos."
             + "<br>En este formulario todos los campos son obligatorios. "
             + "<br>Se debe asignar un rol de usuario al nuevo usuario y completar los demás campos. "
-            + "<br>El número de cedula no debe tener caracteres diferentes a números y no pueden existir 2 usuarios en el sistema con el número de cedula, se marcará con un logo afirmativo color verde si el número de cedula está disponible y puede ser utilizado. (El número de cedula solo puede tener entre 6 a 10 caracteres)"
-            + "<br>El nombre de usuario tampoco debe estar repetido, se marcará con un logo de afirmativo color verde si el nombre está disponible y puede ser utilizado (El nombre no debe tener más de 40 caracteres)"
+            + "<br>El número de cedula no debe tener caracteres diferentes a números y no pueden existir 2 usuarios en el sistema con el número de cedula,"
+            + " se marcará con un logo afirmativo color verde si el número de cedula está disponible y puede ser utilizado. (El número de cedula solo puede tener entre 6 a 10 caracteres)"
+            + "<br>El nombre de usuario tampoco debe estar repetido, se marcará con un logo de afirmativo color verde si el nombre está disponible y puede ser utilizado (El nombre de usuario no debe "
+            + "tener más de 40 caracteres)"
             + "<br>La dirección no puede tener más de 60 caracteres."
-            + "<br>Luego de haber llenado los datos del Usuario se debe dar click en 'Guardar'"
+            + "<br><br>Luego de haber llenado los datos del Usuario se debe dar click en 'Guardar'"
             + "<br>Al dar click en 'Guardar' el nuevo Usuario quedará registrado en la base de datos de Usuarios del sistema."
-            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario</p></html>"
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(242, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(198, 198, 198)
-                .addComponent(jLabel2)
-                .addContainerGap())
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(79, 79, 79)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(78, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(97, 97, 97)
+                        .addComponent(jLabel2)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(68, 68, 68))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,11 +94,11 @@ public class AddUserHelp extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(45, 45, 45)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         pack();
