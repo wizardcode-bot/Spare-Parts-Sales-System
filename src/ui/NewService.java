@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import common.Validations;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import ui.help.NewServiceHelp;
 
 public class NewService extends javax.swing.JFrame {
 
@@ -38,7 +39,7 @@ public class NewService extends javax.swing.JFrame {
         initComponents();
         username = tempUsername;
         setLocationRelativeTo(null);
-        setSize(1366, 778);
+        setSize(1366, 768);
     }
 
     private void productName(String nameOrUniqueId) {
@@ -274,6 +275,7 @@ public class NewService extends javax.swing.JFrame {
         txtDescription = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -563,7 +565,16 @@ public class NewService extends javax.swing.JFrame {
                 jLabel18MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1320, 6, -1, -1));
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1315, 6, -1, -1));
+
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel19.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel19MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(1279, 17, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -1139,6 +1150,10 @@ public class NewService extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel18MouseClicked
 
+    private void jLabel19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel19MouseClicked
+        new NewServiceHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel19MouseClicked
+
     /* Método para cargar las placas en el jComboBox */
     private void loadVehicles() {
         String query = "SELECT motorbike_pk FROM motorbikes";
@@ -1213,6 +1228,7 @@ public class NewService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

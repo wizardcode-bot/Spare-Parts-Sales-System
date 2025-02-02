@@ -5,12 +5,12 @@
             <url>src/ui/NewService.java</url>
             <bookmark id="2">
                 <name/>
-                <line>1080</line>
+                <line>786</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>1240</line>
+                <line>946</line>
                 <key/>
             </bookmark>
         </file>
@@ -41,14 +41,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/common/Validations.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/help/UpdateClienteHelp.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/ProductIDS.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/InventoryAdjustmentHistory.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/dao/Tables.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Login.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Profile.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Camera.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/AddUser.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/UpdateClient.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/TypeOfAdjustment.java</file>
         </group>
     </open-files>
 </project-private>

@@ -15,6 +15,8 @@ import javax.swing.table.TableModel;
  * @author HOME
  */
 public class StockExchange extends javax.swing.JFrame {
+    
+    private final String typeOfAdjustment = "Intercambio de stock";
 
     /**
      * Creates new form InventoryAdjustments
@@ -215,6 +217,8 @@ public class StockExchange extends javax.swing.JFrame {
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 395, -1, -1));
 
         txtMotive.setColumns(20);
+        txtMotive.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtMotive.setForeground(new java.awt.Color(0, 0, 0));
         txtMotive.setRows(5);
         jScrollPane2.setViewportView(txtMotive);
 
@@ -404,20 +408,21 @@ public class StockExchange extends javax.swing.JFrame {
             motive = Validations.isNullOrBlank(motive) ? "No registrado" : motive;
 
             String insertAdjustmentQuery = "INSERT INTO inventory_adjustments "
-                    + "(previousQuantity, newQuantity, adjustmentMotive, moneyReceived, moneyPaid, product_pk) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "(typeOfAdjustment, previousQuantity, newQuantity, adjustmentMotive, moneyReceived, moneyPaid, product_pk) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             String updateProductQuery = "UPDATE products SET quantity = ? WHERE product_pk = ?";
 
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement pstInsert = con.prepareStatement(insertAdjustmentQuery); PreparedStatement pstUpdate = con.prepareStatement(updateProductQuery)) {
 
                 // Insertar en inventory_adjustments
-                pstInsert.setLong(1, currentStockValue); // previousQuantity
-                pstInsert.setLong(2, newStockValue);    // newQuantity
-                pstInsert.setString(3, motive);         // adjustmentMotive
-                pstInsert.setLong(4, moneyReceivedValue);         // adjustmentMotive
-                pstInsert.setLong(5, moneyPaidValue);         // adjustmentMotive
-                pstInsert.setString(6, productID);      // product_pk
+                pstInsert.setString(1, typeOfAdjustment); // previousQuantity
+                pstInsert.setLong(2, currentStockValue); // previousQuantity
+                pstInsert.setLong(3, newStockValue);    // newQuantity
+                pstInsert.setString(4, motive);         // adjustmentMotive
+                pstInsert.setLong(5, moneyReceivedValue);         // adjustmentMotive
+                pstInsert.setLong(6, moneyPaidValue);         // adjustmentMotive
+                pstInsert.setString(7, productID);      // product_pk
 
                 int rowsAffectedInsert = pstInsert.executeUpdate();
 

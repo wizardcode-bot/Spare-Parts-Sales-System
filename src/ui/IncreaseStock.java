@@ -15,6 +15,8 @@ import javax.swing.table.TableModel;
  * @author HOME
  */
 public class IncreaseStock extends javax.swing.JFrame {
+    
+    private final String typeOfAdjustment = "Aumento de stock";
 
     /**
      * Creates new form InventoryAdjustments
@@ -149,36 +151,54 @@ public class IncreaseStock extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("ID del producto");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 148, -1, -1));
+
+        txtProductID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtProductID.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtProductID, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 169, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Descripción");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 211, -1, -1));
+
+        txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtDescription.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 232, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Marca");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 274, -1, -1));
+
+        txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtProductBrand.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 295, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Cantidad en stock");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 400, -1, -1));
+
+        txtCurrentStock.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtCurrentStock.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtCurrentStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 421, 200, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Ubicación en almacén");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 337, -1, -1));
+
+        txtProductLocation.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtProductLocation.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtProductLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 358, 300, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Precio de venta");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 463, -1, -1));
+
+        txtSellingPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtSellingPrice.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtSellingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 484, 200, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -195,6 +215,9 @@ public class IncreaseStock extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Cantidad de unidades a incrementar *");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 145, -1, -1));
+
+        txtStockToIncrease.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtStockToIncrease.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtStockToIncrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 166, 233, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -203,6 +226,8 @@ public class IncreaseStock extends javax.swing.JFrame {
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 211, -1, -1));
 
         txtMotive.setColumns(20);
+        txtMotive.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtMotive.setForeground(new java.awt.Color(0, 0, 0));
         txtMotive.setRows(5);
         jScrollPane2.setViewportView(txtMotive);
 
@@ -315,18 +340,19 @@ public class IncreaseStock extends javax.swing.JFrame {
             long newStockValue = currentStockValue + stockToIncreaseValue;
 
             String insertAdjustmentQuery = "INSERT INTO inventory_adjustments "
-                    + "(previousQuantity, newQuantity, adjustmentMotive, product_pk) "
-                    + "VALUES (?, ?, ?, ?)";
+                    + "(typeOfAdjustment, previousQuantity, newQuantity, adjustmentMotive, product_pk) "
+                    + "VALUES (?, ?, ?, ?, ?)";
 
             String updateProductQuery = "UPDATE products SET quantity = ? WHERE product_pk = ?";
 
             try (Connection con = ConnectionProvider.getCon(); PreparedStatement pstInsert = con.prepareStatement(insertAdjustmentQuery); PreparedStatement pstUpdate = con.prepareStatement(updateProductQuery)) {
 
                 // Insertar en inventory_adjustments
-                pstInsert.setLong(1, currentStockValue); // previousQuantity
-                pstInsert.setLong(2, newStockValue);    // newQuantity
-                pstInsert.setString(3, motive);         // adjustmentMotive
-                pstInsert.setString(4, productID);      // product_pk
+                pstInsert.setString(1, typeOfAdjustment); // previousQuantity
+                pstInsert.setLong(2, currentStockValue); // previousQuantity
+                pstInsert.setLong(3, newStockValue);    // newQuantity
+                pstInsert.setString(4, motive);         // adjustmentMotive
+                pstInsert.setString(5, productID);      // product_pk
 
                 int rowsAffectedInsert = pstInsert.executeUpdate();
 

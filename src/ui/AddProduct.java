@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import java.sql.*;
 import javax.swing.ImageIcon;
 import common.Validations;
+import ui.help.AddProductHelp;
 
 public class AddProduct extends javax.swing.JFrame {
 
@@ -74,6 +75,7 @@ public class AddProduct extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         iconLabel = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -84,12 +86,12 @@ public class AddProduct extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Añadir Producto");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 65, 850, 10));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("ID del Producto *");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 121, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 125, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtUniqueId.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -97,39 +99,39 @@ public class AddProduct extends javax.swing.JFrame {
                 txtUniqueIdKeyReleased(evt);
             }
         });
-        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 141, 300, -1));
+        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 145, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Descripción *");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 311, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 315, -1, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 331, 300, -1));
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 335, 300, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Marca");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 372, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 376, -1, -1));
 
         txtProductName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 392, 300, -1));
+        getContentPane().add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 396, 300, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cantidad de unidades adquiridas *");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 121, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 125, -1, -1));
 
         txtQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 141, 300, -1));
+        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 145, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Precio de venta (Unidad) *");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 251, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 255, -1, -1));
 
         txtSellingPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtSellingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 268, 300, -1));
+        getContentPane().add(txtSellingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 272, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -143,44 +145,44 @@ public class AddProduct extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 361, 110, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 365, 110, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Seleccione una categoría *");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 191, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 195, -1, -1));
 
         comboCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboCategory.setForeground(new java.awt.Color(0, 0, 0));
         comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 211, 300, -1));
+        getContentPane().add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 215, 300, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Añadir nueva categoría");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 251, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 255, -1, -1));
 
         txtNewCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNewCategory.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtNewCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 271, 200, -1));
+        getContentPane().add(txtNewCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 275, 200, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Precio Adquirido *");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 191, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 195, -1, -1));
 
         txtAcquiredPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtAcquiredPrice.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtAcquiredPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 211, 300, -1));
+        getContentPane().add(txtAcquiredPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 215, 300, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Ubicación en almacén *");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 311, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 315, -1, -1));
 
         txtLocation.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtLocation.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 331, 300, -1));
+        getContentPane().add(txtLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 335, 300, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -192,17 +194,17 @@ public class AddProduct extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 268, 94, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 272, 94, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("(*) Indica campo obligatorio");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 451, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 455, -1, -1));
 
         iconLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         iconLabel.setForeground(new java.awt.Color(0, 0, 0));
         iconLabel.setText("---");
-        getContentPane().add(iconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 146, -1, -1));
+        getContentPane().add(iconLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 150, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -212,6 +214,15 @@ public class AddProduct extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -411,6 +422,10 @@ public class AddProduct extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel14MouseClicked
 
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        new AddProductHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel13MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -456,6 +471,7 @@ public class AddProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

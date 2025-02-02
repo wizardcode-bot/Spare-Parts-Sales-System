@@ -218,7 +218,7 @@ public class ViewUser extends javax.swing.JFrame {
                     rs.getString("appuser_pk"),
                     rs.getString("name"),
                     rs.getString("userRole"),
-                    rs.getString("dob"),
+                    rs.getString("dateOfBirth"),
                     rs.getString("mobileNumber"),
                     rs.getString("username"),
                     rs.getString("address")

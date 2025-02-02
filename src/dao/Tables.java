@@ -100,6 +100,7 @@ public class Tables {
             
             String createInventoryAdjustments = "CREATE TABLE IF NOT EXISTS inventory_adjustments("
                     + "inventory_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "typeOfAdjustment varchar(50) NOT NULL,"
                     + "previousQuantity BIGINT NOT NULL,"
                     + "newQuantity BIGINT NOT NULL,"
                     + "adjustmentMotive VARCHAR(255),"

@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import common.Validations;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import ui.help.SellProductHelp;
 
 public class SellProduct extends javax.swing.JFrame {
 
@@ -36,7 +37,7 @@ public class SellProduct extends javax.swing.JFrame {
         initComponents();
         username = tempUsername;
         setLocationRelativeTo(null);
-        setSize(1366, 778);
+        setSize(1366, 768);
     }
 
     private void productName(String nameOrUniqueId) {
@@ -204,7 +205,6 @@ public class SellProduct extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -243,6 +243,8 @@ public class SellProduct extends javax.swing.JFrame {
         txtTransferPaid = new javax.swing.JTextField();
         txtDescription = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel19 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -257,7 +259,6 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Vender Producto");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(546, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 62, 1366, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -520,8 +521,18 @@ public class SellProduct extends javax.swing.JFrame {
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 190, 300, -1));
 
-        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
-        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel18MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1284, 14, -1, -1));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 1366, 10));
+
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
+        getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -900,6 +911,10 @@ public class SellProduct extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+        new SellProductHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel18MouseClicked
+
     /* Método para cargar los clientes en el jComboBox */
     private void cargarClientes() {
         String query = "SELECT * FROM clients";
@@ -985,6 +1000,7 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -995,7 +1011,7 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblFinalTotalPrice;
     private javax.swing.JTable productsTable;
     private javax.swing.JTextField txtCashPaid;
