@@ -230,7 +230,7 @@ public class CashFlow extends javax.swing.JFrame {
         lblInventoryExpenses.setText("--:--");
         getContentPane().add(lblInventoryExpenses, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 398, -1, -1));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all_pages_background.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();

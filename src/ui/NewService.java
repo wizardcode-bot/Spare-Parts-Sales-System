@@ -604,7 +604,7 @@ public class NewService extends javax.swing.JFrame {
         if (!Validations.isNullOrBlank(noOfUnits)) {
             String price = txtPricePerUnit.getText().trim();
 
-            if (!noOfUnits.matches(Validations.numberPattern)) {
+            if (!noOfUnits.matches(Validations.NUMBER_PATTERN)) {
                 JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad de unidades a vender en números.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 txtNoOfUnits.setText("");
@@ -664,7 +664,7 @@ public class NewService extends javax.swing.JFrame {
 
         if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(uniqueId) && !Validations.isNullOrBlank(pricePerUnit)) {
 
-            if (!pricePerUnit.matches(Validations.numberPattern) || !noOfUnits.matches(Validations.numberPattern)) {
+            if (!pricePerUnit.matches(Validations.NUMBER_PATTERN) || !noOfUnits.matches(Validations.NUMBER_PATTERN)) {
                 JOptionPane.showMessageDialog(null, "El número de unidades y precio del producto deben ser ingresados en números", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
@@ -987,7 +987,7 @@ public class NewService extends javax.swing.JFrame {
     private void txtPricePerUnitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPricePerUnitKeyReleased
         String pricePerUnit = txtPricePerUnit.getText();
 
-        if (!pricePerUnit.matches(Validations.numberPattern)) {
+        if (!pricePerUnit.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio del producto en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtPricePerUnit.setText("");
@@ -998,7 +998,7 @@ public class NewService extends javax.swing.JFrame {
     private void txtCashPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashPaidKeyReleased
         String cashPaid = txtCashPaid.getText();
 
-        if (!cashPaid.matches(Validations.numberPattern)) {
+        if (!cashPaid.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtCashPaid.setText("");
@@ -1009,7 +1009,7 @@ public class NewService extends javax.swing.JFrame {
     private void txtTransferPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTransferPaidKeyReleased
         String transferPaid = txtTransferPaid.getText();
 
-        if (!transferPaid.matches(Validations.numberPattern)) {
+        if (!transferPaid.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtTransferPaid.setText("");

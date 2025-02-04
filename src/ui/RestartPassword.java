@@ -208,7 +208,7 @@ public class RestartPassword extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la cédula del usuario!",
                     "No hay usuarios seleccionados", JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (!idCard.matches(Validations.numberPattern)) {
+        } else if (!idCard.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "La cédula debe contener solo números.", "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;

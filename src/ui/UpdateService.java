@@ -53,18 +53,19 @@ public class UpdateService extends javax.swing.JFrame {
         return dtm.getRowCount() == 0; // Devuelve true si está vacío, false si contiene filas
     }
 
-    //Obtiene los productos actuales de un servicio desde la base de datos.
-    private Map<Long, Integer> getCurrentProducts(Connection con, long servicePK) throws SQLException {
-        Map<Long, Integer> currentProducts = new HashMap<>();
+    // Obtiene los productos actuales de un servicio desde la base de datos.
+    private Map<String, Integer> getCurrentProducts(Connection con, long servicePK) throws SQLException {
+        Map<String, Integer> currentProducts = new HashMap<>();
         String query = "SELECT sp.product_pk, sp.quantity "
                 + "FROM soldProducts sp "
                 + "JOIN soldProducts_services sps ON sp.soldProduct_pk = sps.soldProduct_pk "
                 + "WHERE sps.service_pk = ?";
+
         try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setLong(1, servicePK);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    long productPk = rs.getLong("product_pk");
+                    String productPk = rs.getString("product_pk"); // Ahora es String
                     int quantity = rs.getInt("quantity");
                     currentProducts.put(productPk, quantity);
                 }
@@ -134,10 +135,10 @@ public class UpdateService extends javax.swing.JFrame {
         }
     }
 
-    private void removeProductFromService(Connection con, long soldProductPk) throws SQLException {
+    private void removeProductFromService(Connection con, String soldProductPk) throws SQLException {
         String query = "DELETE FROM soldProducts WHERE soldProduct_pk = ?";
         try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setLong(1, soldProductPk);
+            ps.setString(1, soldProductPk);
             ps.executeUpdate();
         }
     }
@@ -196,7 +197,7 @@ public class UpdateService extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT * FROM products WHERE description LIKE ? OR uniqueId LIKE ?";
+        String query = "SELECT * FROM products WHERE description LIKE ? OR product_pk LIKE ?";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
@@ -205,7 +206,7 @@ public class UpdateService extends javax.swing.JFrame {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    model.addRow(new Object[]{rs.getString("uniqueId") + "   -   " + rs.getString("description")});
+                    model.addRow(new Object[]{rs.getString("product_pk") + "   -   " + rs.getString("description")});
                 }
             }
         } catch (SQLException e) {
@@ -685,7 +686,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         try {
             if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(price)) {
-                if (!noOfUnits.matches(Validations.numberPattern)) {
+                if (!noOfUnits.matches(Validations.NUMBER_PATTERN)) {
                     JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad de unidades a vender en números.",
                             "Error", JOptionPane.ERROR_MESSAGE);
                     txtNoOfUnits.setText("");
@@ -729,7 +730,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         String uniqueId[] = nameOrUniqueId.split("-", 0);
 
-        String query = "SELECT * FROM products WHERE uniqueId = ?";
+        String query = "SELECT * FROM products WHERE product_pk = ?";
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
 
             pst.setString(1, uniqueId[0]);
@@ -774,7 +775,7 @@ public class UpdateService extends javax.swing.JFrame {
         String pricePerUnit = txtPricePerUnit.getText().trim();
 
         if (!Validations.isNullOrBlank(noOfUnits) && !Validations.isNullOrBlank(uniqueId) && !Validations.isNullOrBlank(pricePerUnit)) {
-            if (!pricePerUnit.matches(Validations.numberPattern) || !noOfUnits.matches(Validations.numberPattern)) {
+            if (!pricePerUnit.matches(Validations.NUMBER_PATTERN) || !noOfUnits.matches(Validations.NUMBER_PATTERN)) {
                 JOptionPane.showMessageDialog(null, "El número de unidades y precio del producto deben ser ingresados en números", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
@@ -798,7 +799,7 @@ public class UpdateService extends javax.swing.JFrame {
             try (Connection con = ConnectionProvider.getCon()) {
                 if (rowIndex == -1) {
                     // Producto nuevo en el carrito
-                    try (PreparedStatement pst = con.prepareStatement("SELECT * FROM products WHERE uniqueId = ?")) {
+                    try (PreparedStatement pst = con.prepareStatement("SELECT * FROM products WHERE product_pk = ?")) {
                         pst.setString(1, uniqueId);
                         try (ResultSet rs = pst.executeQuery()) {
                             if (rs.next()) {
@@ -1006,12 +1007,12 @@ public class UpdateService extends javax.swing.JFrame {
                 updateService(con, selectedVehicle, serviceState, totalPrice, servicePKLong);
 
                 // Obtener productos actuales del servicio desde la base de datos
-                Map<Long, Integer> currentProducts = getCurrentProducts(con, servicePKLong);
+                Map<String, Integer> currentProducts = getCurrentProducts(con, servicePKLong);
 
                 // Procesar productos en el carrito
                 DefaultTableModel dtm = (DefaultTableModel) cartTable.getModel();
                 for (int i = 0; i < dtm.getRowCount(); i++) {
-                    String uniqueId = dtm.getValueAt(i, 0).toString();
+                    String uniqueId = dtm.getValueAt(i, 0).toString(); // Asegurar que es un String
                     int newQuantity = Integer.parseInt(dtm.getValueAt(i, 4).toString());
                     long salePrice = Long.parseLong(dtm.getValueAt(i, 3).toString());
 
@@ -1027,14 +1028,13 @@ public class UpdateService extends javax.swing.JFrame {
                 }
 
                 // Eliminar productos que ya no están en el carrito
-                for (Map.Entry<Long, Integer> entry : currentProducts.entrySet()) {
-                    long soldProductPk = entry.getKey();
+                for (Map.Entry<String, Integer> entry : currentProducts.entrySet()) {
+                    String soldProductPk = entry.getKey(); // Ahora es String
                     removeProductFromService(con, soldProductPk);
                 }
-                
+
                 // Generar PDF de la venta
                 generatePDF(clientID, totalPrice, cashPaidLong, transferPaidLong, billId);
-
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1051,7 +1051,7 @@ public class UpdateService extends javax.swing.JFrame {
     private void txtPricePerUnitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPricePerUnitKeyReleased
         String pricePerUnit = txtPricePerUnit.getText();
 
-        if (!pricePerUnit.matches(Validations.numberPattern)) {
+        if (!pricePerUnit.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio del producto en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtPricePerUnit.setText("");
@@ -1062,7 +1062,7 @@ public class UpdateService extends javax.swing.JFrame {
     private void txtCashPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashPaidKeyReleased
         String cashPaid = txtCashPaid.getText();
 
-        if (!cashPaid.matches(Validations.numberPattern)) {
+        if (!cashPaid.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtCashPaid.setText("");
@@ -1073,7 +1073,7 @@ public class UpdateService extends javax.swing.JFrame {
     private void txtTransferPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTransferPaidKeyReleased
         String transferPaid = txtTransferPaid.getText();
 
-        if (!transferPaid.matches(Validations.numberPattern)) {
+        if (!transferPaid.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtTransferPaid.setText("");
@@ -1239,7 +1239,7 @@ public class UpdateService extends javax.swing.JFrame {
             return;
         }
 
-        if (!serviceId.matches(Validations.numberPattern)) {
+        if (!serviceId.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(this, "El ID del servicio debe ser ingresado en números", "Advertencia",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -1260,14 +1260,14 @@ public class UpdateService extends javax.swing.JFrame {
                     if (rsState.next()) {
                         String state = rsState.getString("state");
                         if ("Terminado".equalsIgnoreCase(state)) {
-                            JOptionPane.showMessageDialog(this, "El servicio ya está terminado y no puede ser editado.", 
+                            JOptionPane.showMessageDialog(this, "El servicio ya está terminado y no puede ser editado.",
                                     "Servicio terminado", JOptionPane.WARNING_MESSAGE);
                             btnSearchService.setEnabled(true);
                             txtServiceID.setEditable(true);
                             return;
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, "No se encontró el servicio con el ID proporcionado.", 
+                        JOptionPane.showMessageDialog(this, "No se encontró el servicio con el ID proporcionado.",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                         btnSearchService.setEnabled(true);
                         txtServiceID.setEditable(true);
@@ -1317,7 +1317,7 @@ public class UpdateService extends javax.swing.JFrame {
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar el servicio: " + e.getMessage(), "Error", 
+            JOptionPane.showMessageDialog(this, "Error al buscar el servicio: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchServiceActionPerformed

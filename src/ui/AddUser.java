@@ -266,7 +266,7 @@ public class AddUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!name.matches(Validations.justLetters)) {
+        if (!name.matches(Validations.JUST_LETTERS)) {
             JOptionPane.showMessageDialog(null, "¡El nombre debe contener solamente letras!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -281,7 +281,7 @@ public class AddUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
+        if (!mobileNumber.matches(Validations.NUMBER_PATTERN) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -291,7 +291,7 @@ public class AddUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!IDcard.matches(Validations.numberPattern) || IDcard.length() < 6 || IDcard.length() > 10) {
+        if (!IDcard.matches(Validations.NUMBER_PATTERN) || IDcard.length() < 6 || IDcard.length() > 10) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido, debe contener entre 6 a 10 digitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -357,7 +357,7 @@ public class AddUser extends javax.swing.JFrame {
     private void txtIDcardKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDcardKeyReleased
         String idCard = txtIDcard.getText().trim();
 
-        if (Validations.isNullOrBlank(idCard) || !idCard.matches(Validations.numberPattern)
+        if (Validations.isNullOrBlank(idCard) || !idCard.matches(Validations.NUMBER_PATTERN)
                 || idCard.length() < 6 || idCard.length() > 10) {
             IDiconLabel.setVisible(false);
             return;

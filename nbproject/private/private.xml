@@ -18,12 +18,12 @@
             <url>src/ui/UpdateService.java</url>
             <bookmark id="7">
                 <name/>
-                <line>757</line>
+                <line>758</line>
                 <key/>
             </bookmark>
             <bookmark id="8">
                 <name/>
-                <line>950</line>
+                <line>948</line>
                 <key/>
             </bookmark>
             <bookmark id="5">
@@ -41,10 +41,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/common/Validations.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/InventoryAdjustmentHistory.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/dao/Tables.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Login.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/TypeOfAdjustment.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/help/UpdateProductHelp.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/UpdateProduct.java</file>
         </group>
     </open-files>
 </project-private>

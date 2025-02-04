@@ -174,13 +174,13 @@ public class AddClient extends javax.swing.JFrame {
             return;
         }
         if (!Validations.isNullOrBlank(mobileNumber)) {
-            if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
+            if (!mobileNumber.matches(Validations.NUMBER_PATTERN) || mobileNumber.length() != 10) {
                 JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
-        if (!Validations.isNullOrBlank(email) && !email.matches(Validations.emailPattern)) {
+        if (!Validations.isNullOrBlank(email) && !email.matches(Validations.EMAIL_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡El correo electrónico no es válido!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;

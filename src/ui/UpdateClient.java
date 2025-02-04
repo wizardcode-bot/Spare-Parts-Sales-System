@@ -191,7 +191,7 @@ public class UpdateClient extends javax.swing.JFrame {
         }
 
         if (!mobileNumber.equals("No registrado") && !Validations.isNullOrBlank(mobileNumber)) {
-            if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
+            if (!mobileNumber.matches(Validations.NUMBER_PATTERN) || mobileNumber.length() != 10) {
                 JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
                         JOptionPane.WARNING_MESSAGE);
                 return;
@@ -204,7 +204,7 @@ public class UpdateClient extends javax.swing.JFrame {
             return;
         }
 
-        if (!email.matches(Validations.emailPattern) && !email.equalsIgnoreCase("No registrado") && !Validations.isNullOrBlank(email)) {
+        if (!email.matches(Validations.EMAIL_PATTERN) && !email.equalsIgnoreCase("No registrado") && !Validations.isNullOrBlank(email)) {
             JOptionPane.showMessageDialog(null, "¡El correo electrónico no es válido!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;

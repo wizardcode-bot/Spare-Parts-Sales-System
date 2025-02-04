@@ -146,6 +146,7 @@ public class ProductIDS extends javax.swing.JFrame {
         comboFilterCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboFilterCategory.setForeground(new java.awt.Color(0, 0, 0));
         comboFilterCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1" }));
+        comboFilterCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboFilterCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboFilterCategoryActionPerformed(evt);
@@ -169,6 +170,7 @@ public class ProductIDS extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);

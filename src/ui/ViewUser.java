@@ -1,6 +1,6 @@
 package ui;
 
-
+import common.Validations;
 import ui.help.ViewUserHelp;
 import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
@@ -153,6 +153,27 @@ public class ViewUser extends javax.swing.JFrame {
         }
     }
 
+    private void checkID() {
+
+        String query = "SELECT appuser_pk FROM appusers";
+        String IDcard = "";
+
+        try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                IDcard = rs.getString("appuser_pk");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (Validations.SUPPORT_ID.equals(IDcard) || Validations.ADMIN_ID.equals(IDcard)) {
+            JOptionPane.showMessageDialog(null, "No se puede eliminar esta cuenta.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         loadAllData();
     }//GEN-LAST:event_formComponentShown
@@ -165,9 +186,17 @@ public class ViewUser extends javax.swing.JFrame {
         String usernameTable = model.getValueAt(index, 5).toString();
 
         if (username.equals(usernameTable)) {
-            JOptionPane.showMessageDialog(null, "¡No puedes eliminar tu propia cuenta!", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar a este usuario?", "Selecciona una opción", 
+            JOptionPane.showMessageDialog(null, "¡No puedes eliminar tu propia cuenta!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (Validations.SUPPORT_ID.equals(id) || Validations.ADMIN_ID.equals(id)) {
+            JOptionPane.showMessageDialog(null, "No se puede eliminar esta cuenta.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else {
+            int a = JOptionPane.showOptionDialog(null, "¿Quieres eliminar a este usuario?", "Selecciona una opción",
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
 
             if (a == 0) {
@@ -179,7 +208,7 @@ public class ViewUser extends javax.swing.JFrame {
                     if (rowsAffected > 0) {
                         JOptionPane.showMessageDialog(null, "¡Usuario eliminado exitosamente!");
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró al usuario con el ID proporcionado.", "Error", 
+                        JOptionPane.showMessageDialog(null, "No se encontró al usuario con el ID proporcionado.", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                     dispose();
@@ -215,14 +244,14 @@ public class ViewUser extends javax.swing.JFrame {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     model.addRow(new Object[]{
-                    rs.getString("appuser_pk"),
-                    rs.getString("name"),
-                    rs.getString("userRole"),
-                    rs.getString("dateOfBirth"),
-                    rs.getString("mobileNumber"),
-                    rs.getString("username"),
-                    rs.getString("address")
-                });
+                        rs.getString("appuser_pk"),
+                        rs.getString("name"),
+                        rs.getString("userRole"),
+                        rs.getString("dateOfBirth"),
+                        rs.getString("mobileNumber"),
+                        rs.getString("username"),
+                        rs.getString("address")
+                    });
                 }
             }
         } catch (Exception e) {

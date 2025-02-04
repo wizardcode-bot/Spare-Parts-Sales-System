@@ -123,14 +123,24 @@ public class AddProduct extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 125, -1, -1));
 
         txtQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtQuantityKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 145, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Precio de venta (Unidad) *");
+        jLabel6.setText("Precio de venta (Unidad - sin puntos ni comas) *");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 255, -1, -1));
 
         txtSellingPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtSellingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSellingPriceKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtSellingPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 272, 300, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -168,11 +178,16 @@ public class AddProduct extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Precio Adquirido *");
+        jLabel10.setText("Precio Adquirido (sin puntos ni comas)*");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 195, -1, -1));
 
         txtAcquiredPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtAcquiredPrice.setForeground(new java.awt.Color(0, 0, 0));
+        txtAcquiredPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAcquiredPriceKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtAcquiredPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(466, 215, 300, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -266,7 +281,7 @@ public class AddProduct extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!quantity.matches(Validations.numberPattern)) {
+        if (!quantity.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes escribir la cantidad del producto en números!",  "Advertencia", 
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -282,7 +297,7 @@ public class AddProduct extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!acquiredPrice.matches(Validations.numberPattern)) {
+        if (!acquiredPrice.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes escribir el precio de adquisición del producto en números!",  "Advertencia", 
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -292,7 +307,7 @@ public class AddProduct extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!sellingPrice.matches(Validations.numberPattern)) {
+        if (!sellingPrice.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes escribir el precio de venta del producto en números!",  "Advertencia", 
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -425,6 +440,39 @@ public class AddProduct extends javax.swing.JFrame {
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         new AddProductHelp().setVisible(true);
     }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void txtQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuantityKeyReleased
+        String acquiredUnits = txtQuantity.getText().trim();
+
+        if (!acquiredUnits.matches(Validations.NUMBER_PATTERN)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar la cantidad de unidades en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtQuantity.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtQuantityKeyReleased
+
+    private void txtAcquiredPriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAcquiredPriceKeyReleased
+        String acquiredPrice = txtAcquiredPrice.getText().trim();
+
+        if (!acquiredPrice.matches(Validations.NUMBER_PATTERN)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtAcquiredPrice.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtAcquiredPriceKeyReleased
+
+    private void txtSellingPriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSellingPriceKeyReleased
+        String sellingPrice = txtSellingPrice.getText().trim();
+
+        if (!sellingPrice.matches(Validations.NUMBER_PATTERN)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el precio en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtSellingPrice.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtSellingPriceKeyReleased
 
     /**
      * @param args the command line arguments

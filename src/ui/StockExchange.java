@@ -455,7 +455,7 @@ public class StockExchange extends javax.swing.JFrame {
     private void txtUnitsToExchangeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUnitsToExchangeKeyReleased
         // verificar que la cantidad de unidades a cambiar esté en números
         String stockToExchange = txtUnitsToExchange.getText().trim();
-        if (!stockToExchange.matches(Validations.numberPattern)){
+        if (!stockToExchange.matches(Validations.NUMBER_PATTERN)){
             JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad en números", "Error", 
                     JOptionPane.ERROR_MESSAGE);
             txtUnitsToExchange.setText("");
@@ -466,7 +466,7 @@ public class StockExchange extends javax.swing.JFrame {
     private void txtMoneyReceivedKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMoneyReceivedKeyReleased
         // verificar que la cantidad de dinero esté en números
         String moneyReceived = txtMoneyReceived.getText().trim();
-        if (!moneyReceived.matches(Validations.numberPattern)){
+        if (!moneyReceived.matches(Validations.NUMBER_PATTERN)){
             JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad en números", "Error", 
                     JOptionPane.ERROR_MESSAGE);
             txtMoneyReceived.setText("");
@@ -477,7 +477,7 @@ public class StockExchange extends javax.swing.JFrame {
     private void txtMoneyPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMoneyPaidKeyReleased
         // verificar que la cantidad de unidades a cambiar esté en números
         String moneyPaid = txtMoneyPaid.getText().trim();
-        if (!moneyPaid.matches(Validations.numberPattern)){
+        if (!moneyPaid.matches(Validations.NUMBER_PATTERN)){
             JOptionPane.showMessageDialog(null, "Debes ingresar la cantidad en números", "Error", 
                     JOptionPane.ERROR_MESSAGE);
             txtMoneyPaid.setText("");

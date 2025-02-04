@@ -221,7 +221,15 @@ public class UpdateUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!IDcard.matches(Validations.numberPattern) || IDcard.length() < 6 || IDcard.length() > 10) {
+        if (userRole.equals("Vendedor")) {
+
+            if (Validations.SUPPORT_ID.equals(IDcard) || Validations.ADMIN_ID.equals(IDcard)) {
+                JOptionPane.showMessageDialog(null, "No se puede cambiar el rol de esta cuenta.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        if (!IDcard.matches(Validations.NUMBER_PATTERN) || IDcard.length() < 6 || IDcard.length() > 10) {
             JOptionPane.showMessageDialog(null, "¡El número de cédula no es válido, debe contener entre 6 a 10 digitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -231,7 +239,7 @@ public class UpdateUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!name.matches(Validations.justLetters)) {
+        if (!name.matches(Validations.JUST_LETTERS)) {
             JOptionPane.showMessageDialog(null, "¡El nombre solo puede contener letras y espacios!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -251,7 +259,7 @@ public class UpdateUser extends javax.swing.JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
+        if (!mobileNumber.matches(Validations.NUMBER_PATTERN) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;

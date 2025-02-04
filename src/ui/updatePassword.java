@@ -9,18 +9,18 @@ import java.sql.ResultSet;
 import org.mindrot.jbcrypt.BCrypt;
 import common.Validations;
 
-public class updatePassword extends javax.swing.JFrame {
+public class UpdatePassword extends javax.swing.JFrame {
 
     private String username = "";
 
     /**
      * Creates new form updatePassword
      */
-    public updatePassword() {
+    public UpdatePassword() {
         initComponents();
     }
 
-    public updatePassword(String tempUsername) {
+    public UpdatePassword(String tempUsername) {
         initComponents();
         username = tempUsername;
         setSize(480, 300);
@@ -180,20 +180,21 @@ public class updatePassword extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(updatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(updatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(updatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(updatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new updatePassword().setVisible(true);
+                new UpdatePassword().setVisible(true);
             }
         });
     }

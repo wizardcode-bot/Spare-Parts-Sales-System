@@ -206,7 +206,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/images/all_pages_background.png"/>
+          <Image iconType="3" name="/images/whiteSmoke.jpg"/>
         </Property>
       </Properties>
       <Constraints>

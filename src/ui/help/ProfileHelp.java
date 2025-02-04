@@ -50,15 +50,15 @@ public class ProfileHelp extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
-            + "<br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta y luego dar click en el botón 'Actualizar'."
+        jLabel8.setText("<html><p>En el módulo 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
+            + "<br><br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta."
             + "<br>Adicionalmente, podrás cambiar tu contraseña e imagen de perfil. Al cambiar la imagen de perfil se cerrará automáticamente "
             + "la interfaz, así que se recomienda primero guardar los cambios realizados en los datos personales y luego cambiar la imagen de perfil."
-            + "<br>Luego de confirmar el proceso, tus datos serán actualizados en la base de datos del sistema. "
-            + "<br><br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+            + "<br><br>Luego de confirmar el proceso dando click en el botón 'Actualizar', tus datos serán actualizados en la base de datos del sistema. "
+            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 147, 740, 173));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 147, 740, 200));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));

@@ -233,7 +233,7 @@ public class Profile extends javax.swing.JFrame {
         if (Validations.isNullOrBlank(name)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el nombre!", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (!name.matches(Validations.justLetters)) {
+        } else if (!name.matches(Validations.JUST_LETTERS)) {
             JOptionPane.showMessageDialog(null, "¡El nombre debe contener solamente letras!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -241,7 +241,7 @@ public class Profile extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el número de teléfono!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (!mobileNumber.matches(Validations.numberPattern) || mobileNumber.length() != 10) {
+        } else if (!mobileNumber.matches(Validations.NUMBER_PATTERN) || mobileNumber.length() != 10) {
             JOptionPane.showMessageDialog(null, "¡El número de teléfono no es válido, debe contener 10 dígitos!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -271,7 +271,7 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new updatePassword(username).setVisible(true);
+        new UpdatePassword(username).setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked

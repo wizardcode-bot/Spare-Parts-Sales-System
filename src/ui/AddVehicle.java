@@ -131,7 +131,7 @@ public class AddVehicle extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("Filtrar por número de cédula");
+        jLabel8.setText("Filtrar por número de cédula o NIT");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(471, 283, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -274,7 +274,7 @@ public class AddVehicle extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el color del vehículo!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (!color.matches(Validations.justLetters)){
+        } else if (!color.matches(Validations.JUST_LETTERS)){
             JOptionPane.showMessageDialog(null, "¡El color debe ser ingresado solamente en letras!", "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
