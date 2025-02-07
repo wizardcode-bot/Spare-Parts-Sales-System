@@ -18,22 +18,22 @@
             <url>src/ui/UpdateService.java</url>
             <bookmark id="7">
                 <name/>
-                <line>758</line>
+                <line>764</line>
                 <key/>
             </bookmark>
             <bookmark id="8">
                 <name/>
-                <line>948</line>
+                <line>954</line>
                 <key/>
             </bookmark>
             <bookmark id="5">
                 <name/>
-                <line>1083</line>
+                <line>1089</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>1088</line>
+                <line>1094</line>
                 <key/>
             </bookmark>
         </file>
@@ -43,8 +43,6 @@
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/common/Validations.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/dao/Tables.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Login.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/help/UpdateProductHelp.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/UpdateProduct.java</file>
         </group>
     </open-files>
 </project-private>
