@@ -2,7 +2,11 @@ package ui;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import common.OpenPdf;
@@ -113,76 +117,115 @@ public class SellProduct extends javax.swing.JFrame {
     }
 
     private void generatePDF() {
-        // Crear factura
-        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+        // Configurar el tamaño de la factura para 58mm
+        // Ajustar ancho a 58mm y dejar la altura dinámica
+        com.itextpdf.text.Document doc = new com.itextpdf.text.Document(new Rectangle(226, PageSize.A4.getHeight()));
+        //medida del documento
+        doc.setMargins(10, 10, 10, 10); // Márgenes 
+
         String selectedClient = comboRelateClient.getSelectedItem().toString();
-        String idCard = getClientIdCard(selectedClient); // Consultar el idCard
+        String idCard = getClientIdCard(selectedClient);
         String paymentTerm = comboPayment.getSelectedItem().toString();
         final String NIT = "119887284-4";
         final String ADDRESS = "Cra 18 # 11 - 62 Centro - Cumaral";
         String vendorName = Validations.getNameByUsername(username);
 
         try {
-            // Obtener la fecha actual
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dateString = now.format(formatter);
+
             PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
             doc.open();
-            Paragraph title = new Paragraph("Factura de venta" + "\nMOTOREPUESTOS GOOFY" + "\nNIT: " + NIT + "\nDirección: " + ADDRESS
-                    + "\nNo Responsable De IVA");
+
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD);
+            Font normalFont = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL);
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
+
+            Paragraph title = new Paragraph("Factura de venta\nMOTOREPUESTOS GOOFY\nNIT: " + NIT + "\nDirección: " 
+                    + ADDRESS + "\nNo Responsable De IVA\n", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             doc.add(title);
+
             Paragraph details = new Paragraph("\nID de factura: " + billId
-                    + "\nFecha y hora de expedición: " + dateString
+                    + "\nFecha: " + dateString
                     + "\nVendedor: " + vendorName
                     + "\nCliente: " + selectedClient
-                    + "\nNIT/CC: " + (idCard != null ? idCard : "No disponible"));
+                    + "\nNIT/CC: " + (idCard != null ? idCard : "No disponible") + "\n", normalFont);
+            //details.setAlignment(Element.ALIGN_CENTER);
             doc.add(details);
-            Paragraph hyphenLine = new Paragraph("-".repeat(130) + "\n\n");
-            hyphenLine.setAlignment(Element.ALIGN_CENTER);
-            doc.add(hyphenLine);
-            PdfPTable tbl = new PdfPTable(6);
-            tbl.addCell("ID del producto");
-            tbl.addCell("Descripción");
-            tbl.addCell("Marca");
-            tbl.addCell("Precio por unidad");
-            tbl.addCell("Cantidad");
-            tbl.addCell("Sub Total");
+
+            Paragraph separator = new Paragraph("-".repeat(70) + "\n\n", normalFont);
+            separator.setAlignment(Element.ALIGN_CENTER);
+            doc.add(separator);
+
+            PdfPTable tbl = new PdfPTable(4);
+            tbl.setWidthPercentage(80);
+            tbl.setWidths(new float[]{4, 3, 2, 3});
+
+            PdfPCell cell;
+
+            cell = new PdfPCell(new Phrase("Descripción", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("P. Unidad", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Cant.", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Total", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
             for (int i = 0; i < cartTable.getRowCount(); i++) {
-                tbl.addCell(cartTable.getValueAt(i, 0).toString());
-                tbl.addCell(cartTable.getValueAt(i, 1).toString());
-                tbl.addCell(cartTable.getValueAt(i, 2).toString());
-                tbl.addCell(cartTable.getValueAt(i, 3).toString());
-                tbl.addCell(cartTable.getValueAt(i, 4).toString());
-                tbl.addCell(cartTable.getValueAt(i, 5).toString());
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 1).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 3).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 4).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 5).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
             }
+
             doc.add(tbl);
-            Paragraph paymentTitle = new Paragraph("-".repeat(40) + "Detalle De Pago" + "-".repeat(40) + "\n");
+
+            doc.add(separator);
+            Paragraph paymentTitle = new Paragraph("DETALLE DE PAGO\n", boldFont);
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
-            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Paragraph total = new Paragraph("\nPrecio Total Pagado: " + finalTotalPrice, boldFont);
+
+            Paragraph total = new Paragraph("Total: " + finalTotalPrice + "\n", boldFont);
+            //total.setAlignment(Element.ALIGN_CENTER);
             doc.add(total);
+
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
-                    + "\nTransferencia: " + transferPaidInt);
+                    + "\nTransferencia: " + transferPaidInt + "\n", normalFont);
+            //paymentDetails.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentDetails);
-            doc.add(hyphenLine);
+
+            doc.add(separator);
             Paragraph disclaimerMsg = new Paragraph(
-                    """
-                    NO SE HACE DEVOLUCIÓN DE DINERO
-                    Después de ocho (8) dias de retirados los productos
-                    NO se aceptan devoluciones. Es indispensable presentar
-                    esta factura. Con esta el comprador declara haber
-                    recibido real y materialmente los productos.
-                    El tiempo de garantía de los productos es de tres (3) meses
-                    a la fecha de factura, excepto en parte eléctricas.
-                    En partes eléctricas NO hay garantía ni devoluciones.
-                    Gracias por tu compra. Te esperamos de nuevo!""");
+                    "NO SE HACE DEVOLUCIÓN DE DINERO\n"
+                    + "Después de ocho (8) días no se aceptan devoluciones.\n"
+                    + "Indispensable presentar esta factura.\n"
+                    + "Garantía de tres (3) meses, excepto en partes eléctricas.\n"
+                    + "Gracias por tu compra!", normalFont);
             disclaimerMsg.setAlignment(Element.ALIGN_CENTER);
             doc.add(disclaimerMsg);
-            // Abrir PDF
+
             OpenPdf.openById(String.valueOf(billId));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
