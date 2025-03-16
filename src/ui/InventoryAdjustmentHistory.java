@@ -1,7 +1,10 @@
 package ui;
 
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +21,23 @@ public class InventoryAdjustmentHistory extends javax.swing.JFrame {
         setSize(1200, 580);
         setLocationRelativeTo(null);
         loadInventoryAdjustments();
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadInventoryAdjustments() {

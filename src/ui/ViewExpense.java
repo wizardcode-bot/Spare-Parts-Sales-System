@@ -1,10 +1,14 @@
 package ui;
 
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import java.util.Date;
+import javax.imageio.ImageIO;
+import ui.help.ViewExpenseHelp;
 
 /**
  *
@@ -21,6 +25,23 @@ public class ViewExpense extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         loadExpenseData();
         ExpenseDate.addPropertyChangeListener(evt -> loadExpenseData());
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -33,7 +54,6 @@ public class ViewExpense extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -42,6 +62,8 @@ public class ViewExpense extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,7 +75,6 @@ public class ViewExpense extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Gastos registrados");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(254, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -113,7 +134,16 @@ public class ViewExpense extends javax.swing.JFrame {
         });
         getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(571, 87, 231, -1));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
+
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -199,6 +229,10 @@ public class ViewExpense extends javax.swing.JFrame {
         loadExpenseData();
     }//GEN-LAST:event_jTextField1KeyReleased
 
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        new ViewExpenseHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel7MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -254,6 +288,7 @@ public class ViewExpense extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;

@@ -6,6 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.mindrot.jbcrypt.BCrypt;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 
 public class Login extends javax.swing.JFrame {
 
@@ -16,6 +21,9 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         setSize(1366, 768);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
 
         // Añadir el KeyListener al campo de contraseña
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -26,6 +34,75 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         });
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para verificar créditos pendientes
+    private void checkPendingCredits(Connection con) {
+        String creditQuery = "SELECT COUNT(*) AS pendingCredits FROM clients_credits WHERE DATE(paymentDeadline) = CURRENT_DATE";
+
+        try (PreparedStatement pst = con.prepareStatement(creditQuery); ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next() && rs.getInt("pendingCredits") > 0) {
+                showPopupNotification("Recordatorio de Créditos",
+                        "¡Hay créditos que deben pagarse hoy! Revísalos en: Gestionar Clientes/Consultar créditos.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar créditos pendientes: " + e.getMessage());
+        }
+    }
+
+    // Método para mostrar una notificación emergente
+    private void showPopupNotification(String title, String message) {
+        JWindow window = new JWindow();
+        window.setAlwaysOnTop(true);
+        window.setSize(350, 120); // Aumenta el tamaño de la ventana si es necesario
+        window.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(255, 255, 255));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.BLACK, 2), // Borde exterior
+                BorderFactory.createEmptyBorder(15, 15, 15, 15) // Padding interno
+        ));
+
+        JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
+        lblTitle.setForeground(Color.BLACK);
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JLabel lblMessage = new JLabel("<html><center>" + message + "</center></html>", SwingConstants.CENTER);
+        lblMessage.setForeground(Color.BLACK);
+        lblMessage.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        panel.add(lblTitle, BorderLayout.NORTH);
+        panel.add(lblMessage, BorderLayout.CENTER);
+        window.add(panel);
+
+        // Posicionar la ventana en la esquina inferior derecha
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = screenSize.width - window.getWidth() - 20;
+        int y = screenSize.height - window.getHeight() - 70;
+        window.setLocation(x, y);
+
+        // Mostrar la notificación
+        window.setVisible(true);
+
+        // Cerrar automáticamente después de 5 segundos
+        new Timer(10000, e -> window.dispose()).start();
     }
 
     /**
@@ -121,6 +198,7 @@ public class Login extends javax.swing.JFrame {
 
         try (
                 Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
+
             pst.setString(1, username);
 
             try (ResultSet rs = pst.executeQuery()) {
@@ -131,32 +209,37 @@ public class Login extends javax.swing.JFrame {
 
                     // Verificar la contraseña ingresada
                     if (BCrypt.checkpw(password, hashedPassword)) {
-                        // Determinar el rol del usuario
                         String userRole = rs.getString("userRole");
+
+                        // Verificar créditos pendientes antes de abrir el dashboard
+                        checkPendingCredits(con);
+
+                        // Determinar el rol del usuario
                         if ("Administrador".equals(userRole)) {
                             new AdminDashboard(username).setVisible(true);
                         } else {
                             new SellerDashboard(username).setVisible(true);
                         }
                         dispose();
+                        //contraseña incorrecta
                     } else {
-                        // Contraseña incorrecta
                         JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
 
-            // Si no se encontró al usuario
             if (!userFound) {
-                JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecto", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al iniciar sesión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al iniciar sesión: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
-        java.util.Arrays.fill(passwordChars, '\0'); //limpiar el arreglo del campo de contraseña
+        java.util.Arrays.fill(passwordChars, '\0');
 
     }//GEN-LAST:event_btnLoginActionPerformed
 

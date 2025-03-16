@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import common.Validations;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 import ui.help.UpdateVehicleHelp;
 
 public class UpdateVehicle extends javax.swing.JFrame {
@@ -19,6 +22,23 @@ public class UpdateVehicle extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

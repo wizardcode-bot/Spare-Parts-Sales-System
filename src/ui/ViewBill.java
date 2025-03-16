@@ -1,12 +1,16 @@
 package ui;
 
-
 import common.OpenPdf;
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import javax.imageio.ImageIO;
+import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import ui.help.ViewBillHelp;
 
 public class ViewBill extends javax.swing.JFrame {
@@ -16,8 +20,62 @@ public class ViewBill extends javax.swing.JFrame {
      */
     public ViewBill() {
         initComponents();
-        setSize(850,500);
+        setSize(850, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        jTable1.setRowSorter(sorter);
+
+        txtFilterBill.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                filterTable();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                filterTable();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                filterTable();
+            }
+        });
+
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void filterTable() {
+        TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) jTable1.getRowSorter();
+        String text = txtFilterBill.getText().trim();
+
+        if (text.isEmpty()) {
+            sorter.setRowFilter(null); // Muestra todas las filas si el campo está vacío
+        } else {
+            try {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 0)); // Filtra por la columna "ID de factura"
+            } catch (java.util.regex.PatternSyntaxException e) {
+                sorter.setRowFilter(null); // Evita errores si hay caracteres inválidos en la búsqueda
+            }
+        }
     }
 
     /**
@@ -36,6 +94,8 @@ public class ViewBill extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        txtFilterBill = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -57,9 +117,17 @@ public class ViewBill extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Factura de ID", "Fecha", "Total Pagado", "Generado por", "Cliente"
+                "ID de factura", "Fecha", "Total Pagado", "Generado por", "Cliente"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -68,7 +136,7 @@ public class ViewBill extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 81, 838, 380));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 110, 838, 356));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -82,7 +150,7 @@ public class ViewBill extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Selecciona la factura para imprimir o ver los detalles");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(287, 473, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 472, -1, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -94,6 +162,15 @@ public class ViewBill extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 850, 10));
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Filtrar por ID de factura");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 79, -1, -1));
+
+        txtFilterBill.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtFilterBill.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtFilterBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(198, 75, 240, -1));
+
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -104,10 +181,10 @@ public class ViewBill extends javax.swing.JFrame {
         // Mostrar datos en la tabla
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         String query = "SELECT b.billId, b.billDate, b.totalPaid, a.name AS generatedBy, c.name AS relatedClient "
-                 + "FROM bills b "
-                 + "JOIN appusers a ON b.appuser_pk = a.appuser_pk "
-                 + "JOIN clients c ON b.client_pk = c.client_pk "
-                 + "ORDER BY b.billDate DESC"; // Ordenar por fecha descendente
+                + "FROM bills b "
+                + "JOIN appusers a ON b.appuser_pk = a.appuser_pk "
+                + "JOIN clients c ON b.client_pk = c.client_pk "
+                + "ORDER BY b.billDate DESC"; // Ordenar por fecha descendente
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
@@ -122,7 +199,7 @@ public class ViewBill extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar los datos: " + e.getMessage(), "Error", 
+            JOptionPane.showMessageDialog(null, "Error al cargar los datos: " + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formComponentShown
@@ -184,8 +261,10 @@ public class ViewBill extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtFilterBill;
     // End of variables declaration//GEN-END:variables
 }

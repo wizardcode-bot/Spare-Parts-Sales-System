@@ -1,8 +1,11 @@
 package ui;
 
 import java.awt.GridLayout;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JPanel;
 import java.sql.*;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -38,6 +41,23 @@ public class ExpenseDetails extends javax.swing.JFrame {
         this.responsible = responsible;
 
         setValues();
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setValues() {

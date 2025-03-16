@@ -116,6 +116,25 @@ public class Tables {
                     + "expenseValue BIGINT NOT NULL,"
                     + "expenseDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
                     + "expenseResponsible VARCHAR(200) NOT NULL)";
+            
+            String createCredits = "CREATE TABLE IF NOT EXISTS clients_credits("
+                    + "clientsCredits_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "client_pk VARCHAR(20),"
+                    + "totalCredit BIGINT NOT NULL,"
+                    + "pendingBalance BIGINT NOT NULL,"
+                    + "creditDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                    + "paymentDeadline TIMESTAMP NULL,"
+                    + "creditState VARCHAR(15) NOT NULL," // pendiente o pagado
+                    + "lastModified TIMESTAMP NULL," 
+                    + "FOREIGN KEY (client_pk) REFERENCES clients(client_pk) ON DELETE RESTRICT)";
+            
+            String credit_payments = "CREATE TABLE IF NOT EXISTS credit_payments ("
+                    + "payment_pk BIGINT AUTO_INCREMENT PRIMARY KEY,"
+                    + "clientsCredits_pk BIGINT NOT NULL," // Relación con el crédito
+                    + "paymentAmount BIGINT NOT NULL," //Monto abonado
+                    + "paymentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP," //Fecha del pago
+                    + "FOREIGN KEY (clientsCredits_pk) REFERENCES clients_credits(clientsCredits_pk) ON DELETE CASCADE)";
+
 
             // EJECUTAR LAS CONSULTAS
             
@@ -132,6 +151,8 @@ public class Tables {
             //st.executeUpdate(createSoldProductsServices);
             //st.executeUpdate(createInventoryAdjustments);
             //st.executeUpdate(createExpenses);
+            //st.executeUpdate(createCredits);
+            //st.executeUpdate(credit_payments);
             
             JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {

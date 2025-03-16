@@ -6,6 +6,9 @@ import java.sql.*;
 import common.Validations;
 import static common.Validations.getIDByUsername;
 import java.awt.Image;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -30,6 +33,23 @@ public class Profile extends javax.swing.JFrame {
         setSize(850, 500);
         username = tempUsername;
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setImage(JLabel lbl, String ruta) {
@@ -71,7 +91,7 @@ public class Profile extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtDoB = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnCamera = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -165,17 +185,17 @@ public class Profile extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/smallCamera.png"))); // NOI18N
-        jButton1.setText("Establecer foto de perfil");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCamera.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCamera.setForeground(new java.awt.Color(0, 0, 0));
+        btnCamera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/smallCamera.png"))); // NOI18N
+        btnCamera.setText("Establecer foto de perfil");
+        btnCamera.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCamera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCameraActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(127, 414, -1, -1));
+        getContentPane().add(btnCamera, new org.netbeans.lib.awtextra.AbsoluteConstraints(127, 414, -1, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
@@ -189,6 +209,7 @@ public class Profile extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         //mostrar datos en las casillas
         txtDoB.setEditable(false);
+        btnCamera.setEnabled(false);
 
         String query = "SELECT name, dateOfBirth, mobileNumber, address FROM appusers WHERE username = ?";
 
@@ -278,11 +299,11 @@ public class Profile extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCameraActionPerformed
         // botón para llamar la interfaz de la cámara
         new Camera(username).setVisible(true);
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCameraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -320,7 +341,7 @@ public class Profile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnCamera;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;

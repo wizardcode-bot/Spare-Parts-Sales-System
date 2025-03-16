@@ -12,6 +12,9 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 import common.Validations;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 import ui.help.RestartPasswordHelp;
 
 public class RestartPassword extends javax.swing.JFrame {
@@ -27,10 +30,23 @@ public class RestartPassword extends javax.swing.JFrame {
         txtName.setEditable(false);
         txtUserRole.setEditable(false);
         txtUsername.setEditable(false);
+        
+        //establecer icono
+        setImage();
     }
-
-    private boolean isNullOrBlank(String str) {
-        return str == null || str.isBlank();
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String generatePassword() {
@@ -204,7 +220,7 @@ public class RestartPassword extends javax.swing.JFrame {
         // Botón para buscar usuario
         String idCard = txtIDCard.getText().trim();
 
-        if (isNullOrBlank(idCard)) {
+        if (Validations.isNullOrBlank(idCard)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar la cédula del usuario!",
                     "No hay usuarios seleccionados", JOptionPane.WARNING_MESSAGE);
             return;
@@ -264,13 +280,13 @@ public class RestartPassword extends javax.swing.JFrame {
         String idCard = txtIDCard.getText().trim();
 
         // Validar campos
-        if (isNullOrBlank(newPassword)) {
+        if (Validations.isNullOrBlank(newPassword)) {
             JOptionPane.showMessageDialog(this, "Por favor, genera una nueva contraseña antes de guardar.",
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (isNullOrBlank(idCard)) {
+        if (Validations.isNullOrBlank(idCard)) {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un usuario válido.",
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;

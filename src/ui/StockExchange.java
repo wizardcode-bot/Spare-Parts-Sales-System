@@ -2,13 +2,17 @@ package ui;
 
 import common.Validations;
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import ui.help.StockExchangeHelp;
 
 /**
  *
@@ -25,6 +29,23 @@ public class StockExchange extends javax.swing.JFrame {
         initComponents();
         setSize(1200, 610);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void productName(String nameOrUniqueId) {
@@ -59,7 +80,6 @@ public class StockExchange extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         productsTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -92,6 +112,8 @@ public class StockExchange extends javax.swing.JFrame {
         txtMoneyReceived = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         txtMoneyPaid = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel17 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -108,7 +130,6 @@ public class StockExchange extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Intercambiar producto");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 1200, 10));
 
         productsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         productsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -315,6 +336,16 @@ public class StockExchange extends javax.swing.JFrame {
         });
         getContentPane().add(txtMoneyPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 354, 194, -1));
 
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel18MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1118, 14, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 1200, 10));
+
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke1200x612.jpg"))); // NOI18N
         getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -485,6 +516,10 @@ public class StockExchange extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtMoneyPaidKeyReleased
 
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+        new StockExchangeHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel18MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -536,6 +571,7 @@ public class StockExchange extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

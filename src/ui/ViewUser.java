@@ -3,9 +3,12 @@ package ui;
 import common.Validations;
 import ui.help.ViewUserHelp;
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import javax.imageio.ImageIO;
 import javax.swing.table.TableModel;
 
 public class ViewUser extends javax.swing.JFrame {
@@ -24,6 +27,23 @@ public class ViewUser extends javax.swing.JFrame {
         username = tempUsername;
         setSize(950, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -36,15 +56,15 @@ public class ViewUser extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtFilterID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -59,7 +79,6 @@ public class ViewUser extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Ver Usuario");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(387, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 61, 950, 10));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,15 +111,6 @@ public class ViewUser extends javax.swing.JFrame {
         jLabel2.setText("Selecciona la fila de el usuario a eliminar");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 466, -1, -1));
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
-        jButton4.setBorder(null);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(858, 16, 40, 30));
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Filtrar por nombre o número de cédula");
@@ -124,8 +134,18 @@ public class ViewUser extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(904, 6, -1, -1));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke950.jpg"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(868, 14, -1, -1));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 950, 10));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke950.jpg"))); // NOI18N
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -220,10 +240,6 @@ public class ViewUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        new ViewUserHelp().setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void txtFilterIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterIDKeyReleased
         //filtrar por número de cédula
         String filterText = txtFilterID.getText().trim();
@@ -265,6 +281,10 @@ public class ViewUser extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        new ViewUserHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -301,14 +321,14 @@ public class ViewUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtFilterID;
     // End of variables declaration//GEN-END:variables

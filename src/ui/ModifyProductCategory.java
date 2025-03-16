@@ -1,10 +1,13 @@
 package ui;
 
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +26,23 @@ public class ModifyProductCategory extends javax.swing.JFrame {
         txtCategoryID.setEditable(false);
         txtCurrentName.setEditable(false);
         loadCategories();
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadCategories() {

@@ -2,7 +2,11 @@ package ui;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import common.OpenPdf;
@@ -14,8 +18,11 @@ import javax.swing.table.TableModel;
 import dao.ProductsUtils;
 import java.io.FileOutputStream;
 import common.Validations;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.imageio.ImageIO;
 import ui.help.NewServiceHelp;
 
 public class NewService extends javax.swing.JFrame {
@@ -40,6 +47,23 @@ public class NewService extends javax.swing.JFrame {
         username = tempUsername;
         setLocationRelativeTo(null);
         setSize(1366, 768);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void productName(String nameOrUniqueId) {
@@ -123,7 +147,10 @@ public class NewService extends javax.swing.JFrame {
 
     private void generatePDF(String clientID) {
         // Crear factura
-        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+        // Ajustar ancho a 58mm y dejar la altura dinámica
+        com.itextpdf.text.Document doc = new com.itextpdf.text.Document(new Rectangle(226, PageSize.A4.getHeight()));
+        //medida del documento
+        doc.setMargins(10, 5, 10, 10); // Márgenes 
         String client_pk = clientID;
         String clientName = null;
         String paymentTerm = comboPayment.getSelectedItem().toString();
@@ -145,75 +172,108 @@ public class NewService extends javax.swing.JFrame {
                 }
             }
 
-            // Obtener la fecha actual
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dateString = now.format(formatter);
 
-            // Crear el PDF
             PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
             doc.open();
 
-            // Título
-            Paragraph title = new Paragraph("Factura de venta\nMOTOREPUESTOS GOOFY\nNIT: " + NIT + "\nDirección: " + ADDRESS
-                    + "\nNo Responsable De IVA");
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font normalFont = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+
+            Paragraph title = new Paragraph("Factura de venta\nMOTOREPUESTOS GOOFY\nNIT: " + NIT + "\nDirección: "
+                    + ADDRESS + "\nNo Responsable De IVA\n", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             doc.add(title);
 
-            // Detalles del cliente
             Paragraph details = new Paragraph("\nID de factura: " + billId
-                    + "\nFecha y hora de expedición: " + dateString
+                    + "\nFecha: " + dateString
                     + "\nVendedor: " + vendorName
-                    + "\nCliente: " + (clientName != null ? clientName : "Desconocido")
-                    + "\nNIT/CC: " + client_pk);
+                    + "\nCliente: " + clientName
+                    + "\nNIT/CC: " + (client_pk != null ? client_pk : "No disponible") + "\n", normalFont);
+            //details.setAlignment(Element.ALIGN_CENTER);
             doc.add(details);
 
-            // Línea divisoria
-            Paragraph hyphenLine = new Paragraph("-".repeat(130) + "\n\n");
-            hyphenLine.setAlignment(Element.ALIGN_CENTER);
-            doc.add(hyphenLine);
+            Paragraph separator = new Paragraph("-".repeat(57) + "\n\n", normalFont);
+            separator.setAlignment(Element.ALIGN_CENTER);
+            doc.add(separator);
 
-            // Tabla de productos
-            PdfPTable tbl = new PdfPTable(6);
-            tbl.addCell("ID del producto");
-            tbl.addCell("Descripción");
-            tbl.addCell("Marca");
-            tbl.addCell("Precio por unidad");
-            tbl.addCell("Cantidad");
-            tbl.addCell("Sub Total");
+            PdfPTable tbl = new PdfPTable(4);
+            tbl.setWidthPercentage(100);
+            tbl.setWidths(new float[]{4, 3, 3, 3});
+
+            PdfPCell cell;
+
+            cell = new PdfPCell(new Phrase("Producto", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("P. Unidad", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Cant.", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Total", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
 
             for (int i = 0; i < cartTable.getRowCount(); i++) {
-                tbl.addCell(cartTable.getValueAt(i, 0).toString());
-                tbl.addCell(cartTable.getValueAt(i, 1).toString());
-                tbl.addCell(cartTable.getValueAt(i, 2).toString());
-                tbl.addCell(cartTable.getValueAt(i, 3).toString());
-                tbl.addCell(cartTable.getValueAt(i, 4).toString());
-                tbl.addCell(cartTable.getValueAt(i, 5).toString());
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 1).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 3).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 4).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 5).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
             }
+
             doc.add(tbl);
 
-            // Detalle de pago
-            Paragraph paymentTitle = new Paragraph("-".repeat(40) + "Detalle De Pago" + "-".repeat(40) + "\n");
+            doc.add(separator);
+            Paragraph paymentTitle = new Paragraph("DETALLE DE PAGO\n", boldFont);
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
 
-            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Paragraph total = new Paragraph("\nPrecio Total Pagado: " + finalTotalPrice, boldFont);
+            Paragraph total = new Paragraph("Total: " + lblFinalTotalPrice.getText() + "\n", boldFont);
+            //total.setAlignment(Element.ALIGN_CENTER);
             doc.add(total);
 
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
-                    + "\nTransferencia: " + transferPaidInt);
+                    + "\nTransferencia: " + transferPaidInt + "\n", normalFont);
+            //paymentDetails.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentDetails);
 
-            doc.add(hyphenLine);
+            doc.add(separator);
+            Paragraph disclaimerMsg = new Paragraph(
+                    "NO SE HACE DEVOLUCIÓN DE DINERO\n"
+                    + "Después de ocho (8) días no se aceptan devoluciones.\n"
+                    + "No hay devoluciones en partes eléctricas.\n"
+                    + "Indispensable presentar esta factura.\n"
+                    + "¡Gracias por tu compra!", normalFont);
+            disclaimerMsg.setAlignment(Element.ALIGN_CENTER);
+            doc.add(disclaimerMsg);
+            JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-            // Mensaje de agradecimiento
-            Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
-            doc.add(thanksMsg);
-
-            // Abrir PDF
-            OpenPdf.openById(String.valueOf(billId));
+            //preguntar si se desea imprimir
+            int a = JOptionPane.showOptionDialog(null, "¿Quieres imprimir la factura?", "Selecciona una opción",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+            if (a == 0) {
+                OpenPdf.openById(String.valueOf(billId));
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -395,7 +455,6 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnAddToCart.setForeground(new java.awt.Color(0, 0, 0));
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
         btnAddToCart.setText("Añadir al carrito");
         btnAddToCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -423,6 +482,7 @@ public class NewService extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        cartTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cartTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cartTableMouseClicked(evt);
@@ -443,7 +503,6 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 447, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
         jButton3.setText("Finalizar servicio e Imprimir");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -456,6 +515,12 @@ public class NewService extends javax.swing.JFrame {
 
         comboRelateVehicle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboRelateVehicle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un vehículo" }));
+        comboRelateVehicle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboRelateVehicle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboRelateVehicleActionPerformed(evt);
+            }
+        });
         getContentPane().add(comboRelateVehicle, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 313, 300, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -467,7 +532,6 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 373, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/filter.png"))); // NOI18N
         jButton2.setText("Filtrar");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -492,7 +556,6 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 300, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addIcon.png"))); // NOI18N
         jButton1.setText("Añadir vehículo");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -547,7 +610,6 @@ public class NewService extends javax.swing.JFrame {
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 196, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveProgress.png"))); // NOI18N
         jButton4.setText("Guardar proceso");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -731,6 +793,13 @@ public class NewService extends javax.swing.JFrame {
 
                             JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
                             clearProductFields();
+
+                            //verificar si el stock es menor a 5 unidades
+                            long updatedStock = availableQuantity - Integer.parseInt(noOfUnits);
+                            if (updatedStock < 5) {
+                                JOptionPane.showMessageDialog(null, "¡Te quedan menos de 5 unidades de este producto en stock!", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+                            }
                         } else {
                             JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
                                     + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -754,7 +823,7 @@ public class NewService extends javax.swing.JFrame {
         // eliminar producto del carrito
         int index = cartTable.getSelectedRow();
         if (index == -1) {
-            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún producto para eliminar.", "Error", 
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún producto para eliminar.", "Error",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -904,12 +973,12 @@ public class NewService extends javax.swing.JFrame {
 
                     // Obtener product_pk a partir del uniqueId
                     String productQuery = "SELECT product_pk FROM products WHERE product_pk = ?";
-                    long productPk = -1;
+                    String productPk = "";
                     try (PreparedStatement psProduct = con.prepareStatement(productQuery)) {
                         psProduct.setString(1, uniqueId);
                         try (ResultSet rs = psProduct.executeQuery()) {
                             if (rs.next()) {
-                                productPk = rs.getLong("product_pk");
+                                productPk = rs.getString("product_pk");
                             } else {
                                 throw new Exception("No se encontró el producto con ID único: " + uniqueId);
                             }
@@ -922,7 +991,7 @@ public class NewService extends javax.swing.JFrame {
                         psSoldProduct.setInt(1, quantity);
                         psSoldProduct.setLong(2, salePrice);
                         psSoldProduct.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                        psSoldProduct.setLong(4, productPk);
+                        psSoldProduct.setString(4, productPk);
                         psSoldProduct.executeUpdate();
 
                         try (ResultSet generatedKeys = psSoldProduct.getGeneratedKeys()) {
@@ -942,7 +1011,8 @@ public class NewService extends javax.swing.JFrame {
                     }
                 }
                 generatePDF(clientID); // Crear PDF de la venta
-                JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -1154,8 +1224,46 @@ public class NewService extends javax.swing.JFrame {
         new NewServiceHelp().setVisible(true);
     }//GEN-LAST:event_jLabel19MouseClicked
 
+    private void comboRelateVehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRelateVehicleActionPerformed
+
+        Object selectedObject = comboRelateVehicle.getSelectedItem(); // Obtener el objeto seleccionado
+
+        // Verificar que no sea null antes de llamar a toString()
+        if (selectedObject == null) {
+            return; // No hacer nada si no hay selección
+        }
+
+        String selectedPlate = selectedObject.toString();
+
+        String query = "SELECT client_pk FROM motorbikes WHERE motorbike_pk = ?";
+
+        try (Connection conn = ConnectionProvider.getCon(); PreparedStatement pst = conn.prepareStatement(query)) {
+
+            pst.setString(1, selectedPlate);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String clientPk = rs.getString("client_pk");
+
+                if (clientPk == null) {
+                    JOptionPane.showMessageDialog(null, "Este vehículo no tiene un propietario registrado, "
+                            + "debes registrarlo en la sección de 'Actualizar vehículo'",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    loadVehicles();
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar el propietario: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_comboRelateVehicleActionPerformed
+
     /* Método para cargar las placas en el jComboBox */
     private void loadVehicles() {
+
         String query = "SELECT motorbike_pk FROM motorbikes";
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
@@ -1187,16 +1295,24 @@ public class NewService extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewService.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewService.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewService.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewService.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewService.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewService.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewService.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewService.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

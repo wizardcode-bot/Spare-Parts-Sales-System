@@ -4,6 +4,10 @@ import dao.ConnectionProvider;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import common.Validations;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+import ui.help.NewExpenseHelp;
 
 /**
  *
@@ -18,6 +22,23 @@ public class NewExpense extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -30,7 +51,6 @@ public class NewExpense extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         txtExpenseValue = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -41,6 +61,8 @@ public class NewExpense extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtExpenseResponsible = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -52,7 +74,6 @@ public class NewExpense extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Registrar Nuevo Gasto");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 6, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -110,8 +131,18 @@ public class NewExpense extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
 
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
+
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 500));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -169,6 +200,10 @@ public class NewExpense extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        new NewExpenseHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel8MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -213,6 +248,7 @@ public class NewExpense extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea txtExpenseMotive;

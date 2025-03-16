@@ -9,7 +9,7 @@ public class ViewUserHelp extends javax.swing.JFrame {
     public ViewUserHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
     }
 
     /**
@@ -24,10 +24,11 @@ public class ViewUserHelp extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel7.setText("<html><p>En la función 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
@@ -42,41 +43,47 @@ public class ViewUserHelp extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("¿Cómo usar esta función?");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 11, -1, -1));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("¿Cómo funciona este módulo?");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(139, 6, -1, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, 40, 40));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 10));
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("<html><p>En la función de 'Ver Usuario' el Administrador y Vendedor podrán ver los usuarios registrados en el sistema."
-            + "<br Se debe de ingresar en la barra de búsqueda número de cedula que se va a buscar y luego dar click en el botón 'Buscar'. "
-            + "<br>Se podrán visualizar los siguientes campos del Usuario ya existente que son: "
-            + "<br>ID, Nombre, Rol, Fecha de Nacimiento, Teléfono, Usuario y Dirección."
-            + "<br>Si se desea eliminar un usario solo el Administrador podrá hacerlo, el Vendedor no cuenta con esta función. "
-            + "<br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+            + "<br Se puede ingresar en la barra de búsqueda el número de cédula del usuario que se desea filtrar en la tabla. "
+            + "<br>Puedes filtrar cualquier usuario en la tabla ingresando su número de cédula en el campo de búsqueda."
+            + "<br>Solo el Administrador podrá eliminar usuarios, el Vendedor no cuenta con esta función. "
+            + "<br>No puedes eliminar tu propia cuenta, tampoco se podrán eliminar las cuentas del Administrador principal y la cuenta de soporte."
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 120));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 165, 740, 131));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Ver Usuario");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 125, -1, -1));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -4209,8 +4216,9 @@ public class ViewUserHelp extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;

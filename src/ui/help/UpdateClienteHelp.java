@@ -9,7 +9,7 @@ public class UpdateClienteHelp extends javax.swing.JFrame {
     public UpdateClienteHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
     }
 
     /**

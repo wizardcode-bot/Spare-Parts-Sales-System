@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.mindrot.jbcrypt.BCrypt;
 import common.Validations;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 
 public class UpdatePassword extends javax.swing.JFrame {
 
@@ -25,6 +28,23 @@ public class UpdatePassword extends javax.swing.JFrame {
         username = tempUsername;
         setSize(480, 300);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updatePassword(String username, String currentPassword, String newPassword) {
@@ -109,15 +129,12 @@ public class UpdatePassword extends javax.swing.JFrame {
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 174, -1, -1));
 
         txtCurrentPassword.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtCurrentPassword.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtCurrentPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 124, 300, -1));
 
         txtNewPassword.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtNewPassword.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtNewPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 194, 300, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
         jButton1.setText("Actualizar");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -188,6 +205,12 @@ public class UpdatePassword extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(UpdatePassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

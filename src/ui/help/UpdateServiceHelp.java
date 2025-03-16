@@ -9,7 +9,7 @@ public class UpdateServiceHelp extends javax.swing.JFrame {
     public UpdateServiceHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
     }
 
     /**
@@ -60,7 +60,7 @@ public class UpdateServiceHelp extends javax.swing.JFrame {
             + "si por el contrario ya se han terminado las reparaciones al vehículo. "
             + "<br>Al dar click en 'Guardar Proceso' el  Servicio quedará actualizado y registrado en la base de datos de Servicios del sistema."
             + "<br>Al dar click en 'Finalizar Servicio' el estado del Servicio quedará registrado como 'Terminado' en la base de datos de Servicios del sistema y se generará la factura correspondiente."
-            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 127, 740, 300));

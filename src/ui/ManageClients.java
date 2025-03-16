@@ -1,5 +1,9 @@
 package ui;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class ManageClients extends javax.swing.JFrame {
     
@@ -16,6 +20,23 @@ public class ManageClients extends javax.swing.JFrame {
         username = tempUsername;
         setSize(1366, 768);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -36,6 +57,7 @@ public class ManageClients extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -152,7 +174,22 @@ public class ManageClients extends javax.swing.JFrame {
                 jButton8ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(493, 576, 360, 108));
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(724, 577, 360, 108));
+
+        jButton9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButton9.setForeground(new java.awt.Color(0, 0, 0));
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/credits.png"))); // NOI18N
+        jButton9.setText("Consultar créditos");
+        jButton9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton9.setIconTextGap(30);
+        jButton9.setMargin(new java.awt.Insets(2, 20, 2, 14));
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(258, 577, 360, 108));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -187,6 +224,10 @@ public class ManageClients extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         new UpdateVehicle().setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        new ViewCredits().setVisible(true);
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -231,6 +272,7 @@ public class ManageClients extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;

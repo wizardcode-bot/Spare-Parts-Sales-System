@@ -1,7 +1,10 @@
 package ui;
 
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class SellerDashboard extends javax.swing.JFrame {
@@ -20,6 +23,23 @@ public class SellerDashboard extends javax.swing.JFrame {
         username = tempUsername;
         setLocationRelativeTo(null);
         setSize(1366, 768);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

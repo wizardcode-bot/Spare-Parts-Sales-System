@@ -9,7 +9,7 @@ public class UpdateVehicleHelp extends javax.swing.JFrame {
     public UpdateVehicleHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
     }
 
     /**

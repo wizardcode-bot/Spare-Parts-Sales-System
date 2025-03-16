@@ -9,7 +9,7 @@ public class ViewBillHelp extends javax.swing.JFrame {
     public ViewBillHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
     }
 
     /**

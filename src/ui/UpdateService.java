@@ -2,7 +2,11 @@ package ui;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import common.OpenPdf;
@@ -14,12 +18,15 @@ import javax.swing.table.TableModel;
 import dao.ProductsUtils;
 import java.io.FileOutputStream;
 import common.Validations;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.imageio.ImageIO;
 import ui.help.UpdateServiceHelp;
 
 public class UpdateService extends javax.swing.JFrame {
@@ -46,6 +53,23 @@ public class UpdateService extends javax.swing.JFrame {
         username = tempUsername;
         setLocationRelativeTo(null);
         setSize(1366, 768);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Verifica si hay productos en el carrito
@@ -226,7 +250,10 @@ public class UpdateService extends javax.swing.JFrame {
 
     private void generatePDF(String clientID, Long lblTotalPrice, Long cashPaidInt, Long transferPaidInt, String billId) {
         // Crear factura
-        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+        // Ajustar ancho a 58mm y dejar la altura dinámica
+        com.itextpdf.text.Document doc = new com.itextpdf.text.Document(new Rectangle(226, PageSize.A4.getHeight()));
+        //medida del documento
+        doc.setMargins(10, 5, 10, 10); // Márgenes 
         String client_pk = clientID;
         String clientName = null;
         String paymentTerm = comboPayment.getSelectedItem().toString();
@@ -248,76 +275,109 @@ public class UpdateService extends javax.swing.JFrame {
                 }
             }
 
-            // Obtener la fecha actual
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dateString = now.format(formatter);
 
-            // Crear el PDF
             PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
             doc.open();
 
-            // Título
-            Paragraph title = new Paragraph("Factura de venta\nMOTOREPUESTOS GOOFY\nNIT: " + NIT + "\nDirección: " + ADDRESS
-                    + "\nNo Responsable De IVA");
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font normalFont = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+
+            Paragraph title = new Paragraph("Factura de venta\nMOTOREPUESTOS GOOFY\nNIT: " + NIT + "\nDirección: "
+                    + ADDRESS + "\nNo Responsable De IVA\n", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             doc.add(title);
 
-            // Detalles del cliente
             Paragraph details = new Paragraph("\nID de factura: " + billId
-                    + "\nFecha y hora de expedición: " + dateString
+                    + "\nFecha: " + dateString
                     + "\nVendedor: " + vendorName
-                    + "\nCliente: " + (clientName != null ? clientName : "Desconocido")
-                    + "\nNIT/CC: " + client_pk);
+                    + "\nCliente: " + clientName
+                    + "\nNIT/CC: " + (client_pk != null ? client_pk : "No disponible") + "\n", normalFont);
+            //details.setAlignment(Element.ALIGN_CENTER);
             doc.add(details);
 
-            // Línea divisoria
-            Paragraph hyphenLine = new Paragraph("-".repeat(130) + "\n\n");
-            hyphenLine.setAlignment(Element.ALIGN_CENTER);
-            doc.add(hyphenLine);
+            Paragraph separator = new Paragraph("-".repeat(57) + "\n\n", normalFont);
+            separator.setAlignment(Element.ALIGN_CENTER);
+            doc.add(separator);
 
-            // Tabla de productos
-            PdfPTable tbl = new PdfPTable(6);
-            tbl.addCell("ID del producto");
-            tbl.addCell("Descripción");
-            tbl.addCell("Marca");
-            tbl.addCell("Precio por unidad");
-            tbl.addCell("Cantidad");
-            tbl.addCell("Sub Total");
+            PdfPTable tbl = new PdfPTable(4);
+            tbl.setWidthPercentage(100);
+            tbl.setWidths(new float[]{4, 3, 3, 3});
+
+            PdfPCell cell;
+
+            cell = new PdfPCell(new Phrase("Producto", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("P. Unidad", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Cant.", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Total", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tbl.addCell(cell);
 
             for (int i = 0; i < cartTable.getRowCount(); i++) {
-                tbl.addCell(cartTable.getValueAt(i, 0).toString());
-                tbl.addCell(cartTable.getValueAt(i, 1).toString());
-                tbl.addCell(cartTable.getValueAt(i, 2).toString());
-                tbl.addCell(cartTable.getValueAt(i, 3).toString());
-                tbl.addCell(cartTable.getValueAt(i, 4).toString());
-                tbl.addCell(cartTable.getValueAt(i, 5).toString());
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 1).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 3).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 4).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cartTable.getValueAt(i, 5).toString(), normalFont));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tbl.addCell(cell);
             }
+
             doc.add(tbl);
 
-            // Detalle de pago
-            Paragraph paymentTitle = new Paragraph("-".repeat(40) + "Detalle De Pago" + "-".repeat(40) + "\n");
+            doc.add(separator);
+            Paragraph paymentTitle = new Paragraph("DETALLE DE PAGO\n", boldFont);
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
 
-            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Paragraph total = new Paragraph("\nPrecio Total Pagado: " + lblTotalPrice, boldFont);
+            Paragraph total = new Paragraph("Total: " + lblFinalTotalPrice.getText() + "\n", boldFont);
+            //total.setAlignment(Element.ALIGN_CENTER);
             doc.add(total);
 
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
-                    + "\nTransferencia: " + transferPaidInt);
+                    + "\nTransferencia: " + transferPaidInt + "\n", normalFont);
+            //paymentDetails.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentDetails);
 
-            doc.add(hyphenLine);
-
-            // Mensaje de agradecimiento
-            Paragraph thanksMsg = new Paragraph("¡Gracias por tu compra. Te esperamos de nuevo!");
-            doc.add(thanksMsg);
+            doc.add(separator);
+            Paragraph disclaimerMsg = new Paragraph(
+                    "NO SE HACE DEVOLUCIÓN DE DINERO\n"
+                    + "Después de ocho (8) días no se aceptan devoluciones.\n"
+                    + "No hay devoluciones en partes eléctricas.\n"
+                    + "Indispensable presentar esta factura.\n"
+                    + "¡Gracias por tu compra!", normalFont);
+            disclaimerMsg.setAlignment(Element.ALIGN_CENTER);
+            doc.add(disclaimerMsg);
 
             JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            // Abrir PDF
-            OpenPdf.openById(String.valueOf(billId));
+            
+            //preguntar si se desea imprimir
+            int a = JOptionPane.showOptionDialog(null, "¿Quieres imprimir la factura?", "Selecciona una opción",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
+            if (a == 0) {
+                OpenPdf.openById(String.valueOf(billId));
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -836,6 +896,13 @@ public class UpdateService extends javax.swing.JFrame {
 
                                     JOptionPane.showMessageDialog(null, "¡Producto añadido exitosamente!");
                                     clearProductFields();
+
+                                    //verificar si el stock es menor a 5 unidades
+                                    long updatedStock = availableQuantity - Integer.parseInt(noOfUnits);
+                                    if (updatedStock < 5) {
+                                        JOptionPane.showMessageDialog(null, "¡Te quedan menos de 5 unidades de este producto en stock!", "Advertencia",
+                                                JOptionPane.WARNING_MESSAGE);
+                                    }
                                 } else {
                                     JOptionPane.showMessageDialog(null, "No hay suficiente stock para este producto. Solo quedan "
                                             + availableQuantity + " unidades.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1138,12 +1205,12 @@ public class UpdateService extends javax.swing.JFrame {
         JOIN SoldProducts sp ON sps.soldProduct_pk = sp.soldProduct_pk
         WHERE sps.service_pk = ?
         """;
-            Map<Long, Long> currentProducts = new HashMap<>(); // product_pk -> soldProduct_pk
+            Map<String, Long> currentProducts = new HashMap<>(); // product_pk -> soldProduct_pk
             try (PreparedStatement psGetProducts = con.prepareStatement(getCurrentProductsQuery)) {
                 psGetProducts.setLong(1, Long.parseLong(serviceId));
                 try (ResultSet rs = psGetProducts.executeQuery()) {
                     while (rs.next()) {
-                        currentProducts.put(rs.getLong("product_pk"), rs.getLong("soldProduct_pk"));
+                        currentProducts.put(rs.getString("product_pk"), rs.getLong("soldProduct_pk"));
                     }
                 }
             }
@@ -1215,7 +1282,7 @@ public class UpdateService extends javax.swing.JFrame {
             }
 
             // Eliminar productos que ya no están en el carrito
-            for (Map.Entry<Long, Long> entry : currentProducts.entrySet()) {
+            for (Map.Entry<String, Long> entry : currentProducts.entrySet()) {
                 long soldProductPk = entry.getValue();
                 try (PreparedStatement psDeleteServiceAssociation = con.prepareStatement(deleteSoldProductsServicesQuery)) {
                     psDeleteServiceAssociation.setLong(1, soldProductPk);

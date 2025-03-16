@@ -1,10 +1,14 @@
 package ui;
 
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import javax.imageio.ImageIO;
 import javax.swing.table.TableModel;
+import ui.help.ViewClientHelp;
 
 public class ViewClient extends javax.swing.JFrame {
 
@@ -22,6 +26,23 @@ public class ViewClient extends javax.swing.JFrame {
         username = tempUsername;
         setSize(850, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadAllData() {
@@ -59,8 +80,9 @@ public class ViewClient extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtFilterID = new javax.swing.JTextField();
-        jSeparator2 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -76,7 +98,7 @@ public class ViewClient extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Clientes registrados");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(253, 4, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(253, 6, -1, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -126,7 +148,6 @@ public class ViewClient extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtFilterID, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 88, 300, -1));
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 64, 850, 10));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -135,7 +156,17 @@ public class ViewClient extends javax.swing.JFrame {
                 jLabel6MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 4, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -251,6 +282,10 @@ public class ViewClient extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        new ViewClientHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -291,9 +326,10 @@ public class ViewClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtFilterID;
     // End of variables declaration//GEN-END:variables

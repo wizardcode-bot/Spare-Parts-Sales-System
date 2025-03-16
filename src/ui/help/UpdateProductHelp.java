@@ -9,7 +9,7 @@ public class UpdateProductHelp extends javax.swing.JFrame {
     public UpdateProductHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
     }
 
     /**
@@ -52,7 +52,7 @@ public class UpdateProductHelp extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("<html><p>En la función de 'Actualizar Producto' puedes actualizar los productos que estén ya registrados en el sistema."
             + "<br>Primero se debe ingresar el código del producto y dar click en 'Buscar'. Si no recuerdas el código de producto puedes dar click en 'Copiar código' y buscar el producto "
-            + "que se desea modificar, al seleccionarlo en la tabla se copiará el código del producto al portapapeles, luego puedes regresar al módulo 'Actualiar producto' y continuar con el proceso."
+            + "que se desea modificar, al seleccionarlo en la tabla se copiará el código del producto al portapapeles, luego puedes regresar al módulo 'Actualizar producto' y continuar con el proceso."
             + "<br>Los campos en blanco se llenarán automáticamente si el producto ingresado existe en la base de datos, debes modificarlos en la misma casilla que estos se presentan."
             + "<br>Puedes cambiar de categoría el producto o añadir una nueva en la opción de 'Añadir nueva Categoría'. "
             + "<br><br>Luego de haber modificado los datos del Producto se debe dar click en 'Actualizar'."

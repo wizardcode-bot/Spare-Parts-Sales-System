@@ -1,6 +1,9 @@
 package ui;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 import ui.Login;
 import javax.swing.JOptionPane;
 
@@ -19,9 +22,26 @@ public class AdminDashboard extends javax.swing.JFrame {
     public AdminDashboard(String tempUsername) {
         initComponents();
         username = tempUsername;
-        System.out.println(username); //SE IMPRIME EN CONSOLA EL USUARIO CON EL QUE SE HA LOGEADO
+        //System.out.println(username); //SE IMPRIME EN CONSOLA EL USUARIO CON EL QUE SE HA LOGEADO
         setLocationRelativeTo(null);
         setSize(1366, 768);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -15,7 +15,7 @@ public class Validations {
     public static final String EMAIL_PATTERN = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public static final String NUMBER_PATTERN = "^[0-9]*$";
     public static final String JUST_LETTERS = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$";
-    public static final String ADMIN_ID = "1006798617";
+    public static final String ADMIN_ID = "1119887284";
     public static final String SUPPORT_ID = "1006798616";
 
     //método para comprobar si un campo es null o está vacío

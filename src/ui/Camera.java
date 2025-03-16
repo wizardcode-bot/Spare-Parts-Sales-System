@@ -266,7 +266,7 @@ public class Camera extends javax.swing.JFrame {
             String userID = Validations.getIDByUsername(username);
             String photoName = userID; //nombre de la foto
             //ruta para guardar imágenes
-            File outputFile = new File("C:\\Users\\HOME\\Documents\\NetBeansProjects\\Inventory Management System\\src\\images\\profile\\" + photoName + ".jpg");
+            File outputFile = new File("C:\\Users\\PACKARD\\Documents\\Spare-Parts-Sales-System\\src\\images\\profile\\" + photoName + ".jpg");
 
             try {
                 ImageIO.write(ruta, "jpg", outputFile);

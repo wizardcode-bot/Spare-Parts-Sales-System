@@ -1,10 +1,14 @@
 package ui;
 
 import dao.ConnectionProvider;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import ui.help.ViewServiceHelp;
 
 /**
  *
@@ -26,6 +30,23 @@ public class ViewService extends javax.swing.JFrame {
         username = tempUsername;
         setSize(850, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadAllData() {
@@ -111,6 +132,7 @@ public class ViewService extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         comboServiceState = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -199,6 +221,15 @@ public class ViewService extends javax.swing.JFrame {
         jLabel5.setText("Seleccione la fila a eliminar");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 469, -1, -1));
 
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
+
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -227,7 +258,7 @@ public class ViewService extends javax.swing.JFrame {
         // Eliminar servicio con validación de rol
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
-        String serviceId = model.getValueAt(index, 0).toString(); // Cambiar si el ID está en otra columna
+        String serviceId = model.getValueAt(index, 0).toString(); 
 
         String userRole = "";
         String roleQuery = "SELECT userRole FROM appusers WHERE username = ?";
@@ -280,13 +311,13 @@ public class ViewService extends javax.swing.JFrame {
                                 try (ResultSet rsQuantity = psQuantity.executeQuery()) {
                                     if (rsQuantity.next()) {
                                         int quantitySold = rsQuantity.getInt("quantity");
-                                        long productPk = rsQuantity.getLong("product_pk");
+                                        String productPk = rsQuantity.getString("product_pk");
 
                                         // Restablecer la cantidad en la tabla products
                                         String updateInventoryQuery = "UPDATE products SET quantity = quantity + ? WHERE product_pk = ?";
                                         try (PreparedStatement psUpdate = con.prepareStatement(updateInventoryQuery)) {
                                             psUpdate.setInt(1, quantitySold); // Añadir cantidad vendida al inventario
-                                            psUpdate.setLong(2, productPk); // ID del producto
+                                            psUpdate.setString(2, productPk); // ID del producto
                                             psUpdate.executeUpdate();
                                         }
                                     }
@@ -318,6 +349,10 @@ public class ViewService extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        new ViewServiceHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel7MouseClicked
 
     /**
      * @param args the command line arguments
@@ -362,6 +397,7 @@ public class ViewService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
