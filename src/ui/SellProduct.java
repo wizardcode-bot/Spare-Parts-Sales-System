@@ -55,6 +55,7 @@ public class SellProduct extends javax.swing.JFrame {
         deadlineLabel.setEnabled(false);
 
         comboPayment.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 String paymentMethod = comboPayment.getSelectedItem().toString();
@@ -280,7 +281,7 @@ public class SellProduct extends javax.swing.JFrame {
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
                     + "\nTransferencia: " + transferPaidInt
-                    + "\nFecha de pago: " + formattedPaymentDate + "\n", normalFont); // Nueva línea con la fecha de pago
+                    + "\nFecha de pago: " + formattedPaymentDate + "\n", normalFont);
             doc.add(paymentDetails);
 
             doc.add(separator);
@@ -292,6 +293,8 @@ public class SellProduct extends javax.swing.JFrame {
                     + "¡Gracias por tu compra!", normalFont);
             disclaimerMsg.setAlignment(Element.ALIGN_CENTER);
             doc.add(disclaimerMsg);
+            
+            JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             // Preguntar si se desea imprimir
             int a = JOptionPane.showOptionDialog(null, "¿Quieres imprimir la factura?", "Selecciona una opción",
@@ -301,7 +304,7 @@ public class SellProduct extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } finally {
             doc.close();
         }
@@ -969,7 +972,8 @@ public class SellProduct extends javax.swing.JFrame {
                         throw new Exception("Debes seleccionar una fecha de vencimiento para el crédito.");
                     }
 
-                    String insertCreditQuery = "INSERT INTO clients_credits (client_pk, totalCredit, pendingBalance, creditDate, paymentDeadline, creditState, lastModified) "
+                    String insertCreditQuery = "INSERT INTO clients_credits (client_pk, totalCredit, pendingBalance, creditDate, paymentDeadline,"
+                            + " creditState, lastModified) "
                             + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
                     try (PreparedStatement psCredit = con.prepareStatement(insertCreditQuery)) {
@@ -1021,7 +1025,6 @@ public class SellProduct extends javax.swing.JFrame {
                 }
 
                 updateProductQuantity(); // Actualizar inventario
-                JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                 // Llamar a generatePDF con la fecha de pago calculada
                 generatePDF(paymentDate);

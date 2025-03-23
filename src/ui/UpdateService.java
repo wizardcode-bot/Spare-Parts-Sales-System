@@ -18,6 +18,8 @@ import javax.swing.table.TableModel;
 import dao.ProductsUtils;
 import java.io.FileOutputStream;
 import common.Validations;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -53,11 +55,56 @@ public class UpdateService extends javax.swing.JFrame {
         username = tempUsername;
         setLocationRelativeTo(null);
         setSize(1366, 768);
-        
+
         //establecer icono
         setImage();
+
+        deadlineDate.setEnabled(false);
+        deadlineLabel.setEnabled(false);
+
+        comboPayment.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String paymentMethod = comboPayment.getSelectedItem().toString();
+
+                if ("Contado".equals(paymentMethod)) {
+                    deadlineDate.setEnabled(false);
+                    deadlineLabel.setEnabled(false);
+
+                    txtCashPaid.setEnabled(true);
+                    txtTransferPaid.setEnabled(true);
+                    transferTextLabel.setEnabled(true);
+                    cashTextLabel.setEnabled(true);
+
+                    txtBillPaid.setEnabled(true);
+                    billPaidLabel.setEnabled(true);
+                    calculateSurplusBtn.setEnabled(true);
+
+                    surplusTextLabel.setEnabled(true);
+                    surplusMoneyLabel.setEnabled(true);
+
+                } else if ("Crédito".equals(paymentMethod)) {
+                    deadlineDate.setEnabled(true);
+                    deadlineLabel.setEnabled(true);
+
+                    txtCashPaid.setEnabled(false);
+                    txtTransferPaid.setEnabled(false);
+                    transferTextLabel.setEnabled(false);
+                    cashTextLabel.setEnabled(false);
+
+                    txtBillPaid.setEnabled(false);
+                    calculateSurplusBtn.setEnabled(false);
+                    billPaidLabel.setEnabled(false);
+
+                    surplusTextLabel.setEnabled(false);
+                    surplusMoneyLabel.setEnabled(false);
+
+                }
+            }
+        });
     }
-    
+
     //icono de la aplicación
     public void setImage() {
         try {
@@ -248,12 +295,12 @@ public class UpdateService extends javax.swing.JFrame {
         txtTotalPrice.setText("");
     }
 
-    private void generatePDF(String clientID, Long lblTotalPrice, Long cashPaidInt, Long transferPaidInt, String billId) {
-        // Crear factura
+    private void generatePDF(String clientID, Long totalPrice, Long cashPaidInt, Long transferPaidInt, String billId, Timestamp paymentDate) {
         // Ajustar ancho a 58mm y dejar la altura dinámica
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document(new Rectangle(226, PageSize.A4.getHeight()));
         //medida del documento
         doc.setMargins(10, 5, 10, 10); // Márgenes 
+        
         String client_pk = clientID;
         String clientName = null;
         String paymentTerm = comboPayment.getSelectedItem().toString();
@@ -278,6 +325,10 @@ public class UpdateService extends javax.swing.JFrame {
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dateString = now.format(formatter);
+            
+            // Formatear la fecha de pago
+            DateTimeFormatter paymentFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedPaymentDate = paymentDate.toLocalDateTime().format(paymentFormatter);
 
             PdfWriter.getInstance(doc, new FileOutputStream(ProductsUtils.billPath + "" + billId + ".pdf"));
             doc.open();
@@ -296,7 +347,6 @@ public class UpdateService extends javax.swing.JFrame {
                     + "\nVendedor: " + vendorName
                     + "\nCliente: " + clientName
                     + "\nNIT/CC: " + (client_pk != null ? client_pk : "No disponible") + "\n", normalFont);
-            //details.setAlignment(Element.ALIGN_CENTER);
             doc.add(details);
 
             Paragraph separator = new Paragraph("-".repeat(57) + "\n\n", normalFont);
@@ -344,20 +394,19 @@ public class UpdateService extends javax.swing.JFrame {
             }
 
             doc.add(tbl);
-
             doc.add(separator);
+            
             Paragraph paymentTitle = new Paragraph("DETALLE DE PAGO\n", boldFont);
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
 
-            Paragraph total = new Paragraph("Total: " + lblFinalTotalPrice.getText() + "\n", boldFont);
-            //total.setAlignment(Element.ALIGN_CENTER);
+            Paragraph total = new Paragraph("Total: " + totalPrice + "\n", boldFont);
             doc.add(total);
 
             Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
-                    + "\nTransferencia: " + transferPaidInt + "\n", normalFont);
-            //paymentDetails.setAlignment(Element.ALIGN_CENTER);
+                    + "\nTransferencia: " + transferPaidInt
+                    + "\nFecha de pago: " + formattedPaymentDate + "\n", normalFont);
             doc.add(paymentDetails);
 
             doc.add(separator);
@@ -371,7 +420,7 @@ public class UpdateService extends javax.swing.JFrame {
             doc.add(disclaimerMsg);
 
             JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            
+
             //preguntar si se desea imprimir
             int a = JOptionPane.showOptionDialog(null, "¿Quieres imprimir la factura?", "Selecciona una opción",
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Sí", "No"}, "Sí");
@@ -424,9 +473,8 @@ public class UpdateService extends javax.swing.JFrame {
         txtUniqueId = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         comboPayment = new javax.swing.JComboBox<>();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
+        cashTextLabel = new javax.swing.JLabel();
+        transferTextLabel = new javax.swing.JLabel();
         txtCashPaid = new javax.swing.JTextField();
         txtTransferPaid = new javax.swing.JTextField();
         txtDescription = new javax.swing.JTextField();
@@ -438,7 +486,14 @@ public class UpdateService extends javax.swing.JFrame {
         txtPlate = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
+        deadlineLabel = new javax.swing.JLabel();
+        deadlineDate = new com.toedter.calendar.JDateChooser();
+        billPaidLabel = new javax.swing.JLabel();
+        txtBillPaid = new javax.swing.JTextField();
+        calculateSurplusBtn = new javax.swing.JButton();
+        surplusTextLabel = new javax.swing.JLabel();
+        surplusMoneyLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -454,12 +509,12 @@ public class UpdateService extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Actualizar Servicio");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(526, 6, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(532, 6, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Buscar producto por ID o descripción");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 106, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(64, 126, -1, -1));
 
         txtSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -472,7 +527,7 @@ public class UpdateService extends javax.swing.JFrame {
                 txtSearchKeyReleased(evt);
             }
         });
-        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 134, 370, -1));
+        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 147, 370, -1));
 
         productsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         productsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -502,30 +557,30 @@ public class UpdateService extends javax.swing.JFrame {
             productsTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 167, 370, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 176, 370, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ID del Producto");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 231, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 253, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Descripción");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 295, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 309, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Marca");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 350, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 365, -1, -1));
 
         txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 371, 300, -1));
+        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 386, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Precio por Unidad");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 106, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(821, 127, -1, -1));
 
         txtPricePerUnit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPricePerUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -533,12 +588,12 @@ public class UpdateService extends javax.swing.JFrame {
                 txtPricePerUnitKeyReleased(evt);
             }
         });
-        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 127, 300, -1));
+        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(821, 148, 220, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Número de Unidades *");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 175, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(821, 197, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNoOfUnits.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -546,15 +601,15 @@ public class UpdateService extends javax.swing.JFrame {
                 txtNoOfUnitsKeyReleased(evt);
             }
         });
-        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 196, 300, -1));
+        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(821, 218, 220, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Precio Total");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 231, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(821, 253, -1, -1));
 
         txtTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 252, 300, -1));
+        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(821, 274, 220, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
@@ -565,7 +620,7 @@ public class UpdateService extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 447, -1, -1));
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(819, 309, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -592,17 +647,17 @@ public class UpdateService extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 494, 802, 233));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 485, 859, 233));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio total:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 448, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 441, -1, -1));
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblFinalTotalPrice.setText("---");
-        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(652, 448, -1, -1));
+        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 441, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
@@ -613,39 +668,34 @@ public class UpdateService extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(137, 664, -1, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 672, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 733, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 730, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 252, 300, -1));
+        getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 274, 300, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Forma de pago *");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 293, -1, -1));
+        jLabel10.setText("Forma y medio de pago *");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 127, -1, -1));
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Crédito" }));
-        getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 314, 300, -1));
+        getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 148, 180, -1));
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setText("Medio de pago *");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 350, -1, -1));
+        cashTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cashTextLabel.setForeground(new java.awt.Color(255, 255, 255));
+        cashTextLabel.setText("Efectivo ($)");
+        getContentPane().add(cashTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 195, -1, -1));
 
-        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("Efectivo ($)");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 388, -1, -1));
-
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel17.setText("Transferencia ($)");
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(994, 418, -1, -1));
+        transferTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        transferTextLabel.setForeground(new java.awt.Color(255, 255, 255));
+        transferTextLabel.setText("Transferencia ($)");
+        getContentPane().add(transferTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 251, -1, -1));
 
         txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -653,7 +703,7 @@ public class UpdateService extends javax.swing.JFrame {
                 txtCashPaidKeyReleased(evt);
             }
         });
-        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1094, 383, 200, -1));
+        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 216, 210, -1));
 
         txtTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -661,10 +711,10 @@ public class UpdateService extends javax.swing.JFrame {
                 txtTransferPaidKeyReleased(evt);
             }
         });
-        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 413, 190, -1));
+        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 272, 210, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 316, 300, -1));
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 330, 300, -1));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveProgress.png"))); // NOI18N
@@ -675,15 +725,15 @@ public class UpdateService extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 600, -1, -1));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 609, -1, -1));
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Ingrese el ID del servicio a actualizar *");
-        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 106, -1, -1));
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 126, -1, -1));
 
         txtServiceID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtServiceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 134, 217, -1));
+        getContentPane().add(txtServiceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 152, 217, -1));
 
         btnSearchService.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSearchService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
@@ -696,15 +746,15 @@ public class UpdateService extends javax.swing.JFrame {
                 btnSearchServiceActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSearchService, new org.netbeans.lib.awtextra.AbsoluteConstraints(715, 129, 102, -1));
+        getContentPane().add(btnSearchService, new org.netbeans.lib.awtextra.AbsoluteConstraints(687, 147, 102, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Placa del vehículo");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 175, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 197, -1, -1));
 
         txtPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 196, 222, -1));
+        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 218, 222, -1));
 
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel19.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -723,10 +773,47 @@ public class UpdateService extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1284, 14, -1, -1));
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 1366, 10));
+
+        deadlineLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        deadlineLabel.setForeground(new java.awt.Color(255, 255, 255));
+        deadlineLabel.setText("Fecha límite de pago *");
+        getContentPane().add(deadlineLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 307, -1, -1));
+        getContentPane().add(deadlineDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 328, 236, -1));
+
+        billPaidLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        billPaidLabel.setForeground(new java.awt.Color(255, 255, 255));
+        billPaidLabel.setText("Paga con ($)");
+        getContentPane().add(billPaidLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 364, -1, -1));
+
+        txtBillPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtBillPaid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBillPaidKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtBillPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 385, 160, -1));
+
+        calculateSurplusBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        calculateSurplusBtn.setText("Calcular");
+        calculateSurplusBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateSurplusBtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(calculateSurplusBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1243, 385, 80, -1));
+
+        surplusTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        surplusTextLabel.setForeground(new java.awt.Color(255, 255, 255));
+        surplusTextLabel.setText("Excedente");
+        getContentPane().add(surplusTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 420, -1, -1));
+
+        surplusMoneyLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        surplusMoneyLabel.setForeground(new java.awt.Color(51, 204, 255));
+        surplusMoneyLabel.setText("$ 0");
+        getContentPane().add(surplusMoneyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 441, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 1366, 10));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
-        jLabel12.setText("jLabel12");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
@@ -1029,10 +1116,11 @@ public class UpdateService extends javax.swing.JFrame {
 
         String selectedVehicle = txtPlate.getText().trim();
         String paymentTerm = comboPayment.getSelectedItem().toString();
-        String cashPaid = txtCashPaid.getText().trim();
-        String transferPaid = txtTransferPaid.getText().trim();
+        String cashPaid = null;
+        String transferPaid = null;
         String servicePK = txtServiceID.getText().trim();
         serviceState = "Terminado";
+        long totalPrice = 0;
 
         if (Validations.isNullOrBlank(servicePK)) {
             JOptionPane.showMessageDialog(null, "Debes ingresar el ID del servicio que quieres actualizar",
@@ -1046,28 +1134,49 @@ public class UpdateService extends javax.swing.JFrame {
             return;
         }
 
-        if (Validations.isNullOrBlank(cashPaid) && Validations.isNullOrBlank(transferPaid)) {
-            JOptionPane.showMessageDialog(null, "Debes completar el medio de pago",
-                    "Datos incompletos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         if ("Seleccione un vehículo".equals(selectedVehicle)) {
             JOptionPane.showMessageDialog(null, "¡Debes relacionar un vehículo al servicio!",
                     "No hay vehículo relacionado", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            long totalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
-            long cashPaidLong = Long.parseLong(cashPaid);
-            long transferPaidLong = Long.parseLong(transferPaid);
+        if ("Contado".equals(paymentTerm)) {
+            cashPaid = txtCashPaid.getText();
+            transferPaid = txtTransferPaid.getText();
 
-            if (cashPaidLong + transferPaidLong != totalPrice) {
-                JOptionPane.showMessageDialog(null, "La suma de efectivo y transferencia debe ser igual al total pagado.");
+            if (Validations.isNullOrBlank(cashPaid) || Validations.isNullOrBlank(transferPaid)) {
+                JOptionPane.showMessageDialog(null, "Debes completar el medio de pago (Efectivo y Transferencia)",
+                        "Datos incompletos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
+            try {
+                totalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
+                cashPaidInt = Integer.parseInt(cashPaid);
+                transferPaidInt = Integer.parseInt(transferPaid);
+
+                if (cashPaidInt + transferPaidInt != totalPrice) {
+                    JOptionPane.showMessageDialog(null, "La suma de efectivo y transferencia debe ser igual al total pagado.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Debes ingresar los valores en números",
+                        "Datos incorrectos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } else if ("Crédito".equals(paymentTerm)) {
+            cashPaid = "0";
+            transferPaid = "0";
+
+            try {
+                cashPaidInt = Integer.parseInt(cashPaid);
+                transferPaidInt = Integer.parseInt(transferPaid);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Valor de transferencia y efectivo no válidos.");
+            }
+        }
+
+        try {
             long servicePKLong = Long.parseLong(servicePK);
 
             try (Connection con = ConnectionProvider.getCon()) {
@@ -1080,7 +1189,39 @@ public class UpdateService extends javax.swing.JFrame {
                 // Generar un ID único para la factura
                 String billId = getUniqueId("FACT-");
 
-                long billPk = insertBill(con, billId, totalPrice, paymentTerm, cashPaidLong, transferPaidLong, clientID, appuserPk);
+                long billPk = insertBill(con, billId, totalPrice, paymentTerm, cashPaidInt, transferPaidInt, clientID, appuserPk);
+                
+                // Variable para almacenar la fecha de pago
+                Timestamp paymentDate;
+
+                // Insertar crédito si el pago es "Crédito"
+                if ("Crédito".equals(paymentTerm)) {
+                    java.util.Date utilDate = deadlineDate.getDate(); // Obtener fecha del JDateChooser
+                    if (utilDate != null) {
+                        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                        paymentDate = new Timestamp(sqlDate.getTime()); // Fecha límite de pago
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debes seleccionar una fecha de vencimiento para el crédito.");
+                        return;
+                    }
+
+                    String insertCreditQuery = "INSERT INTO clients_credits (client_pk, totalCredit, pendingBalance, creditDate, paymentDeadline,"
+                            + " creditState, lastModified) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+                    try (PreparedStatement psCredit = con.prepareStatement(insertCreditQuery)) {
+                        psCredit.setString(1, clientID);
+                        psCredit.setLong(2, finalTotalPrice);
+                        psCredit.setLong(3, finalTotalPrice);
+                        psCredit.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now())); // Fecha del crédito
+                        psCredit.setTimestamp(5, paymentDate); // Fecha límite de pago
+                        psCredit.setString(6, "Pendiente");
+                        psCredit.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now())); // Guardar la fecha en lastModified
+                        psCredit.executeUpdate();
+                    }
+                } else {
+                    paymentDate = Timestamp.valueOf(LocalDateTime.now()); // Fecha actual si es contado
+                }
 
                 // Actualizar la tabla services
                 updateService(con, selectedVehicle, serviceState, totalPrice, servicePKLong);
@@ -1113,7 +1254,7 @@ public class UpdateService extends javax.swing.JFrame {
                 }
 
                 // Generar PDF de la venta
-                generatePDF(clientID, totalPrice, cashPaidLong, transferPaidLong, billId);
+                generatePDF(clientID, totalPrice, cashPaidInt, transferPaidInt, billId, paymentDate);
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1415,6 +1556,47 @@ public class UpdateService extends javax.swing.JFrame {
         new UpdateServiceHelp().setVisible(true);
     }//GEN-LAST:event_jLabel14MouseClicked
 
+    private void txtBillPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillPaidKeyReleased
+        String billPaid = txtBillPaid.getText().trim();
+
+        if (!billPaid.matches(Validations.NUMBER_PATTERN)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtBillPaid.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtBillPaidKeyReleased
+
+    private void calculateSurplusBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateSurplusBtnActionPerformed
+        // botón para calcular excedente
+        String billPaid = txtBillPaid.getText().trim();
+        String transferPaid = txtTransferPaid.getText().trim();
+        String cashPaid = txtCashPaid.getText().trim();
+
+        if (Validations.isNullOrBlank(transferPaid) || Validations.isNullOrBlank(cashPaid)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar primero el valor pagado por efectivo y por tranferencia!",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+            txtBillPaid.setText("");
+            return;
+        }
+
+        // Calcular el excedente a entregar
+        try {
+            int transferPaidInt = Integer.parseInt(transferPaid);
+            int cashPaidInt = Integer.parseInt(cashPaid);
+            int billPaidInt = Integer.parseInt(billPaid);
+
+            int totalPaid = (transferPaidInt + cashPaidInt);
+            int surplusMoney = (billPaidInt - totalPaid);
+
+            // Mostrar el resultado en el label
+            surplusMoneyLabel.setText(String.format("%,d", surplusMoney));
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_calculateSurplusBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1454,10 +1636,15 @@ public class UpdateService extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel billPaidLabel;
     private javax.swing.JButton btnAddToCart;
     private javax.swing.JButton btnSearchService;
+    private javax.swing.JButton calculateSurplusBtn;
     private javax.swing.JTable cartTable;
+    private javax.swing.JLabel cashTextLabel;
     private javax.swing.JComboBox<String> comboPayment;
+    private com.toedter.calendar.JDateChooser deadlineDate;
+    private javax.swing.JLabel deadlineLabel;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
@@ -1466,9 +1653,6 @@ public class UpdateService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -1481,9 +1665,13 @@ public class UpdateService extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblFinalTotalPrice;
     private javax.swing.JTable productsTable;
+    private javax.swing.JLabel surplusMoneyLabel;
+    private javax.swing.JLabel surplusTextLabel;
+    private javax.swing.JLabel transferTextLabel;
+    private javax.swing.JTextField txtBillPaid;
     private javax.swing.JTextField txtCashPaid;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtNoOfUnits;
