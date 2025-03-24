@@ -209,6 +209,7 @@ public class ViewService extends javax.swing.JFrame {
         comboServiceState.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboServiceState.setForeground(new java.awt.Color(0, 0, 0));
         comboServiceState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "En proceso", "Terminado" }));
+        comboServiceState.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboServiceState.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboServiceStateActionPerformed(evt);

@@ -185,6 +185,7 @@ public class AddProduct extends javax.swing.JFrame {
         comboCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboCategory.setForeground(new java.awt.Color(0, 0, 0));
         comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Item 2", "Item 3", "Item 4" }));
+        comboCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 215, 300, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

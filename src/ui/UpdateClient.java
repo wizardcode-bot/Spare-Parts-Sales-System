@@ -7,6 +7,7 @@ import common.Validations;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
+import ui.help.UpdateClientHelp;
 
 public class UpdateClient extends javax.swing.JFrame {
 
@@ -60,6 +61,7 @@ public class UpdateClient extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -141,7 +143,7 @@ public class UpdateClient extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(447, 372, 120, -1));
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 64, 850, 10));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -151,6 +153,15 @@ public class UpdateClient extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel8MouseReleased(evt);
+            }
+        });
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -263,6 +274,10 @@ public class UpdateClient extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
+    private void jLabel8MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseReleased
+        new UpdateClientHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel8MouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -308,6 +323,7 @@ public class UpdateClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField txtAddress;

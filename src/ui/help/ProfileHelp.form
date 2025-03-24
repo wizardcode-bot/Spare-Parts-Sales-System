@@ -75,7 +75,7 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En el m&#xf3;dulo &apos;Mi Perfil&apos; podr&#xe1;s ver los datos personales registrados en tu cuenta y modificarlos si es necesario.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Para modificar alg&#xfa;n dato debes editarlo en la misma casilla que este se presenta.&quot;&#xa;    + &quot;&lt;br&gt;Adicionalmente, podr&#xe1;s cambiar tu contrase&#xf1;a e imagen de perfil. Al cambiar la imagen de perfil se cerrar&#xe1; autom&#xe1;ticamente &quot;&#xa;    + &quot;la interfaz, as&#xed; que se recomienda primero guardar los cambios realizados en los datos personales y luego cambiar la imagen de perfil.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Luego de confirmar el proceso dando click en el bot&#xf3;n &apos;Actualizar&apos;, tus datos ser&#xe1;n actualizados en la base de datos del sistema. &quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mejor informaci&#xf3;n puedes consultar el manual de usuario&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En el m&#xf3;dulo &apos;Mi Perfil&apos; podr&#xe1;s ver los datos personales registrados en tu cuenta y modificarlos si es necesario.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Para modificar alg&#xfa;n dato debes editarlo en la misma casilla que este se presenta.&quot;&#xa;    + &quot;&lt;br&gt;Adicionalmente, podr&#xe1;s cambiar tu contrase&#xf1;a e im&#xe1;gen de perfil si tienes una c&#xe1;mara conectada al computador. Si no tienes una c&#xe1;mara &quot;&#xa;    + &quot;conectada al computador podr&#xe1;s cambiar la im&#xe1;gen de perfil manualmente de la siguiente manera:&quot;&#xa;    + &quot;&lt;br&gt;1. Toma la foto de la persona a medio cuerpo.&quot;&#xa;    + &quot;&lt;br&gt;2. Guarda la foto en el computador en la ruta: Inventory Management System\\src\\images\\profile.&quot;&#xa;    + &quot;&lt;br&gt;3. La im&#xe1;gen debe estar en formato .jpg y tener por nombre el n&#xfa;mero de c&#xe9;dula del usuario, sin puntos ni comas, solamente n&#xfa;meros.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Luego de confirmar el proceso dando click en el bot&#xf3;n &apos;Actualizar&apos;, tus datos ser&#xe1;n actualizados en la base de datos del sistema. &quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mayor informaci&#xf3;n puedes consultar el manual de usuario.&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Default Cursor"/>
@@ -83,7 +83,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="55" y="147" width="740" height="200"/>
+          <AbsoluteConstraints x="55" y="147" width="740" height="260"/>
         </Constraint>
       </Constraints>
     </Component>

@@ -20,6 +20,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,44,0,0,1,-112"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
@@ -92,7 +93,7 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Nuevo gasto&apos; debes registrar los egresos de la empresa para &quot;&#xa;    + &quot;poder realizar un calculo m&#xe1;s preciso del flujo de dinero en la empresa.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Todos los campos deben ser completados para tener un mejor registro de qui&#xe9;n y en qu&#xe9; se est&#xe1;&quot;&#xa;    + &quot; usando el dinero en la empresa. &quot;&#xa;    + &quot;&lt;br&gt;El valor del gasto debe ser ingresado sin puntos ni comas y solamente en n&#xfa;meros. &quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mayor informaci&#xf3;n puedes consultar el manual de usuario.&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Nuevo gasto&apos; debes registrar los egresos de la empresa para &quot;&#xa;    + &quot;poder realizar un c&#xe1;lculo m&#xe1;s preciso del flujo de dinero en la empresa.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Todos los campos deben ser completados para tener un mejor registro de qui&#xe9;n y en qu&#xe9; se est&#xe1;&quot;&#xa;    + &quot; usando el dinero en la empresa. &quot;&#xa;    + &quot;&lt;br&gt;El valor del gasto debe ser ingresado sin puntos ni comas y solamente en n&#xfa;meros. &quot;&#xa;    + &quot;&lt;br&gt;Puedes consultar el historial de gastos en el m&#xf3;dulo: Reportes/Historial de gastos.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mayor informaci&#xf3;n puedes consultar el manual de usuario.&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
         </Property>
       </Properties>
       <Constraints>

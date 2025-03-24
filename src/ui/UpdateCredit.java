@@ -111,7 +111,7 @@ public class UpdateCredit extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("ID delCrédito");
+        jLabel3.setText("ID del Crédito");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(102, 122, -1, -1));
 
         txtCreditID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

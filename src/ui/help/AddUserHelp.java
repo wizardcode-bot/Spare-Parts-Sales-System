@@ -1,6 +1,10 @@
 
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author Usuario
@@ -14,6 +18,23 @@ public class AddUserHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -62,16 +83,16 @@ public class AddUserHelp extends javax.swing.JFrame {
         jLabel4.setText("<html><p>En la función de 'Añadir Usuario' puedes registrar a nuevos Usuarios en el sistema, estos tendrán sus propios datos."
             + "<br>En este formulario todos los campos son obligatorios. "
             + "<br>Se debe asignar un rol de usuario al nuevo usuario y completar los demás campos. "
-            + "<br>El número de cedula no debe tener caracteres diferentes a números y no pueden existir 2 usuarios en el sistema con el número de cedula,"
-            + " se marcará con un logo afirmativo color verde si el número de cedula está disponible y puede ser utilizado. (El número de cedula solo puede tener entre 6 a 10 caracteres)"
-            + "<br>El nombre de usuario tampoco debe estar repetido, se marcará con un logo de afirmativo color verde si el nombre está disponible y puede ser utilizado (El nombre de usuario no debe "
-            + "tener más de 40 caracteres)"
+            + "<br>El número de cédula no debe tener caracteres diferentes a números y no pueden existir 2 usuarios en el sistema con el mismo número de cedula,"
+            + " se indicará con un logo afirmativo de color verde si el número de cédula está disponible y puede ser utilizado. (El número de cédula solo puede tener entre 6 a 10 caracteres)."
+            + "<br>El nombre de usuario tampoco puede estar repetido en la base de datos; se indicará con un logo afirmativo de color verde si el nombre de usuario está disponible y puede ser utilizado (El nombre de usuario no debe "
+            + "tener más de 40 caracteres)."
             + "<br>La dirección no puede tener más de 60 caracteres."
-            + "<br><br>Luego de haber llenado los datos del Usuario se debe dar click en 'Guardar'"
+            + "<br><br>Luego de haber completado los datos del Usuario se debe dar click en 'Guardar'."
             + "<br>Al dar click en 'Guardar' el nuevo Usuario quedará registrado en la base de datos de Usuarios del sistema."
-            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 151, 704, 272));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 151, 704, 280));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -80,7 +101,7 @@ public class AddUserHelp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        dispose(); //Click al boton se cierre esa monda
+        dispose(); 
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**

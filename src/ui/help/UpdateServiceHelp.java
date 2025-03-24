@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class UpdateServiceHelp extends javax.swing.JFrame {
 
@@ -10,6 +14,23 @@ public class UpdateServiceHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -56,19 +77,22 @@ public class UpdateServiceHelp extends javax.swing.JFrame {
             + "<br> Los datos del servicio se completarán automáticamente luego de haber ingresado el ID del servicio, luego de verificar si es el servicio que se desea actualizar, podrás modificar los productos "
             + "y el estado del servicio. "
             + "<br>Todo Producto ingresado al carrito se verá reflejado en la factura y en base a ello podrás calcular el precio del servicio. "
-            + "<br><br>Luego de haber modificado los datos del servicio puedes dar click en 'Guardar Proceso' si aún no se ha terminado la reparación del vehículo o dar click en 'Finalizar Servicio'"
+            + "<br><br>Luego de haber modificado los datos del servicio puedes dar click en 'Guardar Proceso' si aún no se ha terminado la reparación del vehículo o dar click en 'Finalizar Servicio' "
             + "si por el contrario ya se han terminado las reparaciones al vehículo. "
-            + "<br>Al dar click en 'Guardar Proceso' el  Servicio quedará actualizado y registrado en la base de datos de Servicios del sistema."
+            + "<br>Para registrar un servicio como 'fiado' debes seleccionar la opción 'Crédito' en la forma de pago y seleccionar una fecha límite de pago "
+            + "en la que se espera que el cliente pague la totalidad del servicio, esto solamente es necesario cuando "
+            + "ya se va a registrar el servicio como terminado, no es necesario establecerlo para guardar el estado del servicio."
+            + "<br><br>Al dar click en 'Guardar Proceso' el  Servicio quedará actualizado y registrado en la base de datos de Servicios del sistema."
             + "<br>Al dar click en 'Finalizar Servicio' el estado del Servicio quedará registrado como 'Terminado' en la base de datos de Servicios del sistema y se generará la factura correspondiente."
             + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 127, 740, 300));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 117, 760, 340));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Actualizar Servicio");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 97, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

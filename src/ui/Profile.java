@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import ui.help.ProfileHelp;
 
 public class Profile extends javax.swing.JFrame {
 
@@ -198,6 +199,12 @@ public class Profile extends javax.swing.JFrame {
         getContentPane().add(btnCamera, new org.netbeans.lib.awtextra.AbsoluteConstraints(127, 414, -1, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel6MouseReleased(evt);
+            }
+        });
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
@@ -304,6 +311,10 @@ public class Profile extends javax.swing.JFrame {
         new Camera(username).setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCameraActionPerformed
+
+    private void jLabel6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseReleased
+        new ProfileHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel6MouseReleased
 
     /**
      * @param args the command line arguments

@@ -1,15 +1,36 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 
-public class UpdateClienteHelp extends javax.swing.JFrame {
+
+public class UpdateClientHelp extends javax.swing.JFrame {
 
     /**
      * Creates new form ProfileHelp
      */
-    public UpdateClienteHelp() {
+    public UpdateClientHelp() {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -53,15 +74,16 @@ public class UpdateClienteHelp extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("<html><p>En la función de 'Actualizar Cliente' puedes actualizar los datos personales de los clientes que se encuentran ya registrados en el sistema, "
             + "los datos deben ser modificados en la misma casilla que se presentan."
-            + "<br><br>Primero se debe buscar al cliente por su número de cedula o NIT (Recordar que el cliente ya debe existir en la base de datos) "
+            + "<br><br>Primero se debe buscar al cliente por su número de cédula o NIT (Recordar que el cliente ya debe existir en la base de datos). "
             + "<br>Al dar click en 'Buscar' se cargarán los datos registrados para ese cliente en sus respectivas casillas para que se verifique si es realmente el cliente al que se desean"
             + " actualizar los datos. "
-            + "<br><br>Luego de haber actualizado los datos del Cliente se debe dar click en 'Actualizar'"
+            + "Los datos deben ser modificados en la misma casilla que se presentan."
+            + "<br><br>Luego de haber actualizado los datos del Cliente se debe dar click en 'Actualizar'."
             + "<br>Al dar click en 'Actualizar' la nueva información del Cliente quedará registrada en la base de datos de Clientes del sistema."
             + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 209));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 230));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
@@ -104,14 +126,30 @@ public class UpdateClienteHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UpdateClienteHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateClientHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -132,7 +170,7 @@ public class UpdateClienteHelp extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UpdateClienteHelp().setVisible(true);
+                new UpdateClientHelp().setVisible(true);
             }
         });
     }

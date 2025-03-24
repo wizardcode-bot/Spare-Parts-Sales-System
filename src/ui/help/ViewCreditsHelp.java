@@ -7,16 +7,16 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Usuario
+ * @author HOME
  */
-public class AddVehicleHelp extends javax.swing.JFrame {
+public class ViewCreditsHelp extends javax.swing.JFrame {
 
     /**
-     * Creates new form AddClient
+     * Creates new form ViewCreditsHelp
      */
-    public AddVehicleHelp() {
+    public ViewCreditsHelp() {
         initComponents();
-        setSize(850, 500);
+        setSize(850,500);
         setLocationRelativeTo(null);
         
         //establecer icono
@@ -60,14 +60,14 @@ public class AddVehicleHelp extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("¿Cómo Funciona este Módulo?");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 6, -1, -1));
+        jLabel1.setText("¿Cómo funciona este módulo?");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 6, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel2MouseReleased(evt);
             }
         });
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 6, -1, -1));
@@ -75,24 +75,23 @@ public class AddVehicleHelp extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Registrar Vehiculo");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 109, -1, -1));
+        jLabel3.setText("Créditos Registrados");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 99, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("<html><p>En la función de 'Añadir Vehículo' puedes registrar nuevos Vehículos en el sistema, estos tendrán sus propios datos, "
-            + "cada vehículo debe estar vinculado a un cliente ya existente."
-            + "<br><br>Los campos marcados con el simbolo (*) son obligatorios para realizar un registro exitoso. "
-            + "<br>Si el número de placa ingresado ya existe en la base de datos o es mayor a 6 dígitos, se presentará un icono de error. Una moto no puede estar "
-            + "registrada más de una vez ni tener una placa con más de 6 dígitos."
-            + "<br>En el campo 'Relacionar Propietario' debes seleccionar el propietario del vehículo, puedes filtrar el cliente en el campo "
-            + "'Filtrar por número de cédula' para encontrarlo más fácilmente,"
-            + " (Se debe tener en cuenta que el propietario del vehículo ya debe estar registrado en el sistema como 'Cliente'). "
-            + "<br><br>Luego de completar todos los datos requeridos debes dar click en el botón 'Guardar'. "
-            + "<br>Al dar click en 'Guardar' el nuevo Vehículo quedará registrado en la base de datos de Vehículos del sistema."
-            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario. </p></html>"
-        );
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 147, 715, 240));
+        jLabel4.setText("<html><p>En la función de 'Créditos Registrados' puedes ver el historial de créditos realizados. "
+            + "Puedes filtrar los registros por estado (créditos pendientes y créditos ya pagados) y por nombre del cliente "
+            + "responsable del crédito. Puedes aplicar estos dos filtros para una búsqueda más precisa. "
+            + "<br><br>Al seleccionar una fila en la tabla, se abrirá una nueva interfaz con todos los detalles del crédito. "
+            + "<br>En esta interfaz puedes registrar los abonos realizados a dicho crédito. Al completar el valor total del crédito "
+            + "éste automáticamente se marcará como pagado."
+            + "<br>NOTA: Al iniciar sesión en el sistema se mostrará una notificación en la pantalla si hay créditos pendientes para "
+            + "el dia actual. Igualmente, se marcarán en esta tabla de color rojo los créditos cuya fecha límite de pago es el día actual "
+            + "o si ya pasó la fecha límite de pago."
+            + "<br>Los abonos registrados se verán reflejados en el flujo de caja como ingresos."
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 127, 756, 267));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -100,9 +99,9 @@ public class AddVehicleHelp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        dispose(); 
-    }//GEN-LAST:event_jLabel2MouseClicked
+    private void jLabel2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseReleased
+        dispose();
+    }//GEN-LAST:event_jLabel2MouseReleased
 
     /**
      * @param args the command line arguments
@@ -121,35 +120,20 @@ public class AddVehicleHelp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCreditsHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCreditsHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCreditsHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewCreditsHelp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddVehicleHelp().setVisible(true);
+                new ViewCreditsHelp().setVisible(true);
             }
         });
     }

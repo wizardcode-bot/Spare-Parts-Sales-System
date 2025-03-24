@@ -685,6 +685,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Crédito" }));
+        comboPayment.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(1077, 148, 180, -1));
 
         cashTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -795,6 +796,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         calculateSurplusBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         calculateSurplusBtn.setText("Calcular");
+        calculateSurplusBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         calculateSurplusBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 calculateSurplusBtnActionPerformed(evt);
@@ -1169,6 +1171,7 @@ public class UpdateService extends javax.swing.JFrame {
             transferPaid = "0";
 
             try {
+                totalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
                 cashPaidInt = Integer.parseInt(cashPaid);
                 transferPaidInt = Integer.parseInt(transferPaid);
             } catch (NumberFormatException e) {

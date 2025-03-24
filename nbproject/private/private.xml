@@ -5,12 +5,12 @@
             <url>src/ui/NewService.java</url>
             <bookmark id="2">
                 <name/>
-                <line>900</line>
+                <line>902</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>1109</line>
+                <line>1111</line>
                 <key/>
             </bookmark>
         </file>
@@ -18,32 +18,31 @@
             <url>src/ui/UpdateService.java</url>
             <bookmark id="7">
                 <name/>
-                <line>975</line>
+                <line>977</line>
                 <key/>
             </bookmark>
             <bookmark id="8">
                 <name/>
-                <line>1081</line>
+                <line>1083</line>
                 <key/>
             </bookmark>
             <bookmark id="5">
                 <name/>
-                <line>1270</line>
+                <line>1273</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>1275</line>
+                <line>1278</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/NewService.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/AddVehicle.java</file>
             <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/Login.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/UpdateService.java</file>
-            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/SellProduct.java</file>
+            <file>file:/C:/Users/HOME/Documents/NetBeansProjects/Inventory%20Management%20System/src/ui/help/AddVehicleHelp.java</file>
         </group>
     </open-files>
 </project-private>

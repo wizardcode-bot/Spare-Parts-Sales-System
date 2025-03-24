@@ -1,6 +1,10 @@
 
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author Usuario
@@ -14,6 +18,23 @@ public class AddProductHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -60,16 +81,16 @@ public class AddProductHelp extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("<html><p>En la función de 'Añadir Producto' puedes agregar nuevos Productos al inventario, estos tendrán sus propios datos."
-            + "<br>Solo son requeridos los campos marcados con (*) "
-            + "<br>El código del producto puede llevar letras y números, no pueden existir 2 códigos iguales en la base de datos, por eso si se marca un logo de "
-            + "aceptación color verde al lado de la casilla significa que el código está disponible y puede ser utilizado. Si por el contrario, se marca una equis de color rojo "
-            + "significa  que el código del producto ya está en uso "
-            + "<br>Para relacionar una categoría se puede seleccionar una del menú desplegable o agregar una nueva (Para modificar una categoría se debe dirigir al módulo"
-            + " ajustes de inventario y la función modificar categorías de productos) "
-            + "<br>La Cantidad de Unidades y los Precios deben ser ingresados solamente en números, sin letras, puntos, asteriscos, comas y demás caracteres. "
+            + "<br>Solo son requeridos los campos marcados con el simbolo (*) "
+            + "<br>El código del producto puede llevar letras y números, no pueden existir 2 códigos de producto iguales en la base de datos, por eso se indica con un logo de "
+            + "aceptación color verde al lado de la casilla cuando el código está disponible y puede ser utilizado. Si por el contrario, se muestra una equis de color rojo "
+            + "significa  que el código del producto ya está en uso y debes usar uno diferente. "
+            + "<br>Para relacionar una categoría al producto se puede seleccionar una del menú desplegable o agregar una nueva (Para modificar una categoría se debe dirigir al módulo"
+            + " ajustes de inventario / modificar categorías de productos.) "
+            + "<br>La Cantidad de Unidades y los Precios deben ser ingresados solamente en números, sin letras, puntos, asteriscos, comas o demás caracteres. "
             + "<br><br>Luego de haber completado los datos del Producto se debe dar click en 'Guardar'."
             + "<br>Al dar click en 'Guardar' el nuevo Producto quedará registrado en la base de datos de Productos del sistema."
-            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario.</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 140, 727, 263));
 
@@ -80,7 +101,7 @@ public class AddProductHelp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        dispose(); //Click al boton se cierre esa monda
+        dispose(); 
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**

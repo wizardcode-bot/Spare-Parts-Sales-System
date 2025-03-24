@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class ViewUserHelp extends javax.swing.JFrame {
 
@@ -10,6 +14,23 @@ public class ViewUserHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -51,11 +72,11 @@ public class ViewUserHelp extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("<html><p>En la función de 'Ver Usuario' el Administrador y Vendedor podrán ver los usuarios registrados en el sistema."
-            + "<br Se puede ingresar en la barra de búsqueda el número de cédula del usuario que se desea filtrar en la tabla. "
+            + "<brSe puede ingresar en la barra de búsqueda el número de cédula del usuario que se desea filtrar en la tabla. "
             + "<br>Puedes filtrar cualquier usuario en la tabla ingresando su número de cédula en el campo de búsqueda."
             + "<br>Solo el Administrador podrá eliminar usuarios, el Vendedor no cuenta con esta función. "
             + "<br>No puedes eliminar tu propia cuenta, tampoco se podrán eliminar las cuentas del Administrador principal y la cuenta de soporte."
-            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 165, 740, 131));

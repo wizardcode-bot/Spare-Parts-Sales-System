@@ -629,6 +629,7 @@ public class NewService extends javax.swing.JFrame {
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Crédito" }));
+        comboPayment.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 133, 180, -1));
 
         cashTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -710,6 +711,7 @@ public class NewService extends javax.swing.JFrame {
 
         calculateSurplusBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         calculateSurplusBtn.setText("Calcular");
+        calculateSurplusBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         calculateSurplusBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 calculateSurplusBtnActionPerformed(evt);

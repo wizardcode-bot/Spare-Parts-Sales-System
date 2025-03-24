@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class ProfileHelp extends javax.swing.JFrame {
 
@@ -9,7 +13,24 @@ public class ProfileHelp extends javax.swing.JFrame {
     public ProfileHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -52,13 +73,16 @@ public class ProfileHelp extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("<html><p>En el módulo 'Mi Perfil' podrás ver los datos personales registrados en tu cuenta y modificarlos si es necesario."
             + "<br><br>Para modificar algún dato debes editarlo en la misma casilla que este se presenta."
-            + "<br>Adicionalmente, podrás cambiar tu contraseña e imagen de perfil. Al cambiar la imagen de perfil se cerrará automáticamente "
-            + "la interfaz, así que se recomienda primero guardar los cambios realizados en los datos personales y luego cambiar la imagen de perfil."
+            + "<br>Adicionalmente, podrás cambiar tu contraseña e imágen de perfil si tienes una cámara conectada al computador. Si no tienes una cámara "
+            + "conectada al computador podrás cambiar la imágen de perfil manualmente de la siguiente manera:"
+            + "<br>1. Toma la foto de la persona a medio cuerpo."
+            + "<br>2. Guarda la foto en el computador en la ruta: Inventory Management System\\src\\images\\profile."
+            + "<br>3. La imágen debe estar en formato .jpg y tener por nombre el número de cédula del usuario, sin puntos ni comas, solamente números."
             + "<br><br>Luego de confirmar el proceso dando click en el botón 'Actualizar', tus datos serán actualizados en la base de datos del sistema. "
-            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 147, 740, 200));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 147, 740, 260));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));

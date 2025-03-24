@@ -104,6 +104,7 @@ public class AddUser extends javax.swing.JFrame {
         comboUserRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboUserRole.setForeground(new java.awt.Color(0, 0, 0));
         comboUserRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Vendedor" }));
+        comboUserRole.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboUserRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 142, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

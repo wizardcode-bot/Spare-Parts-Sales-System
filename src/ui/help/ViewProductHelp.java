@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class ViewProductHelp extends javax.swing.JFrame {
 
@@ -10,6 +14,23 @@ public class ViewProductHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -62,7 +83,7 @@ public class ViewProductHelp extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Ver Producto");
+        jLabel5.setText("Consultar Productos");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 125, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N

@@ -156,6 +156,7 @@ public class ViewProduct extends javax.swing.JFrame {
         comboFilterCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboFilterCategory.setForeground(new java.awt.Color(0, 0, 0));
         comboFilterCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboFilterCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboFilterCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboFilterCategoryActionPerformed(evt);

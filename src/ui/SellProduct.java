@@ -546,6 +546,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         comboRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboRelateClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un cliente" }));
+        comboRelateClient.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 319, 306, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -681,6 +682,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         calculateSurplusBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         calculateSurplusBtn.setText("Calcular");
+        calculateSurplusBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         calculateSurplusBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 calculateSurplusBtnActionPerformed(evt);

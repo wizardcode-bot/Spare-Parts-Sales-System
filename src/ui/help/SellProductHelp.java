@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class SellProductHelp extends javax.swing.JFrame {
 
@@ -9,7 +13,24 @@ public class SellProductHelp extends javax.swing.JFrame {
     public SellProductHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -63,7 +84,7 @@ public class SellProductHelp extends javax.swing.JFrame {
             + "<br>Debes completar el medio de pago, si el pago solamente será en efectivo debes poner '0' en transferencia y viceversa, no pueden quedar espacios vacíos, la suma "
             + "del dinero pagado en efectivo y transferencia debe ser igual al precio total de la compra."
             + "<br>Todos los productos añadidos al carrito de Compras se verán reflejados en la factura. "
-            + "<br>Luego de haber completado los datos de la venta se debe dar click en 'Generar venta e imprimir' "
+            + "<br>Luego de haber completado los datos de la venta se debe dar click en 'Generar venta e imprimir'. "
             + "<br>Al dar click en 'Generar venta e imprimir' la venta quedará registrada en la base de datos de Ventas del sistema y será generada la factura en formato pdf, puedes "
             + "imprimirla de una vez o encontrarla luego en el módulo 'Facturas'."
             + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"

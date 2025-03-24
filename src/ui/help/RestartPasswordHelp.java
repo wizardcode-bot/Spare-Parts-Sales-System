@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class RestartPasswordHelp extends javax.swing.JFrame {
 
@@ -9,7 +13,24 @@ public class RestartPasswordHelp extends javax.swing.JFrame {
     public RestartPasswordHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -54,12 +75,12 @@ public class RestartPasswordHelp extends javax.swing.JFrame {
         jLabel8.setText("<html><p>En la función 'Restablecer Contraseña' puedes restablecer la contraseña del usuario que desees."
             + "<br>Para Restablecer la contraseña deberás ingresar el número de cédula del usuario y dar click en 'Buscar' (El usuario ya debe existir en la base datos)."
             + "<br>Si el usuario existe, automáticamente se llenarán los campos que están en blanco, estos son:"
-            + "<br>Nombre, Rol y Nombre de Usuario (Se debe asegurar que los datos del usuario correspondan al número de cedula ingresado)."
+            + "<br>Nombre, Rol y Nombre de Usuario (Se debe asegurar que los datos del usuario correspondan al número de cédula ingresado)."
             + "<br>Puedes dar click en 'Generar una Contraseña', esta función generará una contraseña al azar, puedes generar varias contraseñas hasta encontrar una que te guste"
             + " o puedes escribir tú una nueva contraseña. "
             + "<br>Luego puedes dar click en 'Copiar' para copiar la contraseña al portapapeles del computador."
             + "<br>Finalmente, se debe dar click en 'Guardar Cambios' para establecer la nueva contraseña, y ya se podrá iniciar sesión con la nueva contraseña."
-            + "<br><br>Recuerda que para mejor información se consulta con el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 249));

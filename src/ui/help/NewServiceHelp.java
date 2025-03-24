@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class NewServiceHelp extends javax.swing.JFrame {
 
@@ -9,7 +13,24 @@ public class NewServiceHelp extends javax.swing.JFrame {
     public NewServiceHelp() {
         initComponents();
         setSize(850,500);
-        setLocationRelativeTo(null); //copear ;)
+        setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -51,21 +72,25 @@ public class NewServiceHelp extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("<html><p>En la función de 'Nuevo Servio' puedes registrar los productos que se han utilizado para el arreglo del vehículo."
+        jLabel8.setText("<html><p>En la función de 'Nuevo Servicio' puedes registrar los productos que se han utilizado para el arreglo del vehículo."
             + "<br>Los campos marcados con el simbolo (*) son obligatorios para poder realizar el registro del servicio."
             + "<br>En el campo 'Relacionar Vehículo' debes seleccionar la placa del vehículo al cual se realizará el servicio "
             + "o puedes ingresar la placa en la opción 'Filtrar Vehículo' y dar click en 'Filtrar' para encontrarlo más fácilmente. "
             + "<br>Todos los productos que se vayan añadiendo al servicio se verán reflejados en el carrito de compras, puedes modificar la cantidad "
             + "o eliminar cualquier producto del carrito. "
-            + "<br><br>Para salir de esta interfaz se debe dar click en 'Guardar Proceso' si aún no se han terminado los arreglos al vehíclo o "
-            + "por el contrario, dar click en 'Finalizar Servicio'. "
-            + "<br>Al dar click en 'Guardar Proceso' el nuevo servicio quedará registrado con los productos agregados al carrito este podrá "
+            + "<br>Para registrar un servicio como 'fiado' debes seleccionar la opción 'Crédito' en la forma de pago y seleccionar una fecha límite de pago "
+            + "en la que se espera que el cliente pague la totalidad del servicio, esto solamente es necesario cuando "
+            + "ya se va a registrar el servicio como terminado, no es necesario establecerlo para guardar el estado del servicio."
+            + "<br><br>Para salir de esta interfaz se debe dar click en 'Guardar Proceso' si aún no se han terminado los arreglos al vehículo o "
+            + "por el contrario, dar click en 'Finalizar Servicio' para generar la factura con los productos vendidos. Si deseas salir de la interfaz "
+            + "y ya no registrar un servicio debes eliminar del carrito los productos añadidos y ya podrás cerrar la ventana."
+            + "<br>Al dar click en 'Guardar Proceso' el nuevo servicio quedará registrado con los productos agregados al carrito, este podrá "
             + "ser modificado posteriormente en el módulo 'Actualizar Servicio'."
             + "<br>Al dar click en 'Finalizar Servicio' se genera la factura por el servicio y este no podrá volver a ser modificado."
-            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario</p></html>"
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 144, 765, 260));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 144, 765, 310));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));

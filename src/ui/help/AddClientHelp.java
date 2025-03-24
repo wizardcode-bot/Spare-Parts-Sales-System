@@ -1,6 +1,10 @@
 
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author Usuario
@@ -14,6 +18,23 @@ public class AddClientHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850, 500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -58,15 +79,14 @@ public class AddClientHelp extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("<html><p> El módulo de Registrar Cliente permite al administrador y vendedor registrar nuevos clientes en el sistema."
-            + "<br>Solo son requeridos los campos marcados con (*) "
-            + "<br>Los demás campos que no están marcados con este símbolo (*) no son obligatorios ya que legalmente el cliente no está obligado a dar más información que su Numero de Cedula o NIT y Nombre completo o Razón Social"
-            + "para el proceso de facturación. "
-            + "<br>Los campos que no son obligatorios y no serán completados se deben dejar completamente en blanco para que asi en el sistema queden guardados como 'No Registrado'."
+        jLabel4.setText("<html><p>El módulo de 'Registrar Cliente' permite al administrador y vendedor registrar nuevos clientes en el sistema."
+            + "<br>Los campos marcados con el símbolo (*) son necesarios para poder realizar un registro exitoso. "
+            + "<br>Los demás campos que no están marcados con el símbolo (*) no son obligatorios ya que legalmente el cliente no está obligado a dar más información que su Número de Cédula o NIT y Nombre completo o Razón Social"
+            + " para el proceso de facturación. "
+            + "<br>Los campos que no son obligatorios y no serán completados se deben dejar completamente en blanco para que así en el sistema queden guardados como 'No Registrado'."
             + "<br><br>Luego de haber completado los datos del Cliente se debe dar click en 'Guardar'."
             + "<br>Al dar click en 'Guardar' el nuevo Cliente quedará registrado en la base de datos de Clientes del sistema."
-            + "<br><br>Recuerda que para mejor información puedes consultar el manual de usuario.</p></html>"
-        );
+            + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 135, 728, 257));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 56, 844, 10));
 
@@ -77,7 +97,7 @@ public class AddClientHelp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        dispose(); //Click al boton se cierre esa monda
+        dispose(); 
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**

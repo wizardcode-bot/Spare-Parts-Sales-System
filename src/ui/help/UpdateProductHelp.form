@@ -75,7 +75,7 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Actualizar Producto&apos; puedes actualizar los productos que est&#xe9;n ya registrados en el sistema.&quot;&#xa;    + &quot;&lt;br&gt;Primero se debe ingresar el c&#xf3;digo del producto y dar click en &apos;Buscar&apos;. Si no recuerdas el c&#xf3;digo de producto puedes dar click en &apos;Copiar c&#xf3;digo&apos; y buscar el producto &quot;&#xa;    + &quot;que se desea modificar, al seleccionarlo en la tabla se copiar&#xe1; el c&#xf3;digo del producto al portapapeles, luego puedes regresar al m&#xf3;dulo &apos;Actualizar producto&apos; y continuar con el proceso.&quot;&#xa;    + &quot;&lt;br&gt;Los campos en blanco se llenar&#xe1;n autom&#xe1;ticamente si el producto ingresado existe en la base de datos, debes modificarlos en la misma casilla que estos se presentan.&quot;&#xa;    + &quot;&lt;br&gt;Puedes cambiar de categor&#xed;a el producto o a&#xf1;adir una nueva en la opci&#xf3;n de &apos;A&#xf1;adir nueva Categor&#xed;a&apos;. &quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Luego de haber modificado los datos del Producto se debe dar click en &apos;Actualizar&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Actualizar&apos; quedar&#xe1;n registrados los nuevos datos del  Producto en la base de datos.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mayor informaci&#xf3;n puedes consultar el manual de usuario.&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;En la funci&#xf3;n de &apos;Actualizar Producto&apos; puedes actualizar los productos que est&#xe9;n ya registrados en el sistema.&quot;&#xa;    + &quot;&lt;br&gt;Primero se debe ingresar el c&#xf3;digo del producto y dar click en &apos;Buscar&apos;. Si no recuerdas el c&#xf3;digo de producto puedes dar click en &apos;Copiar c&#xf3;digo&apos; y buscar el producto &quot;&#xa;    + &quot;que se desea modificar, al seleccionarlo en la tabla se copiar&#xe1; el c&#xf3;digo del producto al portapapeles, luego puedes regresar al m&#xf3;dulo &apos;Actualizar producto&apos; y continuar con el proceso.&quot;&#xa;    + &quot;&lt;br&gt;Los campos en blanco se completar&#xe1;n autom&#xe1;ticamente si el producto ingresado existe en la base de datos, debes modificarlos en la misma casilla que estos se presentan.&quot;&#xa;    + &quot;&lt;br&gt;Puedes cambiar la categor&#xed;a del producto o a&#xf1;adir una nueva en la opci&#xf3;n de &apos;A&#xf1;adir nueva Categor&#xed;a&apos;. &quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Luego de haber modificado los datos del Producto se debe dar click en &apos;Actualizar&apos;.&quot;&#xa;    + &quot;&lt;br&gt;Al dar click en &apos;Actualizar&apos; quedar&#xe1;n registrados los nuevos datos del  Producto en la base de datos.&quot;&#xa;    + &quot;&lt;br&gt;&lt;br&gt;Recuerda que para mayor informaci&#xf3;n puedes consultar el manual de usuario.&lt;/p&gt;&lt;/html&gt;&quot;&#xa;    " type="code"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Default Cursor"/>
@@ -83,7 +83,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="40" y="150" width="740" height="229"/>
+          <AbsoluteConstraints x="60" y="150" width="740" height="229"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -99,7 +99,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="40" y="110" width="-1" height="-1"/>
+          <AbsoluteConstraints x="60" y="110" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

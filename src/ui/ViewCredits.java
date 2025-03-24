@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import ui.help.ViewCreditsHelp;
 
 /**
  *
@@ -139,6 +140,7 @@ public class ViewCredits extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         comboCreditState = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -208,7 +210,17 @@ public class ViewCredits extends javax.swing.JFrame {
 
         comboCreditState.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboCreditState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "Pagado" }));
+        comboCreditState.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboCreditState, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 72, 205, -1));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel7MouseReleased(evt);
+            }
+        });
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(868, 14, -1, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke950.jpg"))); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -242,6 +254,10 @@ public class ViewCredits extends javax.swing.JFrame {
             dispose();
         }
     }//GEN-LAST:event_tblCreditsMouseReleased
+
+    private void jLabel7MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseReleased
+        new ViewCreditsHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel7MouseReleased
 
     /**
      * @param args the command line arguments
@@ -286,6 +302,7 @@ public class ViewCredits extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable tblCredits;

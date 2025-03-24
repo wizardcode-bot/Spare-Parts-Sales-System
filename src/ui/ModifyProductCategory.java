@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import ui.help.ModifyProductCategoryHelp;
 
 /**
  *
@@ -100,6 +101,7 @@ public class ModifyProductCategory extends javax.swing.JFrame {
         txtNewName = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -125,12 +127,13 @@ public class ModifyProductCategory extends javax.swing.JFrame {
         comboCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboCategory.setForeground(new java.awt.Color(0, 0, 0));
         comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        comboCategory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboCategoryActionPerformed(evt);
             }
         });
-        getContentPane().add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, 300, -1));
+        getContentPane().add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 151, 300, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -140,26 +143,26 @@ public class ModifyProductCategory extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("ID de la categoría");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, -1));
 
         txtCategoryID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtCategoryID, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, 200, -1));
+        getContentPane().add(txtCategoryID, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 241, 200, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Nombre actual de la categoría");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 301, -1, -1));
 
         txtCurrentName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtCurrentName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 300, -1));
+        getContentPane().add(txtCurrentName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 322, 300, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Nuevo nombre para la categoría *");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 240, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, -1, -1));
 
         txtNewName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtNewName, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 260, 300, -1));
+        getContentPane().add(txtNewName, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 151, 300, -1));
 
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSave.setForeground(new java.awt.Color(0, 0, 0));
@@ -173,12 +176,21 @@ public class ModifyProductCategory extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 290, 110, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 182, 110, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("(*) Indica campo obligatorio");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 440, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 420, -1, -1));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
+        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jLabel9MouseReleased(evt);
+            }
+        });
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -242,6 +254,10 @@ public class ModifyProductCategory extends javax.swing.JFrame {
         txtNewName.setText("");
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void jLabel9MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseReleased
+        new ModifyProductCategoryHelp().setVisible(true);
+    }//GEN-LAST:event_jLabel9MouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -288,6 +304,7 @@ public class ModifyProductCategory extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtCategoryID;
     private javax.swing.JTextField txtCurrentName;

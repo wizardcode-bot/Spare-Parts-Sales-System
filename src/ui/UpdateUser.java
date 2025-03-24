@@ -103,6 +103,7 @@ public class UpdateUser extends javax.swing.JFrame {
         comboUserRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboUserRole.setForeground(new java.awt.Color(255, 255, 255));
         comboUserRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Vendedor" }));
+        comboUserRole.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboUserRole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboUserRoleActionPerformed(evt);

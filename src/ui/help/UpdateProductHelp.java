@@ -1,5 +1,9 @@
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 
 public class UpdateProductHelp extends javax.swing.JFrame {
 
@@ -10,6 +14,23 @@ public class UpdateProductHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null); 
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -53,19 +74,19 @@ public class UpdateProductHelp extends javax.swing.JFrame {
         jLabel8.setText("<html><p>En la función de 'Actualizar Producto' puedes actualizar los productos que estén ya registrados en el sistema."
             + "<br>Primero se debe ingresar el código del producto y dar click en 'Buscar'. Si no recuerdas el código de producto puedes dar click en 'Copiar código' y buscar el producto "
             + "que se desea modificar, al seleccionarlo en la tabla se copiará el código del producto al portapapeles, luego puedes regresar al módulo 'Actualizar producto' y continuar con el proceso."
-            + "<br>Los campos en blanco se llenarán automáticamente si el producto ingresado existe en la base de datos, debes modificarlos en la misma casilla que estos se presentan."
-            + "<br>Puedes cambiar de categoría el producto o añadir una nueva en la opción de 'Añadir nueva Categoría'. "
+            + "<br>Los campos en blanco se completarán automáticamente si el producto ingresado existe en la base de datos, debes modificarlos en la misma casilla que estos se presentan."
+            + "<br>Puedes cambiar la categoría del producto o añadir una nueva en la opción de 'Añadir nueva Categoría'. "
             + "<br><br>Luego de haber modificado los datos del Producto se debe dar click en 'Actualizar'."
             + "<br>Al dar click en 'Actualizar' quedarán registrados los nuevos datos del  Producto en la base de datos."
             + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>"
         );
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 740, 229));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 740, 229));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Actualizar Producto");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

@@ -1,6 +1,10 @@
 
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author HOME
@@ -14,6 +18,23 @@ public class NewExpenseHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -60,10 +81,11 @@ public class NewExpenseHelp extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("<html><p>En la función de 'Nuevo gasto' debes registrar los egresos de la empresa para "
-            + "poder realizar un calculo más preciso del flujo de dinero en la empresa."
+            + "poder realizar un cálculo más preciso del flujo de dinero en la empresa."
             + "<br><br>Todos los campos deben ser completados para tener un mejor registro de quién y en qué se está"
             + " usando el dinero en la empresa. "
             + "<br>El valor del gasto debe ser ingresado sin puntos ni comas y solamente en números. "
+            + "<br>Puedes consultar el historial de gastos en el módulo: Reportes/Historial de gastos."
             + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 125, 709, 219));
 

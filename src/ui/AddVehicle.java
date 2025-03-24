@@ -211,6 +211,7 @@ public class AddVehicle extends javax.swing.JFrame {
         jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addIcon.png"))); // NOI18N
         jButton1.setText("Agregar cliente");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -371,7 +372,7 @@ public class AddVehicle extends javax.swing.JFrame {
                 pst.setString(1, plate);
 
                 try (ResultSet rs = pst.executeQuery()) {
-                    if (rs.next()) {
+                    if (rs.next() || plate.length()>6) {
                         checkPlateExists = true;
                         plateIcon.setIcon(new ImageIcon("src\\images\\no.png"));
                         plateIcon.setText("");

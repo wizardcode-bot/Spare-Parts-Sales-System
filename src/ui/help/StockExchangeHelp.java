@@ -1,6 +1,10 @@
 
 package ui.help;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author HOME
@@ -14,6 +18,23 @@ public class StockExchangeHelp extends javax.swing.JFrame {
         initComponents();
         setSize(850,500);
         setLocationRelativeTo(null);
+        
+        //establecer icono
+        setImage();
+    }
+    
+    //icono de la aplicación
+    public void setImage() {
+        try {
+            InputStream imgStream = getClass().getResourceAsStream("/images/icono.png");
+            if (imgStream != null) {
+                setIconImage(ImageIO.read(imgStream));
+            } else {
+                System.out.println("Icono no encontrado");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -70,7 +91,7 @@ public class StockExchangeHelp extends javax.swing.JFrame {
             + "base de datos del sistema se debe dar click en 'Actualizar producto existente' buscar el producto ingresando su código y añadir el número de cantidades "
             + "entrantes. Finalmente se debe dar click en el botón 'Guardar'."
             + "<br>Al dar click en 'Guardar' quedarán registrados en la base de datos los detalles del ajuste y será actualizado el stock para el/los "
-            + "producto/s intercambiado/s. Estos detalles podrán ser consultados en la sección 'Ajustes de inventario' - 'Historial de ajustes' "
+            + "producto/s intercambiado/s. Estos detalles podrán ser consultados en la sección 'Ajustes de inventario' - 'Historial de ajustes'. "
             + "<br><br>Recuerda que para mayor información puedes consultar el manual de usuario.</p></html>");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 121, 721, 323));
 
