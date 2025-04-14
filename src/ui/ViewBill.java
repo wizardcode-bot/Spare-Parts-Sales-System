@@ -22,7 +22,7 @@ public class ViewBill extends javax.swing.JFrame {
         initComponents();
         setSize(850, 500);
         setLocationRelativeTo(null);
-        
+
         //establecer icono
         setImage();
 
@@ -47,8 +47,14 @@ public class ViewBill extends javax.swing.JFrame {
             }
         });
 
+        filterByDate.getDateEditor().addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                filterTable();
+            }
+        });
+
     }
-    
+
     //icono de la aplicación
     public void setImage() {
         try {
@@ -66,16 +72,38 @@ public class ViewBill extends javax.swing.JFrame {
     private void filterTable() {
         TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) jTable1.getRowSorter();
         String text = txtFilterBill.getText().trim();
+        java.util.Date selectedDate = filterByDate.getDate();
 
-        if (text.isEmpty()) {
-            sorter.setRowFilter(null); // Muestra todas las filas si el campo está vacío
-        } else {
-            try {
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 0)); // Filtra por la columna "ID de factura"
-            } catch (java.util.regex.PatternSyntaxException e) {
-                sorter.setRowFilter(null); // Evita errores si hay caracteres inválidos en la búsqueda
+        RowFilter<DefaultTableModel, Object> idFilter = null;
+        RowFilter<DefaultTableModel, Object> dateFilter = null;
+
+        try {
+            if (!text.isEmpty()) {
+                idFilter = RowFilter.regexFilter("(?i)" + text, 0); // Columna 0: ID factura
             }
+
+            if (selectedDate != null) {
+                // Formatear la fecha al formato que se ve en la tabla
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                String formattedDate = sdf.format(selectedDate);
+                dateFilter = RowFilter.regexFilter(formattedDate, 1); // Columna 1: Fecha
+            }
+
+            // Combinar filtros si existen
+            if (idFilter != null && dateFilter != null) {
+                sorter.setRowFilter(RowFilter.andFilter(java.util.Arrays.asList(idFilter, dateFilter)));
+            } else if (idFilter != null) {
+                sorter.setRowFilter(idFilter);
+            } else if (dateFilter != null) {
+                sorter.setRowFilter(dateFilter);
+            } else {
+                sorter.setRowFilter(null);
+            }
+
+        } catch (java.util.regex.PatternSyntaxException e) {
+            sorter.setRowFilter(null);
         }
+
     }
 
     /**
@@ -96,6 +124,9 @@ public class ViewBill extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         txtFilterBill = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        filterByDate = new com.toedter.calendar.JDateChooser();
+        btnClean = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -136,7 +167,7 @@ public class ViewBill extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 110, 838, 356));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 111, 838, 356));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -150,7 +181,7 @@ public class ViewBill extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Selecciona la factura para imprimir o ver los detalles");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 472, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 473, -1, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -165,11 +196,27 @@ public class ViewBill extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Filtrar por ID de factura");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 79, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 79, -1, -1));
 
         txtFilterBill.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFilterBill.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtFilterBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(198, 75, 240, -1));
+        getContentPane().add(txtFilterBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 75, 240, -1));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Filtrar por fecha");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(417, 79, -1, -1));
+        getContentPane().add(filterByDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 200, -1));
+
+        btnClean.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnClean.setText("Limpiar");
+        btnClean.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnClean, new org.netbeans.lib.awtextra.AbsoluteConstraints(726, 75, 91, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -220,6 +267,12 @@ public class ViewBill extends javax.swing.JFrame {
         new ViewBillHelp().setVisible(true);
     }//GEN-LAST:event_jLabel5MouseClicked
 
+    private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
+        txtFilterBill.setText("");
+        filterByDate.setDate(null);
+        filterTable();
+    }//GEN-LAST:event_btnCleanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -256,12 +309,15 @@ public class ViewBill extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClean;
+    private com.toedter.calendar.JDateChooser filterByDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;

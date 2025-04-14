@@ -154,6 +154,7 @@ public class Tables {
             //st.executeUpdate(createCredits);
             //st.executeUpdate(credit_payments);
             
+            
             JOptionPane.showMessageDialog(null, "Table created successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

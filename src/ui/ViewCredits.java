@@ -26,8 +26,8 @@ public class ViewCredits extends javax.swing.JFrame {
         initComponents();
         setSize(950, 500);
         setLocationRelativeTo(null);
-        loadCredits("", ""); // Cargar todos los créditos al iniciar
-        
+        loadCredits("", comboCreditState.getSelectedItem().toString());
+
         //establecer icono
         setImage();
 
@@ -44,7 +44,7 @@ public class ViewCredits extends javax.swing.JFrame {
         });
 
     }
-    
+
     //icono de la aplicación
     public void setImage() {
         try {
@@ -67,15 +67,21 @@ public class ViewCredits extends javax.swing.JFrame {
                 + "cc.creditDate, cc.paymentDeadline, cc.creditState "
                 + "FROM clients_credits cc "
                 + "INNER JOIN clients c ON cc.client_pk = c.client_pk "
-                + "WHERE (? = '' OR c.name LIKE ?) "
-                + "AND (? = '' OR cc.creditState = ?)";
+                + "WHERE (? = '' OR c.name LIKE ?) ";
+
+        // Si no es "Todas", agregamos el filtro por estado
+        if (!"Todas".equalsIgnoreCase(creditState)) {
+            query += "AND cc.creditState = ? ";
+        }
 
         try (Connection conn = ConnectionProvider.getCon(); PreparedStatement ps = conn.prepareStatement(query)) {
-
             ps.setString(1, clientName);
             ps.setString(2, "%" + clientName + "%");
-            ps.setString(3, creditState);
-            ps.setString(4, creditState);
+
+            // Si no es "Todas", asignamos el valor de estado
+            if (!"Todas".equalsIgnoreCase(creditState)) {
+                ps.setString(3, creditState);
+            }
 
             ResultSet rs = ps.executeQuery();
 
@@ -85,15 +91,15 @@ public class ViewCredits extends javax.swing.JFrame {
                     rs.getString("name"),
                     rs.getLong("totalCredit"),
                     rs.getLong("pendingBalance"),
-                    rs.getTimestamp("creditDate").toLocalDateTime().toLocalDate(), // Formatear fecha del crédito
-                    rs.getTimestamp("paymentDeadline").toLocalDateTime().toLocalDate(), // Solo la fecha sin hora
+                    rs.getTimestamp("creditDate").toLocalDateTime().toLocalDate(),
+                    rs.getTimestamp("paymentDeadline").toLocalDateTime().toLocalDate(),
                     rs.getString("creditState")
                 });
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // Aplicar el renderizador a la columna de fecha límite de pago (columna 5)
+
         tblCredits.getColumnModel().getColumn(5).setCellRenderer(new DeadlineCellRenderer());
     }
 
@@ -209,7 +215,7 @@ public class ViewCredits extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 77, -1, -1));
 
         comboCreditState.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        comboCreditState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "Pagado" }));
+        comboCreditState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todas", "Pendiente", "Pagado" }));
         comboCreditState.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(comboCreditState, new org.netbeans.lib.awtextra.AbsoluteConstraints(557, 72, 205, -1));
 

@@ -92,11 +92,11 @@ public class UpdateVehicle extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Número de placa del vehículo");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 113, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 112, -1, -1));
 
         txtSearchPlate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtSearchPlate.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtSearchPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(254, 109, 300, -1));
+        getContentPane().add(txtSearchPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(254, 108, 174, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 0));
@@ -108,7 +108,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 106, 100, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(434, 103, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));

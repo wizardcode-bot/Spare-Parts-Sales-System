@@ -47,7 +47,7 @@ public class SellProduct extends javax.swing.JFrame {
         username = tempUsername;
         setLocationRelativeTo(null);
         setSize(1366, 768);
-        
+
         //establecer icono
         setImage();
 
@@ -55,7 +55,7 @@ public class SellProduct extends javax.swing.JFrame {
         deadlineLabel.setEnabled(false);
 
         comboPayment.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 String paymentMethod = comboPayment.getSelectedItem().toString();
@@ -64,8 +64,8 @@ public class SellProduct extends javax.swing.JFrame {
                     deadlineDate.setEnabled(false);
                     deadlineLabel.setEnabled(false);
 
-                    txtCashPaid.setEnabled(true);
                     txtTransferPaid.setEnabled(true);
+                    txtCashPaid.setEnabled(true);
                     transferTextLabel.setEnabled(true);
                     cashTextLabel.setEnabled(true);
 
@@ -80,8 +80,8 @@ public class SellProduct extends javax.swing.JFrame {
                     deadlineDate.setEnabled(true);
                     deadlineLabel.setEnabled(true);
 
-                    txtCashPaid.setEnabled(false);
                     txtTransferPaid.setEnabled(false);
+                    txtCashPaid.setEnabled(false);
                     transferTextLabel.setEnabled(false);
                     cashTextLabel.setEnabled(false);
 
@@ -96,7 +96,7 @@ public class SellProduct extends javax.swing.JFrame {
             }
         });
     }
-    
+
     //icono de la aplicación
     public void setImage() {
         try {
@@ -112,17 +112,13 @@ public class SellProduct extends javax.swing.JFrame {
     }
 
     private void productName(String nameOrUniqueId) {
-        //mostrar código y descripción de cada producto en la tabla
+        //MOSTRAR CÓDIGO Y DESCRIPCIÓN DE CADA PRODUCTO EN LA TABLA 
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setRowCount(0);
-
         String query = "SELECT * FROM products WHERE description LIKE ? OR product_pk LIKE ?";
-
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement pst = con.prepareStatement(query)) {
-
-            pst.setString(1, nameOrUniqueId + "%");
-            pst.setString(2, nameOrUniqueId + "%");
-
+            pst.setString(1, "%" + nameOrUniqueId + "%");
+            pst.setString(2, "%" + nameOrUniqueId + "%");
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     model.addRow(new Object[]{rs.getString("product_pk") + "   -   " + rs.getString("description")});
@@ -140,6 +136,8 @@ public class SellProduct extends javax.swing.JFrame {
         txtPricePerUnit.setText("");
         txtNoOfUnits.setText("");
         txtTotalPrice.setText("");
+        txtProductLocation.setText("");
+        txtStockQuantity.setText("");
     }
 
     private void updateProductQuantity() {
@@ -293,7 +291,7 @@ public class SellProduct extends javax.swing.JFrame {
                     + "¡Gracias por tu compra!", normalFont);
             disclaimerMsg.setAlignment(Element.ALIGN_CENTER);
             doc.add(disclaimerMsg);
-            
+
             JOptionPane.showMessageDialog(null, "Factura generada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             // Preguntar si se desea imprimir
@@ -356,8 +354,8 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         cashTextLabel = new javax.swing.JLabel();
         transferTextLabel = new javax.swing.JLabel();
-        txtCashPaid = new javax.swing.JTextField();
         txtTransferPaid = new javax.swing.JTextField();
+        txtCashPaid = new javax.swing.JTextField();
         txtDescription = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -369,6 +367,10 @@ public class SellProduct extends javax.swing.JFrame {
         surplusTextLabel = new javax.swing.JLabel();
         surplusMoneyLabel = new javax.swing.JLabel();
         calculateSurplusBtn = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        txtProductLocation = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        txtStockQuantity = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -449,12 +451,12 @@ public class SellProduct extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 242, -1, -1));
 
         txtProductBrand.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 263, 306, -1));
+        getContentPane().add(txtProductBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 264, 306, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Precio por Unidad");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(809, 130, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 244, -1, -1));
 
         txtPricePerUnit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPricePerUnit.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -462,12 +464,12 @@ public class SellProduct extends javax.swing.JFrame {
                 txtPricePerUnitKeyReleased(evt);
             }
         });
-        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(809, 151, 220, -1));
+        getContentPane().add(txtPricePerUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 265, 220, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Número de Unidades a vender *");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(809, 186, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 300, -1, -1));
 
         txtNoOfUnits.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNoOfUnits.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -475,15 +477,15 @@ public class SellProduct extends javax.swing.JFrame {
                 txtNoOfUnitsKeyReleased(evt);
             }
         });
-        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(809, 207, 220, -1));
+        getContentPane().add(txtNoOfUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 321, 220, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Precio Total");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(809, 242, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 356, -1, -1));
 
         txtTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(809, 263, 220, -1));
+        getContentPane().add(txtTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 377, 220, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddToCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addToCart.png"))); // NOI18N
@@ -494,7 +496,7 @@ public class SellProduct extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 300, -1, -1));
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(874, 414, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -521,7 +523,7 @@ public class SellProduct extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 480, 845, 233));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 481, 845, 233));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -547,15 +549,15 @@ public class SellProduct extends javax.swing.JFrame {
         comboRelateClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboRelateClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un cliente" }));
         comboRelateClient.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(comboRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 319, 306, -1));
+        getContentPane().add(comboRelateClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 320, 306, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Filtrar por número de cédula");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 356, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 357, -1, -1));
 
         txtFilterClient.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 379, 200, -1));
+        getContentPane().add(txtFilterClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 380, 200, -1));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/filter.png"))); // NOI18N
@@ -566,12 +568,12 @@ public class SellProduct extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 376, 100, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 377, 100, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Relacionar Cliente *");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 298, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 299, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
@@ -599,7 +601,7 @@ public class SellProduct extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 418, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 419, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
@@ -616,21 +618,21 @@ public class SellProduct extends javax.swing.JFrame {
         transferTextLabel.setText("Transferencia ($) *");
         getContentPane().add(transferTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 241, -1, -1));
 
-        txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtCashPaidKeyReleased(evt);
-            }
-        });
-        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 262, 236, -1));
-
         txtTransferPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTransferPaid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTransferPaidKeyReleased(evt);
             }
         });
-        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 206, 236, -1));
+        getContentPane().add(txtTransferPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 263, 236, -1));
+
+        txtCashPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtCashPaid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCashPaidKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtCashPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 206, 236, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 207, 306, -1));
@@ -648,8 +650,8 @@ public class SellProduct extends javax.swing.JFrame {
         deadlineLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         deadlineLabel.setForeground(new java.awt.Color(255, 255, 255));
         deadlineLabel.setText("Fecha límite de pago *");
-        getContentPane().add(deadlineLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 297, -1, -1));
-        getContentPane().add(deadlineDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 318, 236, -1));
+        getContentPane().add(deadlineLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 298, -1, -1));
+        getContentPane().add(deadlineDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 319, 236, -1));
 
         comboPayment.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         comboPayment.setForeground(new java.awt.Color(255, 255, 255));
@@ -660,7 +662,7 @@ public class SellProduct extends javax.swing.JFrame {
         billPaidLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         billPaidLabel.setForeground(new java.awt.Color(255, 255, 255));
         billPaidLabel.setText("Paga con ($)");
-        getContentPane().add(billPaidLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 354, -1, -1));
+        getContentPane().add(billPaidLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 355, -1, -1));
 
         txtBillPaid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtBillPaid.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -668,17 +670,17 @@ public class SellProduct extends javax.swing.JFrame {
                 txtBillPaidKeyReleased(evt);
             }
         });
-        getContentPane().add(txtBillPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 374, 160, -1));
+        getContentPane().add(txtBillPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 375, 160, -1));
 
         surplusTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         surplusTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         surplusTextLabel.setText("Excedente");
-        getContentPane().add(surplusTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 403, -1, -1));
+        getContentPane().add(surplusTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 404, -1, -1));
 
         surplusMoneyLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         surplusMoneyLabel.setForeground(new java.awt.Color(51, 204, 255));
         surplusMoneyLabel.setText("$ 0");
-        getContentPane().add(surplusMoneyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 424, -1, -1));
+        getContentPane().add(surplusMoneyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1073, 425, -1, -1));
 
         calculateSurplusBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         calculateSurplusBtn.setText("Calcular");
@@ -688,7 +690,23 @@ public class SellProduct extends javax.swing.JFrame {
                 calculateSurplusBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(calculateSurplusBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1239, 374, 80, -1));
+        getContentPane().add(calculateSurplusBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1239, 375, 80, -1));
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setText("Ubicación en almacén");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 126, -1, -1));
+
+        txtProductLocation.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtProductLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 151, 220, -1));
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setText("Cantidad en stock");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 187, -1, -1));
+
+        txtStockQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtStockQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(813, 207, 220, -1));
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -704,6 +722,8 @@ public class SellProduct extends javax.swing.JFrame {
         txtProductBrand.setEditable(false);
         txtPricePerUnit.setEditable(false);
         txtTotalPrice.setEditable(false);
+        txtProductLocation.setEditable(false);
+        txtStockQuantity.setEditable(false);
     }//GEN-LAST:event_formComponentShown
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
@@ -738,7 +758,7 @@ public class SellProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchMouseClicked
 
     private void productsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsTableMouseClicked
-        // mostrar los datos del producto al seleccionarlo en la tabla
+        // MOSTRAR LOS DATOS DEL PRODUCTO AL SELECCIONARLO EN LA TABLA
         txtPricePerUnit.setEditable(true);
         int index = productsTable.getSelectedRow();
         TableModel model = productsTable.getModel();
@@ -757,6 +777,8 @@ public class SellProduct extends javax.swing.JFrame {
                     txtDescription.setText(rs.getString("description"));
                     txtProductBrand.setText(rs.getString("productBrand"));
                     txtPricePerUnit.setText(rs.getString("sellingPrice"));
+                    txtProductLocation.setText(rs.getString("productLocation"));
+                    txtStockQuantity.setText(rs.getString("quantity"));
                     txtNoOfUnits.setText("");
                     txtTotalPrice.setText("");
                 }
@@ -1086,27 +1108,27 @@ public class SellProduct extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtPricePerUnitKeyReleased
 
-    private void txtCashPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashPaidKeyReleased
-        String cashPaid = txtCashPaid.getText();
+    private void txtTransferPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTransferPaidKeyReleased
+        String cashPaid = txtTransferPaid.getText();
 
         if (!cashPaid.matches(Validations.NUMBER_PATTERN)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            txtCashPaid.setText("");
-            return;
-        }
-    }//GEN-LAST:event_txtCashPaidKeyReleased
-
-    private void txtTransferPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTransferPaidKeyReleased
-        String transferPaid = txtTransferPaid.getText();
-
-        if (!transferPaid.matches(Validations.NUMBER_PATTERN)) {
             JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
                     JOptionPane.ERROR_MESSAGE);
             txtTransferPaid.setText("");
             return;
         }
     }//GEN-LAST:event_txtTransferPaidKeyReleased
+
+    private void txtCashPaidKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashPaidKeyReleased
+        String transferPaid = txtCashPaid.getText();
+
+        if (!transferPaid.matches(Validations.NUMBER_PATTERN)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtCashPaid.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtCashPaidKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         AddClient addClientWindow = new AddClient();
@@ -1139,11 +1161,10 @@ public class SellProduct extends javax.swing.JFrame {
     private void calculateSurplusBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateSurplusBtnActionPerformed
         // botón para calcular excedente
         String billPaid = txtBillPaid.getText().trim();
-        String transferPaid = txtTransferPaid.getText().trim();
         String cashPaid = txtCashPaid.getText().trim();
 
-        if (Validations.isNullOrBlank(transferPaid) || Validations.isNullOrBlank(cashPaid)) {
-            JOptionPane.showMessageDialog(null, "¡Debes ingresar primero el valor pagado por efectivo y por tranferencia!",
+        if (Validations.isNullOrBlank(cashPaid)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar primero el valor pagado en efectivo!",
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtBillPaid.setText("");
             return;
@@ -1151,12 +1172,10 @@ public class SellProduct extends javax.swing.JFrame {
 
         // Calcular el excedente a entregar
         try {
-            int transferPaidInt = Integer.parseInt(transferPaid);
             int cashPaidInt = Integer.parseInt(cashPaid);
             int billPaidInt = Integer.parseInt(billPaid);
 
-            int totalPaid = (transferPaidInt + cashPaidInt);
-            int surplusMoney = (billPaidInt - totalPaid);
+            int surplusMoney = (billPaidInt - cashPaidInt);
 
             // Mostrar el resultado en el label
             surplusMoneyLabel.setText(String.format("%,d", surplusMoney));
@@ -1253,6 +1272,8 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1277,7 +1298,9 @@ public class SellProduct extends javax.swing.JFrame {
     private javax.swing.JTextField txtNoOfUnits;
     private javax.swing.JTextField txtPricePerUnit;
     private javax.swing.JTextField txtProductBrand;
+    private javax.swing.JTextField txtProductLocation;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtStockQuantity;
     private javax.swing.JTextField txtTotalPrice;
     private javax.swing.JTextField txtTransferPaid;
     private javax.swing.JTextField txtUniqueId;

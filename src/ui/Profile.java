@@ -239,14 +239,14 @@ public class Profile extends javax.swing.JFrame {
 
         // Mostrar imagen de perfil
         this.ID = getIDByUsername(username);
-        ruta = "C:\\Users\\HOME\\Documents\\NetBeansProjects\\Inventory Management System\\src\\images\\profile\\" + this.ID + ".jpg";
+        ruta = "C:\\Users\\PACKARD\\Documents\\Inventory Management System\\src\\images\\profile\\" + this.ID + ".jpg";
 
         java.io.File file = new java.io.File(ruta);
         if (file.exists() && !file.isDirectory()) {
             this.setImage(this.lblProfile, ruta);
         } else {
             // Imagen por defecto
-            String defaultRuta = "C:\\Users\\HOME\\Documents\\NetBeansProjects\\Inventory Management System\\src\\images\\Viewprofile.png";
+            String defaultRuta = "C:\\Users\\PACKARD\\Documents\\Inventory Management System\\src\\images\\Viewprofile.png";
             this.setImage(this.lblProfile, defaultRuta);
         }
     }//GEN-LAST:event_formComponentShown

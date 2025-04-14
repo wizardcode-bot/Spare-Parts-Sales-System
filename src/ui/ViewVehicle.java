@@ -148,7 +148,7 @@ public class ViewVehicle extends javax.swing.JFrame {
                 txtFilterPlateKeyReleased(evt);
             }
         });
-        getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 86, 300, -1));
+        getContentPane().add(txtFilterPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 86, 160, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

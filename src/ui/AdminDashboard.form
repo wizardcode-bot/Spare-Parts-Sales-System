@@ -60,12 +60,12 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/profile.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="     Mi perfil"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="20"/>
+        <Property name="iconTextGap" type="int" value="40"/>
+        <Property name="label" type="java.lang.String" value="Mi perfil"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 20, 2, 14]"/>
         </Property>
@@ -90,12 +90,12 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/logout.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="  Cerrar Sesi&#xf3;n"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="20"/>
+        <Property name="iconTextGap" type="int" value="30"/>
+        <Property name="label" type="java.lang.String" value="Cerrar Sesi&#xf3;n"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 20, 2, 14]"/>
         </Property>
@@ -120,12 +120,12 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/exit.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="        Salir"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="20"/>
+        <Property name="iconTextGap" type="int" value="60"/>
+        <Property name="label" type="java.lang.String" value="Salir"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 20, 2, 14]"/>
         </Property>
@@ -240,12 +240,12 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/reports.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="     Reportes"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="20"/>
+        <Property name="iconTextGap" type="int" value="40"/>
+        <Property name="label" type="java.lang.String" value="Reportes"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 20, 2, 14]"/>
         </Property>
