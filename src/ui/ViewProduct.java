@@ -73,6 +73,8 @@ public class ViewProduct extends javax.swing.JFrame {
                 hasWhereClause = true;
             }
         }
+        
+        queryBuilder.append(" ORDER BY CAST(SUBSTRING(p.product_pk, 4) AS UNSIGNED) DESC");
 
         try (Connection con = ConnectionProvider.getCon(); PreparedStatement ps = con.prepareStatement(queryBuilder.toString())) {
 

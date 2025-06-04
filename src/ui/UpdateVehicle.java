@@ -72,6 +72,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel12 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -112,7 +113,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Marca");
+        jLabel3.setText("Marca *");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 178, -1, -1));
 
         txtBrandName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -139,7 +140,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Color");
+        jLabel6.setText("Color *");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(457, 178, -1, -1));
 
         txtColor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -148,7 +149,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Propietario");
+        jLabel7.setText("Propietario *");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(457, 251, -1, -1));
 
         txtOwner.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -220,6 +221,11 @@ public class UpdateVehicle extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(768, 14, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 850, 10));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("(*) Indica campo obligatorio");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 450, -1, -1));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -418,6 +424,7 @@ public class UpdateVehicle extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

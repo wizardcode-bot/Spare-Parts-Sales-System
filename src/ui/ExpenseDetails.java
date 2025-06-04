@@ -1,13 +1,9 @@
 package ui;
 
-import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
-import javax.swing.JPanel;
 import java.sql.*;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /**
  *

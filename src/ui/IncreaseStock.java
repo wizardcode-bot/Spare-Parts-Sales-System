@@ -157,7 +157,7 @@ public class IncreaseStock extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Buscar producto por ID o descripción");
+        jLabel2.setText("Buscar producto por código o descripción");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 84, -1, -1));
 
         txtSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -170,7 +170,7 @@ public class IncreaseStock extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("ID del producto");
+        jLabel3.setText("Código del producto");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 148, -1, -1));
 
         txtProductID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

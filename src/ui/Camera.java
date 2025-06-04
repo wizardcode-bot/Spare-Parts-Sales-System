@@ -93,6 +93,7 @@ public class Camera extends javax.swing.JFrame {
         lblTakenPhoto = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -101,11 +102,10 @@ public class Camera extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Opciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 18), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Opciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnPowerON.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnPowerON.setForeground(new java.awt.Color(0, 0, 0));
         btnPowerON.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/turnON.png"))); // NOI18N
         btnPowerON.setText("Encender cámara");
         btnPowerON.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -121,19 +121,16 @@ public class Camera extends javax.swing.JFrame {
         jPanel1.add(btnPowerON, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 72, 200, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Cámara en uso:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 308, -1, -1));
 
         lblCameraName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblCameraName.setForeground(new java.awt.Color(0, 0, 0));
         lblCameraName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCameraName.setText("-");
         lblCameraName.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jPanel1.add(lblCameraName, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 359, 220, -1));
 
         btnPowerOFF.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnPowerOFF.setForeground(new java.awt.Color(0, 0, 0));
         btnPowerOFF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/turnOFF.png"))); // NOI18N
         btnPowerOFF.setText("Apagar cámara");
         btnPowerOFF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -151,7 +148,6 @@ public class Camera extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 55, 240, 402));
 
         btnSavePhoto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnSavePhoto.setForeground(new java.awt.Color(0, 0, 0));
         btnSavePhoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/savePhoto.png"))); // NOI18N
         btnSavePhoto.setText("Guardar fotografía");
         btnSavePhoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -165,7 +161,6 @@ public class Camera extends javax.swing.JFrame {
         getContentPane().add(btnSavePhoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(603, 394, -1, 63));
 
         btnTakePhoto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnTakePhoto.setForeground(new java.awt.Color(0, 0, 0));
         btnTakePhoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/takePhoto.png"))); // NOI18N
         btnTakePhoto.setText("Tomar fotografía");
         btnTakePhoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -208,6 +203,10 @@ public class Camera extends javax.swing.JFrame {
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 76, -1, 300));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setText("Vista previa");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 80, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whiteSmoke.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -328,6 +327,7 @@ public class Camera extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblCameraName;
