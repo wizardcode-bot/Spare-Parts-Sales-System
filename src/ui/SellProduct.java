@@ -35,6 +35,7 @@ public class SellProduct extends javax.swing.JFrame {
     private long cashPaidInt = 0;
     private long transferPaidInt = 0;
     private long servicePriceInt = 0;
+    private boolean servicePriceAdded = false;
 
     /**
      * Creates new form SellProduct
@@ -375,6 +376,8 @@ public class SellProduct extends javax.swing.JFrame {
         txtStockQuantity = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         txtServicePrice = new javax.swing.JTextField();
+        btnServicePrice = new javax.swing.JButton();
+        btnResetSP = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -527,7 +530,7 @@ public class SellProduct extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 480, 845, 233));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 484, 845, 233));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -536,7 +539,7 @@ public class SellProduct extends javax.swing.JFrame {
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
-        lblFinalTotalPrice.setText("---");
+        lblFinalTotalPrice.setText("0");
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(294, 605, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -582,7 +585,7 @@ public class SellProduct extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(753, 725, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(753, 729, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -723,7 +726,27 @@ public class SellProduct extends javax.swing.JFrame {
                 txtServicePriceKeyReleased(evt);
             }
         });
-        getContentPane().add(txtServicePrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 440, 200, -1));
+        getContentPane().add(txtServicePrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 442, 152, -1));
+
+        btnServicePrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnServicePrice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addIcon.png"))); // NOI18N
+        btnServicePrice.setText("Añadir");
+        btnServicePrice.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnServicePrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServicePriceActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnServicePrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 439, 100, -1));
+
+        btnResetSP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/reset.png"))); // NOI18N
+        btnResetSP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnResetSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetSPActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnResetSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 439, 42, -1));
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -1227,6 +1250,68 @@ public class SellProduct extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtServicePriceKeyReleased
 
+    private void btnServicePriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicePriceActionPerformed
+        // Botón añadir precio de servicio
+        String servicePrice = txtServicePrice.getText().trim();
+
+        if (Validations.isNullOrBlank(servicePrice)) {
+            JOptionPane.showMessageDialog(null, "¡Debe ingresar primero el precio del servicio!", "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        int servicePaidInt = 0;
+
+        try {
+            servicePaidInt = Integer.parseInt(servicePrice);
+
+            // Obtener el valor actual del JLabel
+            String currentTotalText = lblFinalTotalPrice.getText().trim();
+            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+
+            int finalTotal = currentTotal + servicePaidInt;
+
+            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
+            // Desactivar botón y campo de texto al sumar el precio del servicio, activar bandera
+            btnServicePrice.setEnabled(false);
+            txtServicePrice.setEnabled(false);
+            servicePriceAdded = true;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnServicePriceActionPerformed
+
+    private void btnResetSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetSPActionPerformed
+        // Botón para restar el precio del servicio y activar botones
+        String servicePrice = txtServicePrice.getText().trim();
+        
+        if (Validations.isNullOrBlank(servicePrice) || !servicePriceAdded) {
+            JOptionPane.showMessageDialog(null, "¡Debe añadir primero el precio del servicio!", "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        int servicePaidInt = 0;
+
+        try {
+            servicePaidInt = Integer.parseInt(servicePrice);
+
+            // Obtener el valor actual del JLabel
+            String currentTotalText = lblFinalTotalPrice.getText().trim();
+            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+
+            int finalTotal = currentTotal - servicePaidInt;
+
+            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
+            // activar botón y campo de texto al restar el precio del servicio, desactivar bandera
+            btnServicePrice.setEnabled(true);
+            txtServicePrice.setEnabled(true);
+            servicePriceAdded = false;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnResetSPActionPerformed
+
     /* Método para cargar los clientes en el jComboBox */
     private void cargarClientes() {
         String query = "SELECT * FROM clients";
@@ -1273,16 +1358,24 @@ public class SellProduct extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SellProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProduct.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SellProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProduct.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SellProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProduct.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SellProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellProduct.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -1297,6 +1390,8 @@ public class SellProduct extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel billPaidLabel;
     private javax.swing.JButton btnAddToCart;
+    private javax.swing.JButton btnResetSP;
+    private javax.swing.JButton btnServicePrice;
     private javax.swing.JButton calculateSurplusBtn;
     private javax.swing.JTable cartTable;
     private javax.swing.JLabel cashTextLabel;

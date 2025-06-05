@@ -42,6 +42,7 @@ public class UpdateService extends javax.swing.JFrame {
     private long totalPriceLong = 0;
     private long servicePKLong = 0;
     private boolean selectedService = false;
+    private boolean servicePriceAdded = false;
 
     /**
      * Creates new form SellProduct
@@ -302,7 +303,7 @@ public class UpdateService extends javax.swing.JFrame {
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document(new Rectangle(226, PageSize.A4.getHeight()));
         //medida del documento
         doc.setMargins(10, 5, 10, 10); // Márgenes 
-        
+
         String client_pk = clientID;
         String clientName = null;
         String paymentTerm = comboPayment.getSelectedItem().toString();
@@ -327,7 +328,7 @@ public class UpdateService extends javax.swing.JFrame {
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dateString = now.format(formatter);
-            
+
             // Formatear la fecha de pago
             DateTimeFormatter paymentFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedPaymentDate = paymentDate.toLocalDateTime().format(paymentFormatter);
@@ -397,7 +398,7 @@ public class UpdateService extends javax.swing.JFrame {
 
             doc.add(tbl);
             doc.add(separator);
-            
+
             Paragraph paymentTitle = new Paragraph("DETALLE DE PAGO\n", boldFont);
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
@@ -501,7 +502,9 @@ public class UpdateService extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         txtStockQuantity = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtServicePrice = new javax.swing.JTextField();
+        btnResetSP = new javax.swing.JButton();
+        btnServicePrice = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -628,7 +631,7 @@ public class UpdateService extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(885, 411, -1, -1));
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 411, -1, -1));
 
         cartTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -655,7 +658,7 @@ public class UpdateService extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(cartTable);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 474, 859, 258));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 467, 859, 269));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -664,7 +667,7 @@ public class UpdateService extends javax.swing.JFrame {
 
         lblFinalTotalPrice.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblFinalTotalPrice.setForeground(new java.awt.Color(255, 255, 255));
-        lblFinalTotalPrice.setText("---");
+        lblFinalTotalPrice.setText("0");
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(298, 567, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -681,7 +684,7 @@ public class UpdateService extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Seleccione en la tabla el producto a eliminar ");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(767, 739, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(767, 743, -1, -1));
 
         txtUniqueId.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         getContentPane().add(txtUniqueId, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 265, 300, -1));
@@ -815,12 +818,12 @@ public class UpdateService extends javax.swing.JFrame {
         surplusTextLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         surplusTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         surplusTextLabel.setText("Excedente");
-        getContentPane().add(surplusTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1072, 411, -1, -1));
+        getContentPane().add(surplusTextLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1047, 411, -1, -1));
 
         surplusMoneyLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         surplusMoneyLabel.setForeground(new java.awt.Color(51, 204, 255));
         surplusMoneyLabel.setText("$ 0");
-        getContentPane().add(surplusMoneyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1072, 432, -1, -1));
+        getContentPane().add(surplusMoneyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1047, 433, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 59, 1366, 10));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -844,8 +847,33 @@ public class UpdateService extends javax.swing.JFrame {
         jLabel12.setText("Servicio ($)");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 412, -1, -1));
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 433, 202, -1));
+        txtServicePrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtServicePrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtServicePriceKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtServicePrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(464, 432, 140, -1));
+
+        btnResetSP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/reset.png"))); // NOI18N
+        btnResetSP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnResetSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetSPActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnResetSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 427, 42, -1));
+
+        btnServicePrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnServicePrice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addIcon.png"))); // NOI18N
+        btnServicePrice.setText("Añadir");
+        btnServicePrice.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnServicePrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServicePriceActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnServicePrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(658, 427, 95, -1));
 
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/adminDashboardBackground.png"))); // NOI18N
         getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -1228,7 +1256,7 @@ public class UpdateService extends javax.swing.JFrame {
                 String billId = getUniqueId("FACT-");
 
                 long billPk = insertBill(con, billId, totalPrice, paymentTerm, cashPaidInt, transferPaidInt, clientID, appuserPk);
-                
+
                 // Variable para almacenar la fecha de pago
                 Timestamp paymentDate;
 
@@ -1622,7 +1650,6 @@ public class UpdateService extends javax.swing.JFrame {
             int cashPaidInt = Integer.parseInt(cashPaid);
             int billPaidInt = Integer.parseInt(billPaid);
 
-            
             int surplusMoney = (billPaidInt - cashPaidInt);
 
             // Mostrar el resultado en el label
@@ -1632,6 +1659,80 @@ public class UpdateService extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_calculateSurplusBtnActionPerformed
+
+    private void txtServicePriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtServicePriceKeyReleased
+        // Ingresar precio de servicio en números
+        String servicePrice = txtServicePrice.getText().trim();
+
+        if (!servicePrice.matches(Validations.NUMBER_PATTERN)) {
+            JOptionPane.showMessageDialog(null, "¡Debes ingresar el valor en números!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            txtServicePrice.setText("");
+            return;
+        }
+    }//GEN-LAST:event_txtServicePriceKeyReleased
+
+    private void btnServicePriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicePriceActionPerformed
+        // Botón añadir precio de servicio
+        String servicePrice = txtServicePrice.getText().trim();
+
+        if (Validations.isNullOrBlank(servicePrice)) {
+            JOptionPane.showMessageDialog(null, "¡Debe ingresar primero el precio del servicio!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int servicePaidInt = 0;
+
+        try {
+            servicePaidInt = Integer.parseInt(servicePrice);
+
+            // Obtener el valor actual del JLabel
+            String currentTotalText = lblFinalTotalPrice.getText().trim();
+            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+
+            int finalTotal = currentTotal + servicePaidInt;
+
+            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
+            // Desactivar botón y campo de texto al sumar el precio del servicio, activar bandera
+            btnServicePrice.setEnabled(false);
+            txtServicePrice.setEnabled(false);
+            servicePriceAdded = true;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnServicePriceActionPerformed
+
+    private void btnResetSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetSPActionPerformed
+        // Botón para restar el precio del servicio y activar botones
+        String servicePrice = txtServicePrice.getText().trim();
+
+        if (Validations.isNullOrBlank(servicePrice) || !servicePriceAdded) {
+            JOptionPane.showMessageDialog(null, "¡Debe añadir primero el precio del servicio!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int servicePaidInt = 0;
+
+        try {
+            servicePaidInt = Integer.parseInt(servicePrice);
+
+            // Obtener el valor actual del JLabel
+            String currentTotalText = lblFinalTotalPrice.getText().trim();
+            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+
+            int finalTotal = currentTotal - servicePaidInt;
+
+            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
+            // activar botón y campo de texto al restar el precio del servicio, desactivar bandera
+            btnServicePrice.setEnabled(true);
+            txtServicePrice.setEnabled(true);
+            servicePriceAdded = false;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnResetSPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1674,7 +1775,9 @@ public class UpdateService extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel billPaidLabel;
     private javax.swing.JButton btnAddToCart;
+    private javax.swing.JButton btnResetSP;
     private javax.swing.JButton btnSearchService;
+    private javax.swing.JButton btnServicePrice;
     private javax.swing.JButton calculateSurplusBtn;
     private javax.swing.JTable cartTable;
     private javax.swing.JLabel cashTextLabel;
@@ -1705,7 +1808,6 @@ public class UpdateService extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblFinalTotalPrice;
     private javax.swing.JTable productsTable;
     private javax.swing.JLabel surplusMoneyLabel;
@@ -1721,6 +1823,7 @@ public class UpdateService extends javax.swing.JFrame {
     private javax.swing.JTextField txtProductLocation;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtServiceID;
+    private javax.swing.JTextField txtServicePrice;
     private javax.swing.JTextField txtStockQuantity;
     private javax.swing.JTextField txtTotalPrice;
     private javax.swing.JTextField txtTransferPaid;
