@@ -275,7 +275,7 @@ public class SellProduct extends javax.swing.JFrame {
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
 
-            Paragraph total = new Paragraph("Total: " + (finalTotalPrice + servicePriceInt) + "\n", boldFont);
+            Paragraph total = new Paragraph("Total: " + (finalTotalPrice) + "\n", boldFont);
             doc.add(total);
 
             Paragraph paymentDetails = new Paragraph("Servicio: " + servicePriceInt
@@ -1265,13 +1265,9 @@ public class SellProduct extends javax.swing.JFrame {
         try {
             servicePaidInt = Integer.parseInt(servicePrice);
 
-            // Obtener el valor actual del JLabel
-            String currentTotalText = lblFinalTotalPrice.getText().trim();
-            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+            finalTotalPrice += servicePaidInt;
 
-            int finalTotal = currentTotal + servicePaidInt;
-
-            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
+            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
             // Desactivar botón y campo de texto al sumar el precio del servicio, activar bandera
             btnServicePrice.setEnabled(false);
             txtServicePrice.setEnabled(false);
@@ -1296,16 +1292,13 @@ public class SellProduct extends javax.swing.JFrame {
         try {
             servicePaidInt = Integer.parseInt(servicePrice);
 
-            // Obtener el valor actual del JLabel
-            String currentTotalText = lblFinalTotalPrice.getText().trim();
-            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+            finalTotalPrice -= servicePaidInt;
 
-            int finalTotal = currentTotal - servicePaidInt;
-
-            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
-            // activar botón y campo de texto al restar el precio del servicio, desactivar bandera
+            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+            // Activar botón y campo de texto al restar el precio del servicio, desactivar bandera
             btnServicePrice.setEnabled(true);
             txtServicePrice.setEnabled(true);
+            txtServicePrice.setText("");
             servicePriceAdded = false;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

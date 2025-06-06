@@ -43,6 +43,7 @@ public class UpdateService extends javax.swing.JFrame {
     private long servicePKLong = 0;
     private boolean selectedService = false;
     private boolean servicePriceAdded = false;
+    private long servicePriceInt = 0;
 
     /**
      * Creates new form SellProduct
@@ -298,7 +299,7 @@ public class UpdateService extends javax.swing.JFrame {
         txtStockQuantity.setText("");
     }
 
-    private void generatePDF(String clientID, Long totalPrice, Long cashPaidInt, Long transferPaidInt, String billId, Timestamp paymentDate) {
+    private void generatePDF(String clientID, Long cashPaidInt, Long transferPaidInt, String billId, Timestamp paymentDate) {
         // Ajustar ancho a 58mm y dejar la altura dinámica
         com.itextpdf.text.Document doc = new com.itextpdf.text.Document(new Rectangle(226, PageSize.A4.getHeight()));
         //medida del documento
@@ -403,10 +404,11 @@ public class UpdateService extends javax.swing.JFrame {
             paymentTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(paymentTitle);
 
-            Paragraph total = new Paragraph("Total: " + totalPrice + "\n", boldFont);
+            Paragraph total = new Paragraph("Total: " + lblFinalTotalPrice.getText() + "\n", boldFont);
             doc.add(total);
 
-            Paragraph paymentDetails = new Paragraph("Forma de pago: " + paymentTerm
+            Paragraph paymentDetails = new Paragraph("Servicio: " + servicePriceInt
+                    + "\nForma de pago: " + paymentTerm
                     + "\nEfectivo: " + cashPaidInt
                     + "\nTransferencia: " + transferPaidInt
                     + "\nFecha de pago: " + formattedPaymentDate + "\n", normalFont);
@@ -1185,7 +1187,8 @@ public class UpdateService extends javax.swing.JFrame {
         String transferPaid = null;
         String servicePK = txtServiceID.getText().trim();
         serviceState = "Terminado";
-        long totalPrice = 0;
+        //long totalPrice = 0;
+        String servicePrice = txtServicePrice.getText().trim();
 
         if (Validations.isNullOrBlank(servicePK)) {
             JOptionPane.showMessageDialog(null, "Debes ingresar el ID del servicio que quieres actualizar",
@@ -1216,11 +1219,11 @@ public class UpdateService extends javax.swing.JFrame {
             }
 
             try {
-                totalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
+                finalTotalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
                 cashPaidInt = Integer.parseInt(cashPaid);
                 transferPaidInt = Integer.parseInt(transferPaid);
 
-                if (cashPaidInt + transferPaidInt != totalPrice) {
+                if (cashPaidInt + transferPaidInt != finalTotalPrice) {
                     JOptionPane.showMessageDialog(null, "La suma de efectivo y transferencia debe ser igual al total pagado.");
                     return;
                 }
@@ -1234,11 +1237,23 @@ public class UpdateService extends javax.swing.JFrame {
             transferPaid = "0";
 
             try {
-                totalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
+                finalTotalPrice = Long.parseLong(lblFinalTotalPrice.getText().trim());
                 cashPaidInt = Integer.parseInt(cashPaid);
                 transferPaidInt = Integer.parseInt(transferPaid);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Valor de transferencia y efectivo no válidos.");
+            }
+        }
+
+        if (Validations.isNullOrBlank(servicePrice)) {
+            servicePriceInt = 0;
+        } else {
+            try {
+                servicePriceInt = Integer.parseInt(servicePrice);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Debes ingresar el valor del servicio en numeros, sin puntos, comas o algún otro caracter",
+                        "Datos incorrectos", JOptionPane.WARNING_MESSAGE);
+                return;
             }
         }
 
@@ -1255,7 +1270,7 @@ public class UpdateService extends javax.swing.JFrame {
                 // Generar un ID único para la factura
                 String billId = getUniqueId("FACT-");
 
-                long billPk = insertBill(con, billId, totalPrice, paymentTerm, cashPaidInt, transferPaidInt, clientID, appuserPk);
+                long billPk = insertBill(con, billId, finalTotalPrice, paymentTerm, cashPaidInt, transferPaidInt, clientID, appuserPk);
 
                 // Variable para almacenar la fecha de pago
                 Timestamp paymentDate;
@@ -1290,7 +1305,7 @@ public class UpdateService extends javax.swing.JFrame {
                 }
 
                 // Actualizar la tabla services
-                updateService(con, selectedVehicle, serviceState, totalPrice, servicePKLong);
+                updateService(con, selectedVehicle, serviceState, finalTotalPrice, servicePKLong);
 
                 // Obtener productos actuales del servicio desde la base de datos
                 Map<String, Integer> currentProducts = getCurrentProducts(con, servicePKLong);
@@ -1320,7 +1335,7 @@ public class UpdateService extends javax.swing.JFrame {
                 }
 
                 // Generar PDF de la venta
-                generatePDF(clientID, totalPrice, cashPaidInt, transferPaidInt, billId, paymentDate);
+                generatePDF(clientID, cashPaidInt, transferPaidInt, billId, paymentDate);
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1675,6 +1690,7 @@ public class UpdateService extends javax.swing.JFrame {
     private void btnServicePriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicePriceActionPerformed
         // Botón añadir precio de servicio
         String servicePrice = txtServicePrice.getText().trim();
+        String totalPrice = lblFinalTotalPrice.getText();
 
         if (Validations.isNullOrBlank(servicePrice)) {
             JOptionPane.showMessageDialog(null, "¡Debe ingresar primero el precio del servicio!", "Error",
@@ -1683,17 +1699,15 @@ public class UpdateService extends javax.swing.JFrame {
         }
 
         int servicePaidInt = 0;
+        int totalPriceInt = 0;
 
         try {
             servicePaidInt = Integer.parseInt(servicePrice);
+            totalPriceInt = Integer.parseInt(totalPrice);
 
-            // Obtener el valor actual del JLabel
-            String currentTotalText = lblFinalTotalPrice.getText().trim();
-            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+            finalTotalPrice = servicePaidInt + totalPriceInt;
 
-            int finalTotal = currentTotal + servicePaidInt;
-
-            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
+            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
             // Desactivar botón y campo de texto al sumar el precio del servicio, activar bandera
             btnServicePrice.setEnabled(false);
             txtServicePrice.setEnabled(false);
@@ -1718,16 +1732,13 @@ public class UpdateService extends javax.swing.JFrame {
         try {
             servicePaidInt = Integer.parseInt(servicePrice);
 
-            // Obtener el valor actual del JLabel
-            String currentTotalText = lblFinalTotalPrice.getText().trim();
-            int currentTotal = currentTotalText.isEmpty() ? 0 : Integer.parseInt(currentTotalText);
+            finalTotalPrice -= servicePaidInt;
 
-            int finalTotal = currentTotal - servicePaidInt;
-
-            lblFinalTotalPrice.setText(String.valueOf(finalTotal));
-            // activar botón y campo de texto al restar el precio del servicio, desactivar bandera
+            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+            // Activar botón y campo de texto al restar el precio del servicio, desactivar bandera
             btnServicePrice.setEnabled(true);
             txtServicePrice.setEnabled(true);
+            txtServicePrice.setText("");
             servicePriceAdded = false;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
