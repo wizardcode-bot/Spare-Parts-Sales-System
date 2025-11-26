@@ -76,7 +76,7 @@ public class UpdateClient extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Número de cédula o NITdel cliente");
+        jLabel2.setText("Número de cédula o NIT del cliente");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 123, -1, -1));
 
         txtIDCard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
